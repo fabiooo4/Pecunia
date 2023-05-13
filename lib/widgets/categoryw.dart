@@ -18,13 +18,13 @@ class _CategoryWState extends State<CategoryW> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: Card(
+        elevation: 0,
+        color: Colors.grey[200],
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             Text(widget.category.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Text(widget.total.toString().replaceAll('.', ',') + '€', style: const TextStyle(fontSize: 20))
+            Text('${widget.total.toString().replaceAll('.', ',')}€', style: const TextStyle(fontSize: 20))
           ],
         ),
       ),

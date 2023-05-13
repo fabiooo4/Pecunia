@@ -13,8 +13,10 @@ dependencies:
   crypto: ^3.0.3
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.2
   flutter_localizations:
     sdk: flutter
+  go_router: ^7.0.1
   uuid: ^3.0.7
 
 dev_dependencies:

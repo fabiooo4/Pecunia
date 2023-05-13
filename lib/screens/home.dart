@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import '../model/category.dart';
 import '../model/expense.dart';
@@ -20,7 +21,11 @@ class Home extends StatefulWidget {
   ];
 
   late final List<Expense> _expenseList = [
-    Expense(amount: 10.0, date: DateTime.now(), description: 'Gustoso Paninazzo', category: _categoryList[0].id),
+    Expense(
+        amount: 10.0,
+        date: DateTime.now(),
+        description: 'Gustoso Paninazzo',
+        category: _categoryList[0].id),
   ];
 
   @override
@@ -54,16 +59,32 @@ class _HomeState extends State<Home> {
                 itemCount: widget._categoryList.length,
                 controller: ScrollController(keepScrollOffset: false),
                 itemBuilder: (context, index) {
+                  var id = widget._categoryList[index].id;
                   var total = 0.0;
-
                   for (Expense item in widget._expenseList) {
-                    if (item.category == widget._categoryList[index].id) {
+                    if (item.category == id) {
                       total += item.amount;
                     }
                   }
-                  return CategoryW(category: widget._categoryList[index], total: total);
+                  return GestureDetector(
+                      onTap: () => context.go('/category_expenses/${id}'),
+                      child: CategoryW(
+                          category: widget._categoryList[index], total: total));
                 })),
       ]),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+        ],
+        elevation: 0,
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.green[500],
+        unselectedItemColor: Colors.grey[500],
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+      ),
     );
   }
 }
