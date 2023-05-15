@@ -1,40 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/categoryw.dart';
-import '../model/category.dart';
-import '../model/expense.dart';
+import '../model/categories/category.dart';
 
-List<Category> category = [
-  Category(name: 'Food'),
-];
-
-class Home extends StatefulWidget {
-  Home({super.key});
-
-  final List<Category> _categoryList = [
-    Category(name: 'Food'),
-    Category(name: 'Transport'),
-    Category(name: 'Shopping'),
-    Category(name: 'Entertainment'),
-    Category(name: 'Bills'),
-    Category(name: 'Others')
-  ];
-
-  late final List<Expense> _expenseList = [
-    Expense(
-        amount: 10.0,
-        date: DateTime.now(),
-        description: 'Gustoso Paninazzo',
-        category: _categoryList[0].id),
-  ];
+class Home extends ConsumerStatefulWidget {
+  const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   @override
+  void initState() {
+    super.initState();
+    // "ref" can be used in all life-cycles of a StatefulWidget.
+    ref.read(categoryProvider);
+  }
+
+@override
   Widget build(BuildContext context) {
+    final List<Category> categoryList = ref.watch(categoryProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -56,20 +44,20 @@ class _HomeState extends State<Home> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemCount: widget._categoryList.length,
+                itemCount: categoryList.length,
                 controller: ScrollController(keepScrollOffset: false),
                 itemBuilder: (context, index) {
-                  var id = widget._categoryList[index].id;
+                  var id = categoryList[index].id;
                   var total = 0.0;
-                  for (Expense item in widget._expenseList) {
-                    if (item.category == id) {
-                      total += item.amount;
-                    }
-                  }
+                  // for (Expense item in _expenseList) {
+                  //   if (item.category == id) {
+                  //     total += item.amount;
+                  //   }
+                  // }
                   return GestureDetector(
-                      onTap: () => context.go('/category_expenses/${id}'),
+                      onTap: () => context.go('/category_expenses/$id'),
                       child: CategoryW(
-                          category: widget._categoryList[index], total: total));
+                          category: categoryList[index], total: total));
                 })),
       ]),
       bottomNavigationBar: BottomNavigationBar(

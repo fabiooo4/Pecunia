@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/category.dart';
+import '../model/categories/category.dart';
 
-class CategoryW extends StatefulWidget {
+class CategoryW extends ConsumerWidget {
   const CategoryW({super.key, required this.category, required this.total});
 
   final Category category;
   final double total;
 
   @override
-  State<CategoryW> createState() => _CategoryWState();
-}
-
-class _CategoryWState extends State<CategoryW> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -23,11 +19,11 @@ class _CategoryWState extends State<CategoryW> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(widget.category.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Text('${widget.total.toString().replaceAll('.', ',')}€', style: const TextStyle(fontSize: 20))
+            Text(category.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('${total.toString().replaceAll('.', ',')}€', style: const TextStyle(fontSize: 20))
           ],
         ),
       ),
-    );
+    );;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:pecunia/model/account.dart';
-import 'package:pecunia/model/category.dart';
+import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/expense.dart';
 import 'package:uuid/uuid.dart';
 
