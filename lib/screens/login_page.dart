@@ -149,15 +149,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                        */
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                           Text("  or  "),
                           Expanded(child: Divider()),
                         ]),
                         const SizedBox(height: 10),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             IconButton(
                               onPressed: null,
                               icon: Icon(Icons.apple),
