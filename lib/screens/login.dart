@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height / 2.5,
+                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 7, 46, 8),
@@ -149,7 +149,6 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Colors.lightGreen,
                                           fontWeight: FontWeight.bold))),
                             ]),
-                        const SizedBox(height: 10),
                         FilledButton(
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(
@@ -161,15 +160,15 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text('Login'),
                         ),
                         const SizedBox(height: 10),
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
                         const SizedBox(height: 20),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             ProviderTile(path: 'assets/images/google.png'),
                             SizedBox(width: 15),
                             ProviderTile(path: 'assets/images/apple.png'),

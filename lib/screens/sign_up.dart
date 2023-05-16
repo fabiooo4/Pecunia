@@ -39,7 +39,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height / 2.5,
+                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 7, 46, 8),
@@ -150,7 +150,7 @@ class _SignupPageState extends State<SignupPage> {
                           child: const Text('Signup'),
                         ),
                         const SizedBox(height: 10),
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                         ]),
                         Padding(
