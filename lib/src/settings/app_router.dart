@@ -20,6 +20,10 @@ final router = GoRouter(
             ),
           )
         ]),
-    GoRoute(path: '/', builder: (context, state) => const LoginPage())
+    GoRoute(
+        path: '/',
+        builder: (context, state) {
+          return const LoginPage();
+        })
   ],
 );
