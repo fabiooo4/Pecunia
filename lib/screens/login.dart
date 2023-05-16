@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,17 +22,31 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isObscure = true;
 
+  late final StreamSubscription<AuthState> _authSubscription;
+  User? _user;
+
   @override
   void initState() {
-    super.initState();
+    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
+      setState(() {
+        _user = session?.user;
+      });
+    });
+
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
+
+    super.initState();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _authSubscription.cancel();
+
     super.dispose();
   }
 
@@ -58,8 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                             backgroundColor: Colors.white,
                             child: Icon(
                               Icons.attach_money_rounded,
-                              size: 50,
-                              color: Colors.black,
+                              size: 80,
+                              color: Color.fromARGB(255, 233, 217, 0),
                             ),
                           ),
                         )
@@ -141,8 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                                       overlayColor:
                                           MaterialStateProperty.all<Color>(
                                               Colors.transparent)),
-                                  onPressed: () {
-                                    print("Forgot Password");
+                                  onPressed: () async {
+                                    await supabase.auth.signOut();
                                   },
                                   child: const Text('Forgot Password?',
                                       style: TextStyle(
@@ -154,21 +174,34 @@ class _LoginPageState extends State<LoginPage> {
                             minimumSize: MaterialStateProperty.all(
                                 const Size(double.infinity, 50)),
                           ),
-                          onPressed: () {
-                            context.go('/home');
+                          onPressed: () async {
+                            Object? response = await signIn(
+                                _emailController.text,
+                                _passwordController.text);
+
+                            if (response is Error || response == null) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(response is Error
+                                    ? 'Invalid email or password'
+                                    : 'Please fill in all fields'),
+                              ));
+                            } else {
+                              context.go('/home');
+                            }
                           },
                           child: const Text('Login'),
                         ),
                         const SizedBox(height: 10),
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
                         const SizedBox(height: 20),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             ProviderTile(path: 'assets/images/google.png'),
                             SizedBox(width: 15),
                             ProviderTile(path: 'assets/images/apple.png'),
@@ -201,5 +234,19 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ));
+  }
+}
+
+Future<Object?> signIn(String email, String password) async {
+  if (email.isEmpty || password.isEmpty) {
+    return null;
+  }
+
+  try {
+    Object response = await supabase.auth
+        .signInWithPassword(email: email, password: password);
+    return response;
+  } on AuthException {
+    return Error();
   }
 }
