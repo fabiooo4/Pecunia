@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../model/categories/category.dart';
+import '../model/categories/category_provider.dart';
 
-class CategoryExpenses extends StatefulWidget {
+class CategoryExpenses extends ConsumerWidget {
   const CategoryExpenses({super.key, required this.categoryId});
+
+
 
   final String categoryId;
 
   @override
-  State<CategoryExpenses> createState() => _CategoryExpensesState();
-}
-
-class _CategoryExpensesState extends State<CategoryExpenses> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Category> categoryList = ref.read(categoryProvider);
+    final category = categoryList.firstWhere((element) => element.id == categoryId);
     return Scaffold(
-      appBar: AppBar(),
-      body: Text(widget.categoryId),
-
+      appBar: AppBar(
+        
+      ),
+      body: Center(
+        child: Text(category.name),
+      ),
+      
     );
   }
 }
