@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pecunia/widgets/provider_tile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -119,9 +120,11 @@ class _LoginPageState extends State<LoginPage> {
                                       _isObscure = !_isObscure;
                                     });
                                   },
-                                  icon: Icon(_isObscure
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
+                                  icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
                                 ),
                               )),
                           controller: _passwordController,
@@ -156,21 +159,13 @@ class _LoginPageState extends State<LoginPage> {
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
-                        const SizedBox(height: 10),
-                        const Row(
+                        const SizedBox(height: 20),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.apple),
-                              iconSize: 40,
-                            ),
-                            SizedBox(width: 10),
-                            // do the same for google
-                            IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.android),
-                                iconSize: 40),
+                            ProviderTile(path: 'assets/images/google.png'),
+                            const SizedBox(width: 10),
+                            ProviderTile(path: 'assets/images/apple.png'),
                           ],
                         )
                       ],
