@@ -1,9 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/category_expenses.dart';
 import 'package:pecunia/screens/login.dart';
 import 'package:pecunia/screens/sign_up.dart';
 
 import '../../screens/home.dart';
+
+// Custom transition between pages
+CustomTransitionPage buildPageWithDefaultTransition<T>({
+  required BuildContext context,
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<T>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        FadeTransition(opacity: animation, child: child),
+  );
+}
 
 // GoRouter configuration
 final router = GoRouter(
@@ -13,15 +28,43 @@ final router = GoRouter(
         builder: (context, state) {
           return const Home();
         },
+        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: const Home(),
+            ),
         routes: <GoRoute>[
           GoRoute(
             path: 'category_expenses/:categoryId',
             builder: (context, state) => CategoryExpenses(
               categoryId: state.pathParameters['categoryId']!,
             ),
+            pageBuilder: (context, state) =>
+                buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: CategoryExpenses(
+                categoryId: state.pathParameters['categoryId']!,
+              ),
+            ),
           )
         ]),
-    GoRoute(path: '/', builder: (context, state) => const LoginPage()),
-    GoRoute(path: '/signup', builder: (context, state) => const SignupPage()),
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const LoginPage(),
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+        context: context,
+        state: state,
+        child: const LoginPage(),
+      ),
+    ),
+    GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupPage(),
+        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: const SignupPage(),
+            )),
   ],
 );
