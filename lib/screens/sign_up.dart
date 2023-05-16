@@ -150,6 +150,9 @@ class _SignupPageState extends State<SignupPage> {
                           child: const Text('Signup'),
                         ),
                         const SizedBox(height: 10),
+                        Row(children: const [
+                          Expanded(child: Divider()),
+                        ]),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text.rich(
@@ -171,28 +174,6 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                           ),
                         ),
-                        Row(children: const [
-                          Expanded(child: Divider()),
-                          Text("  or  ", style: TextStyle(color: Colors.black)),
-                          Expanded(child: Divider()),
-                        ]),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.apple),
-                              iconSize: 40,
-                            ),
-                            SizedBox(width: 10),
-                            // do the same for google
-                            IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.android),
-                                iconSize: 40),
-                          ],
-                        )
                       ],
                     ),
                   ),
