@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pecunia/widgets/provider_tile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height / 2.5,
+                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 7, 46, 8),
@@ -119,9 +120,11 @@ class _LoginPageState extends State<LoginPage> {
                                       _isObscure = !_isObscure;
                                     });
                                   },
-                                  icon: Icon(_isObscure
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
+                                  icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
                                 ),
                               )),
                           controller: _passwordController,
@@ -156,23 +159,16 @@ class _LoginPageState extends State<LoginPage> {
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
-                        const SizedBox(height: 10),
-                        Row(
+                        const SizedBox(height: 20),
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.apple),
-                              iconSize: 40,
-                            ),
-                            SizedBox(width: 10),
-                            // do the same for google
-                            IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.android),
-                                iconSize: 40),
+                          children: [
+                            ProviderTile(path: 'assets/images/google.png'),
+                            SizedBox(width: 15),
+                            ProviderTile(path: 'assets/images/apple.png'),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
