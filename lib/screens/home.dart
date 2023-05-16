@@ -20,7 +20,7 @@ class _HomeState extends ConsumerState<Home> {
     ref.read(categoryProvider);
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     final List<Category> categoryList = ref.watch(categoryProvider);
     return Scaffold(

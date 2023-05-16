@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/category_expenses.dart';
+import 'package:pecunia/screens/login_page.dart';
 
 import '../../screens/home.dart';
 
@@ -7,9 +8,9 @@ import '../../screens/home.dart';
 final router = GoRouter(
   routes: <GoRoute>[
     GoRoute(
-        path: '/',
+        path: '/home',
         builder: (context, state) {
-          return Home();
+          return const Home();
         },
         routes: <GoRoute>[
           GoRoute(
@@ -19,5 +20,6 @@ final router = GoRouter(
             ),
           )
         ]),
+    GoRoute(path: '/', builder: (context, state) => const LoginPage())
   ],
 );

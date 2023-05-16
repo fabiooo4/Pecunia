@@ -19,11 +19,14 @@ class CategoryW extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(category.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Text('${total.toString().replaceAll('.', ',')}€', style: const TextStyle(fontSize: 20))
+            Text(category.name,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('${total.toString().replaceAll('.', ',')}€',
+                style: const TextStyle(fontSize: 20))
           ],
         ),
       ),
-    );;
+    );
   }
 }
