@@ -160,9 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(child: Divider()),
                         ]),
                         const SizedBox(height: 20),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             ProviderTile(path: 'assets/images/google.png'),
                             SizedBox(width: 15),
                             ProviderTile(path: 'assets/images/apple.png'),
