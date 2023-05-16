@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp.router(
-
           routerConfig: router,
 
           // Providing a restorationScopeId allows the Navigator built by the
@@ -63,7 +62,7 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.dark(
             useMaterial3: true,
           ),
-          themeMode: settingsController.themeMode,
+          themeMode: ThemeMode.light,
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
