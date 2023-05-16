@@ -17,12 +17,11 @@ class _HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
     // "ref" can be used in all life-cycles of a StatefulWidget.
-    ref.read(categoryProvider);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Category> categoryList = ref.watch(categoryProvider);
+    final List<Category> categoryList = ref.read(categoryProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -55,7 +54,7 @@ class _HomeState extends ConsumerState<Home> {
                   //   }
                   // }
                   return GestureDetector(
-                      onTap: () => context.go('/category_expenses/$id'),
+                      onTap: () => context.go('/home/category_expenses/$id'),
                       child: CategoryW(
                           category: categoryList[index], total: total));
                 })),
