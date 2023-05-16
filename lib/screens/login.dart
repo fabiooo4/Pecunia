@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height / 3,
+                    height: MediaQuery.of(context).size.height / 2.5,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 7, 46, 8),
@@ -129,7 +130,26 @@ class _LoginPageState extends State<LoginPage> {
                               )),
                           controller: _passwordController,
                         ),
-                        const SizedBox(height: 20),
+                        Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                  style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                          const EdgeInsets.all(0)),
+                                      overlayColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.transparent)),
+                                  onPressed: () {
+                                    print("Forgot Password");
+                                  },
+                                  child: const Text('Forgot Password?',
+                                      style: TextStyle(
+                                          color: Colors.lightGreen,
+                                          fontWeight: FontWeight.bold))),
+                            ]),
+                        const SizedBox(height: 10),
                         FilledButton(
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(
@@ -141,25 +161,12 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text('Login'),
                         ),
                         const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                                onPressed: () {},
-                                child: const Text('Forgot Password?',
-                                    style: TextStyle(color: Colors.black))),
-                            TextButton(
-                                onPressed: () => context.go('/signup'),
-                                child: const Text('Sign Up',
-                                    style: TextStyle(color: Colors.black))),
-                          ],
-                        ),
                         const Row(children: [
                           Expanded(child: Divider()),
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -168,7 +175,25 @@ class _LoginPageState extends State<LoginPage> {
                             ProviderTile(path: 'assets/images/apple.png'),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text.rich(
+                            TextSpan(
+                              text: 'Don\'t have an account? ',
+                              children: [
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.go('/signup');
+                                    },
+                                  text: 'Sign Up',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
