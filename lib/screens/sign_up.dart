@@ -150,7 +150,7 @@ class _SignupPageState extends State<SignupPage> {
                           child: const Text('Signup'),
                         ),
                         const SizedBox(height: 10),
-                        const Row(children: [
+                        Row(children: const [
                           Expanded(child: Divider()),
                         ]),
                         Padding(
