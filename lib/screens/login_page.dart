@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -136,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             print('Email: $email');
                             print('Password: $password');
+                            context.go('/home');
                           },
                           child: const Text('Login'),
                         ),
