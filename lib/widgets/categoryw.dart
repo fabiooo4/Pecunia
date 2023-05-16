@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dart_emoji/dart_emoji.dart';
 
 import '../model/categories/category.dart';
 
@@ -19,11 +20,21 @@ class CategoryW extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(category.name,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Text('${total.toString().replaceAll('.', ',')}€',
-                style: const TextStyle(fontSize: 20))
+            if (EmojiParser().hasEmoji(category.name.split(' ')[0])) ...[
+              Text(category.name.split(' ')[0],
+                  style: const TextStyle(fontSize: 40)),
+              Text(category.name.substring(category.name.indexOf(' ') + 1),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
+              Text('${total.toString().replaceAll('.', ',')}€',
+                  style: const TextStyle(fontSize: 20))
+            ] else ...[
+              Text(category.name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
+              Text('${total.toString().replaceAll('.', ',')}€',
+                  style: const TextStyle(fontSize: 20))
+            ],
           ],
         ),
       ),
