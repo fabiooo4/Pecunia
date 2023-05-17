@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import '../model/categories/category.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:async';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -28,7 +30,10 @@ class _HomeState extends ConsumerState<Home> {
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () {},
+            onPressed: () async {
+              await Supabase.instance.client.auth.signOut();
+              context.go('/');
+            },
           )
         ],
         title: const Text(
