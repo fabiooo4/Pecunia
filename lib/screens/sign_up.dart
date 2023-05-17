@@ -1,16 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/src/services/auth_provider.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends ConsumerState<SignupPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -33,6 +34,8 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authServiceProvider = ref.watch(authService);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -154,34 +157,63 @@ class _SignupPageState extends State<SignupPage> {
                             minimumSize: MaterialStateProperty.all(
                                 const Size(double.infinity, 50)),
                           ),
-                          onPressed: () async {
-                            var username = _usernameController.text;
-                            var email = _emailController.text;
-                            var password = _passwordController.text;
+                          onPressed: () {
+                            authServiceProvider
+                                .signUp(
+                                  _usernameController.text,
+                                  _emailController.text,
+                                  _passwordController.text,
+                                )
+                                .then((value) => context.go('/home'))
+                                .catchError((e) =>
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "An error has occurred. Please try again later."),
+                                        duration: Duration(seconds: 5),
+                                      ),
+                                    ));
 
-                            final AuthResponse response =
-                                await Supabase.instance.client.auth.signUp(
-                              email: email,
-                              password: password,
-                              data: {'username': username},
-                            );
+                            // if (response != null) {
+                            //   context.go('/home');
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text(
+                            //           "An email has been sent to verify your account"),
+                            //       duration: Duration(seconds: 5),
+                            //     ),
+                            //   );
+                            // } else {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text("Error"),
+                            //     ),
+                            //   );
+                            // }
 
-                            if (response.user != null) {
-                              context.go('/home');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      "An email has been sent to verify your account"),
-                                  duration: Duration(seconds: 5),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Error"),
-                                ),
-                              );
-                            }
+                            // final AuthResponse response =
+                            //     await Supabase.instance.client.auth.signUp(
+                            //   email: email,
+                            //   password: password,
+                            //   data: {'username': username},
+                            // );
+
+                            // if (response.user != null) {
+                            //   context.go('/home');
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text(
+                            //           "An email has been sent to verify your account"),
+                            //       duration: Duration(seconds: 5),
+                            //     ),
+                            //   );
+                            // } else {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text("Error"),
+                            //     ),
+                            //   );
+                            // }
                           },
                           child: const Text('Signup'),
                         ),

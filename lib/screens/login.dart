@@ -2,21 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
+import 'package:pecunia/src/services/auth_provider.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -52,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final authServiceProvider = ref.watch(authService);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -174,6 +178,10 @@ class _LoginPageState extends State<LoginPage> {
                                 const Size(double.infinity, 50)),
                           ),
                           onPressed: () async {
+                            // await authServiceProvider.signIn(
+                            //     _emailController.text,
+                            //     _passwordController.text);
+
                             Object? response = await signIn(
                                 _emailController.text,
                                 _passwordController.text);
