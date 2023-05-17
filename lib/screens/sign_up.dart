@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isObscure = true;
 
   @override
   void initState() {
@@ -56,8 +59,8 @@ class _SignupPageState extends State<SignupPage> {
                             backgroundColor: Colors.white,
                             child: Icon(
                               Icons.attach_money_rounded,
-                              size: 50,
-                              color: Colors.black,
+                              size: 80,
+                              color: Color.fromARGB(255, 233, 217, 0),
                             ),
                           ),
                         )
@@ -121,17 +124,26 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         const SizedBox(height: 20),
                         TextField(
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(
+                          obscureText: _isObscure,
+                          decoration: InputDecoration(
+                              border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10))),
                               labelText: 'Password',
-                              labelStyle: TextStyle(color: Colors.black),
+                              labelStyle: const TextStyle(color: Colors.black),
                               suffixIcon: Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: IconButton(
-                                  onPressed: null,
-                                  icon: Icon(Icons.lock),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
                                 ),
                               )),
                           controller: _passwordController,
@@ -142,10 +154,27 @@ class _SignupPageState extends State<SignupPage> {
                             minimumSize: MaterialStateProperty.all(
                                 const Size(double.infinity, 50)),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             var username = _usernameController.text;
                             var email = _emailController.text;
                             var password = _passwordController.text;
+
+                            final AuthResponse response =
+                                await Supabase.instance.client.auth.signUp(
+                              email: email,
+                              password: password,
+                              data: {'username': username},
+                            );
+
+                            if (response.user != null) {
+                              context.go('/home');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Error"),
+                                ),
+                              );
+                            }
                           },
                           child: const Text('Signup'),
                         ),
