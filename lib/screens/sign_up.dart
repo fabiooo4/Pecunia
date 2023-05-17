@@ -168,6 +168,13 @@ class _SignupPageState extends State<SignupPage> {
 
                             if (response.user != null) {
                               context.go('/home');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "An email has been sent to verify your account"),
+                                  duration: Duration(seconds: 5),
+                                ),
+                              );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
