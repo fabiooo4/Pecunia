@@ -5,7 +5,6 @@ import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import '../model/categories/category.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:async';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
