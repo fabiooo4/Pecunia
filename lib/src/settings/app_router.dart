@@ -74,6 +74,22 @@ final router = GoRouter(
               context: context,
               state: state,
               child: const Dashboard(),
-            ))
+            ),
+        routes: <GoRoute>[
+          GoRoute(
+            path: 'category_expenses/:categoryId',
+            builder: (context, state) => CategoryExpenses(
+              categoryId: state.pathParameters['categoryId']!,
+            ),
+            pageBuilder: (context, state) =>
+                buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: CategoryExpenses(
+                categoryId: state.pathParameters['categoryId']!,
+              ),
+            ),
+          )
+        ])
   ],
 );

@@ -27,6 +27,17 @@ class _AccountCardState extends State<AccountCard> {
   @override
   Widget build(BuildContext context) {
     final cardColor = widget.active ? Colors.green : Colors.blue;
+    final shadow = widget.active
+        ? const BoxShadow(
+            color: Colors.green,
+            blurRadius: 5,
+            offset: Offset(0, 8),
+          )
+        : const BoxShadow(
+            color: Colors.blueAccent,
+            blurRadius: 0,
+            offset: Offset(0, 0),
+          );
     return InkWell(
       enableFeedback: true,
       customBorder: RoundedRectangleBorder(
@@ -45,6 +56,9 @@ class _AccountCardState extends State<AccountCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32),
               color: cardColor,
+              /* boxShadow: [
+                shadow,
+              ], */
             ),
           ),
           Positioned(
@@ -52,7 +66,7 @@ class _AccountCardState extends State<AccountCard> {
             left: 20,
             child: Text(
               widget.name,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
@@ -63,7 +77,7 @@ class _AccountCardState extends State<AccountCard> {
             left: 20,
             child: Text(
               '€ ${widget.totalBalance.toStringAsFixed(2)}',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
@@ -74,7 +88,7 @@ class _AccountCardState extends State<AccountCard> {
             left: 20,
             child: Text(
               '€ ${widget.income.toStringAsFixed(2)}',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
@@ -85,7 +99,7 @@ class _AccountCardState extends State<AccountCard> {
             right: 20,
             child: Text(
               '€ ${widget.expense.toStringAsFixed(2)}',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),

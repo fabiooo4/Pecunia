@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pecunia/model/accounts/card.dart';
+import 'package:pecunia/model/accounts/card_provider.dart';
+import 'package:pecunia/model/categories/category.dart';
+import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
+import 'package:pecunia/widgets/categoryw.dart';
 
-class Dashboard extends StatefulWidget {
+class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
-  static const routeName = '/dashboard';
-
   @override
-  State<Dashboard> createState() => _DashboardState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends ConsumerState<Dashboard> {
   int activeCardIndex = 0;
   int _index = 0;
 
@@ -22,6 +27,9 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Category> categoryList = ref.read(categoryProvider);
+    final List<CardAccount> cardAccountList = ref.read(accountProvider);
+
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -40,79 +48,87 @@ class _DashboardState extends State<Dashboard> {
                         Text(
                           'Hello {user}',
                           style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        Text('Welcome Back!', style: TextStyle(fontSize: 15))
+                        Text(
+                          'Welcome Back!',
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ],
                     ),
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(0.0),
-                            minimumSize: const Size(40, 40),
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)))),
-                        onPressed: () {},
-                        child: const Icon(Icons.add)),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0.0),
+                        minimumSize: const Size(50, 50),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: const Icon(Icons.add),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               SizedBox(
                 height: 200,
                 child: PageView.builder(
-                  itemCount: 3,
+                  itemCount: cardAccountList.length,
                   controller: PageController(viewportFraction: 0.7),
                   onPageChanged: (int index) => setState(() => _index = index),
                   itemBuilder: (_, i) {
                     final isActive = i == activeCardIndex;
+                    final CardAccount card = cardAccountList[i];
+                    print(card);
+
                     return Transform.scale(
                       scale: isActive ? 1 : 0.9,
                       child: AccountCard(
-                        name: 'Account Name $i',
+                        name: card.name,
                         onTap: () => _onCardTapped(i),
-                        totalBalance: 1000,
-                        income: 1000,
-                        expense: 0,
+                        totalBalance: card.totalBalance,
+                        income: card.income,
+                        expense: card.expense,
                         active: isActive,
                       ),
                     );
                   },
                 ),
               ),
-              /* SizedBox(
-                height: 200,
-                width: double.infinity,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: List.generate(
-                            3,
-                            (index) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: AccountCard(
-                                    name: 'Account Name $index',
-                                    onTap: () => _onCardTapped(index),
-                                    totalBalance: 1000,
-                                    income: 1000,
-                                    expense: 0,
-                                    active: index == activeCardIndex,
-                                  ),
-                                )),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 150,
+                      child: PageView.builder(
+                        itemCount: categoryList.length,
+                        controller: PageController(viewportFraction: 0.3),
+                        itemBuilder: (context, index) {
+                          var id = categoryList[index].id;
+                          var total = 0.0;
+                          // for (Expense item in _expenseList) {
+                          //   if (item.category == id) {
+                          //     total += item.amount;
+                          //   }
+                          // }
+                          return GestureDetector(
+                            onTap: () =>
+                                context.go('/dashboard/category_expenses/$id'),
+                            child: CategoryW(
+                              category: categoryList[index],
+                              total: total,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ), 
-              ), */
-              const SizedBox(
-                height: 20,
+                  ),
+                ],
               ),
             ],
           ),
