@@ -6,11 +6,16 @@ part 'signin_repository.g.dart';
 @riverpod
 SignInRepository signInRepository(_) => SignInRepository();
 
-
 class SignInRepository {
   final _client = Supabase.instance.client;
-  
-  Future<AuthResponse> signIn({required String email, required String password}) async {
-    return await _client.auth.signInWithPassword(email: email, password: password);
+
+  Future<AuthResponse> signIn(
+      {required String email, required String password}) async {
+    return await _client.auth
+        .signInWithPassword(email: email, password: password);
+  }
+
+  Future<void> signOut() async {
+    await _client.auth.signOut();
   }
 }

@@ -7,6 +7,7 @@ import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
+import 'package:pecunia/api/sign_in/signin_repository.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -23,6 +24,29 @@ class _DashboardState extends ConsumerState<Dashboard> {
     setState(() {
       activeCardIndex = index;
     });
+  }
+
+  Future<void> _signOut() async {
+    try {
+      await ref.read(signInRepositoryProvider).signOut();
+
+      if (mounted) {
+        context.go('/');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Logged out successfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -68,6 +92,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       onPressed: () {},
                       child: const Icon(Icons.add),
                     ),
+                    ElevatedButton.icon(
+                        onPressed: _signOut,
+                        icon: const Icon(Icons.logout),
+                        label: const Text('Logout')),
                   ],
                 ),
               ),
