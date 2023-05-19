@@ -13,7 +13,53 @@ class CategoryW extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
+    return SizedBox(
+      height: 10,
+      width: 10,
+      child: Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 0,
+        color: Colors.grey[200],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                      child: category.icon,
+                    ),
+                    Text(
+                      category.name,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                '${total.toString().replaceAll('.', ',')}€',
+                style: const TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  /* return Container(
       height: 150, // Set a fixed height to restrict the overall height
       padding: const EdgeInsets.all(2), // Adjust the padding value
       child: Card(
@@ -73,5 +119,5 @@ class CategoryW extends ConsumerWidget {
         ),
       ),
     );
-  }
+  } */
 }
