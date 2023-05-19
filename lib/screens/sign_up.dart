@@ -32,6 +32,12 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
       if (mounted) {
         context.go('/home');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("An email has been sent to $email for verification"),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -181,11 +187,11 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                             minimumSize: MaterialStateProperty.all(
                                 const Size(double.infinity, 50)),
                           ),
-                          onPressed: () => _createAccount()                        ,
+                          onPressed: () => _createAccount(),
                           child: const Text('Signup'),
                         ),
                         const SizedBox(height: 10),
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                         ]),
                         Padding(

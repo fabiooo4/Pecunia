@@ -28,9 +28,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   void initState() {
-    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      
-    });
+    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {});
 
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
@@ -43,7 +41,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final String password = _passwordController.text;
 
     try {
-      await ref.read(signInRepositoryProvider).signIn(email: email, password: password);
+      await ref
+          .read(signInRepositoryProvider)
+          .signIn(email: email, password: password);
 
       if (mounted) {
         final id = supabase.auth.currentUser!.id;
@@ -199,15 +199,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           child: const Text('Login'),
                         ),
                         const SizedBox(height: 10),
-                        Row(children: const [
+                        const Row(children: [
                           Expanded(child: Divider()),
                           Text("  or  ", style: TextStyle(color: Colors.black)),
                           Expanded(child: Divider()),
                         ]),
                         const SizedBox(height: 20),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             ProviderTile(path: 'assets/images/google.png'),
                             SizedBox(width: 15),
                             ProviderTile(path: 'assets/images/apple.png'),
