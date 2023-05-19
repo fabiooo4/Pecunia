@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pecunia/src/services/auth_provider.dart';
+import 'package:pecunia/repository/sign_up/signup_repository.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -18,24 +18,49 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
   bool _isObscure = true;
 
+  Future<void> _createAccount() async {
+    final String username = _usernameController.text;
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    try {
+      await ref.read(signUpRepositoryProvider).signUp(
+            email: email,
+            password: password,
+            username: username,
+          );
+
+      if (mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
+    _usernameController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final authServiceProvider = ref.watch(authService);
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -156,64 +181,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                             minimumSize: MaterialStateProperty.all(
                                 const Size(double.infinity, 50)),
                           ),
-                          onPressed: () {
-                            authServiceProvider
-                                .signUp(
-                                  _usernameController.text,
-                                  _emailController.text,
-                                  _passwordController.text,
-                                )
-                                .then((value) => context.go('/home'))
-                                .catchError((e) =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "An error has occurred. Please try again later."),
-                                        duration: Duration(seconds: 5),
-                                      ),
-                                    ));
-
-                            // if (response != null) {
-                            //   context.go('/home');
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //       content: Text(
-                            //           "An email has been sent to verify your account"),
-                            //       duration: Duration(seconds: 5),
-                            //     ),
-                            //   );
-                            // } else {
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //       content: Text("Error"),
-                            //     ),
-                            //   );
-                            // }
-
-                            // final AuthResponse response =
-                            //     await Supabase.instance.client.auth.signUp(
-                            //   email: email,
-                            //   password: password,
-                            //   data: {'username': username},
-                            // );
-
-                            // if (response.user != null) {
-                            //   context.go('/home');
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //       content: Text(
-                            //           "An email has been sent to verify your account"),
-                            //       duration: Duration(seconds: 5),
-                            //     ),
-                            //   );
-                            // } else {
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //       content: Text("Error"),
-                            //     ),
-                            //   );
-                            // }
-                          },
+                          onPressed: () => _createAccount()                        ,
                           child: const Text('Signup'),
                         ),
                         const SizedBox(height: 10),

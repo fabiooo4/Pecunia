@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
-import 'package:pecunia/src/services/auth_provider.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -25,16 +24,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   bool _isObscure = true;
 
   late final StreamSubscription<AuthState> _authSubscription;
-  User? _user;
 
   @override
   void initState() {
     _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      final AuthChangeEvent event = data.event;
-      final Session? session = data.session;
-      setState(() {
-        _user = session?.user;
-      });
+      
     });
 
     _emailController.addListener(() => setState(() {}));
