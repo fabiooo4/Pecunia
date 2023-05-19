@@ -83,7 +83,9 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     final CardAccount card = cardAccountList[i];
                     print(card);
 
-                    return Transform.scale(
+                    return AnimatedScale(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOutExpo,
                       scale: isActive ? 1 : 0.9,
                       child: AccountCard(
                         name: card.name,
