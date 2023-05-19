@@ -27,12 +27,12 @@ final router = GoRouter(
     GoRoute(
         path: '/home',
         builder: (context, state) {
-          return const Home();
+          return const Dashboard();
         },
         pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
               context: context,
               state: state,
-              child: const Home(),
+              child: const Dashboard(),
             ),
         routes: <GoRoute>[
           GoRoute(

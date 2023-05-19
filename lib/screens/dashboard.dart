@@ -29,7 +29,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
   Widget build(BuildContext context) {
     final List<Category> categoryList = ref.read(categoryProvider);
     final List<CardAccount> cardAccountList = ref.read(accountProvider);
-
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -46,7 +45,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hello {user}',
+                          'Hello',
                           style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,

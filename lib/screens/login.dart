@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pecunia/api/sign_in/signin_repository.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,6 +36,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     _passwordController.addListener(() => setState(() {}));
 
     super.initState();
+  }
+
+  Future<void> _signIn() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    try {
+      await ref.read(signInRepositoryProvider).signIn(email: email, password: password);
+
+      if (mounted) {
+        final id = supabase.auth.currentUser!.id;
+        context.go('/home');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -172,24 +194,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 const Size(double.infinity, 50)),
                           ),
                           onPressed: () async {
-                            // await authServiceProvider.signIn(
-                            //     _emailController.text,
-                            //     _passwordController.text);
-
-                            Object? response = await signIn(
-                                _emailController.text,
-                                _passwordController.text);
-
-                            if (response is Error || response == null) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(response is Error
-                                    ? 'Invalid email or password'
-                                    : 'Please fill in all fields'),
-                              ));
-                            } else {
-                              context.go('/dashboard');
-                            }
+                            await _signIn();
                           },
                           child: const Text('Login'),
                         ),
@@ -238,16 +243,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 }
 
-Future<Object?> signIn(String email, String password) async {
-  if (email.isEmpty || password.isEmpty) {
-    return null;
-  }
+// Future<Object?> signIn(String email, String password) async {
+//   if (email.isEmpty || password.isEmpty) {
+//     return null;
+//   }
 
-  try {
-    Object response = await supabase.auth
-        .signInWithPassword(email: email, password: password);
-    return response;
-  } on AuthException {
-    return Error();
-  }
-}
+//   try {
+//     Object response = await supabase.auth
+//         .signInWithPassword(email: email, password: password);
+//     return response;
+//   } on AuthException {
+//     return Error();
+//   }
+// }
