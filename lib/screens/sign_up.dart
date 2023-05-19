@@ -81,17 +81,16 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Transform(
-                          transform: Matrix4.translationValues(0, 50, 0),
-                          child: const CircleAvatar(
-                            radius: 55,
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.attach_money_rounded,
-                              size: 80,
-                              color: Color.fromARGB(255, 233, 217, 0),
-                            ),
-                          ),
-                        )
+                            transform: Matrix4.translationValues(0, 50, 0),
+                            child: const CircleAvatar(
+                              radius: 70,
+                              backgroundColor: Colors.white,
+                              child: ImageIcon(
+                                AssetImage('assets/images/logopng.png'),
+                                size: 100,
+                                color: Color.fromARGB(255, 7, 46, 8),
+                              ),
+                            )),
                       ],
                     ),
                   ),

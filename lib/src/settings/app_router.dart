@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/category_expenses.dart';
+import 'package:pecunia/screens/dashboard.dart';
 import 'package:pecunia/screens/login.dart';
 import 'package:pecunia/screens/sign_up.dart';
 
@@ -66,5 +67,29 @@ final router = GoRouter(
               state: state,
               child: const SignupPage(),
             )),
+    GoRoute(
+        path: '/dashboard',
+        builder: (context, state) => const Dashboard(),
+        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: const Dashboard(),
+            ),
+        routes: <GoRoute>[
+          GoRoute(
+            path: 'category_expenses/:categoryId',
+            builder: (context, state) => CategoryExpenses(
+              categoryId: state.pathParameters['categoryId']!,
+            ),
+            pageBuilder: (context, state) =>
+                buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: CategoryExpenses(
+                categoryId: state.pathParameters['categoryId']!,
+              ),
+            ),
+          )
+        ])
   ],
 );

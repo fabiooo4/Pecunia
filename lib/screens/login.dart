@@ -188,7 +188,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     : 'Please fill in all fields'),
                               ));
                             } else {
-                              context.go('/home');
+                              context.go('/dashboard');
                             }
                           },
                           child: const Text('Login'),
