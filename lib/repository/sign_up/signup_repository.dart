@@ -12,5 +12,4 @@ class SignUpRepository {
   Future<AuthResponse> signUp({required String email, required String password, required String username}) async {
     return _client.auth.signUp(email: email, password: password, data: {'username': username});
   }
-
 }
