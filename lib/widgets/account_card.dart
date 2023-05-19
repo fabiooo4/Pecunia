@@ -49,6 +49,7 @@ class _AccountCardState extends State<AccountCard> {
         HapticFeedback.mediumImpact();
       },
       child: Stack(
+        fit: StackFit.expand,
         children: [
           Container(
             width: 300,
