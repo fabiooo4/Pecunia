@@ -7,6 +7,10 @@ import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../model/users/user.dart';
+import '../model/users/users_provider.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
@@ -19,6 +23,8 @@ class Dashboard extends ConsumerStatefulWidget {
 class _DashboardState extends ConsumerState<Dashboard> {
   int activeCardIndex = 0;
   int _index = 0;
+
+  late UserModel user;
 
   void _onCardTapped(int index) {
     setState(() {
@@ -53,6 +59,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
   Widget build(BuildContext context) {
     final List<Category> categoryList = ref.read(categoryProvider);
     final List<CardAccount> cardAccountList = ref.read(accountProvider);
+    final user = ref
+        .watch(userProvider(id: Supabase.instance.client.auth.currentUser!.id));
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -65,15 +73,21 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Hello',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        user.when(
+                          data: (user) => Text('Hello ${user.username}',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          error: (error, stackTrace) => const Text("Hello User",
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          loading: () => const CircularProgressIndicator(),
                         ),
                         Text(
                           'Welcome Back!',

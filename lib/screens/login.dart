@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart';
+import 'package:pecunia/api/users/users_repository.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,12 +25,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   bool _isObscure = true;
 
-  late final StreamSubscription<AuthState> _authSubscription;
-
   @override
   void initState() {
-    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {});
-
     _emailController.addListener(() => setState(() {}));
     _passwordController.addListener(() => setState(() {}));
 
@@ -41,12 +38,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final String password = _passwordController.text;
 
     try {
-      await ref
-          .read(signInRepositoryProvider)
-          .signIn(email: email, password: password);
+      await ref.read(signInRepositoryProvider).signIn(email: email, password: password);
 
       if (mounted) {
-        final id = supabase.auth.currentUser!.id;
         context.go('/home');
       }
     } catch (e) {
@@ -63,7 +57,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _authSubscription.cancel();
 
     super.dispose();
   }

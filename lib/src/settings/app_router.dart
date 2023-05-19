@@ -5,7 +5,6 @@ import 'package:pecunia/screens/dashboard.dart';
 import 'package:pecunia/screens/login.dart';
 import 'package:pecunia/screens/sign_up.dart';
 
-import '../../screens/home.dart';
 
 // Custom transition between pages
 CustomTransitionPage buildPageWithDefaultTransition<T>({
