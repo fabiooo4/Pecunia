@@ -147,10 +147,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: 150,
+                      height: 50,
                       child: PageView.builder(
                         itemCount: categoryList.length,
-                        controller: PageController(viewportFraction: 0.3),
+                        controller: PageController(viewportFraction: 0.7),
                         itemBuilder: (context, index) {
                           var id = categoryList[index].id;
                           var total = 0.0;
