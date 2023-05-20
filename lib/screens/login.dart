@@ -38,7 +38,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final String password = _passwordController.text;
 
     try {
-      await ref.read(signInRepositoryProvider).signIn(email: email, password: password);
+      await ref
+          .read(signInRepositoryProvider)
+          .signIn(email: email, password: password);
 
       if (mounted) {
         context.go('/home');
@@ -92,7 +94,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               child: ImageIcon(
                                 AssetImage('assets/images/logopng.png'),
                                 size: 100,
-                                color: Color.fromARGB(255, 7, 46, 8),
+                                color: Color(0xFF072E08),
                               ),
                             )),
                       ],

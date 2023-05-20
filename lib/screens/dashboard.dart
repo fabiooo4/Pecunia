@@ -7,11 +7,12 @@ import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/categories/category_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
+import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../model/users/user.dart';
 import '../model/users/users_provider.dart';
-import 'package:pecunia/api/sign_in/signin_repository.dart';
+import 'package:pecunia/api/sign_in/signin_repository.dart'; // Import the GoRouter instance
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -77,19 +78,23 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         user.when(
-                          data: (user) => Text('Hello ${user.username}',
-                              style: const TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          error: (error, stackTrace) => const Text("Hello User",
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              )),
+                          data: (user) => Text(
+                            'Hello ${user.username}!',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          error: (error, stackTrace) => const Text(
+                            "Hello User",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           loading: () => const CircularProgressIndicator(),
                         ),
-                        Text(
+                        const Text(
                           'Welcome Back!',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -107,9 +112,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       child: const Icon(Icons.add),
                     ),
                     ElevatedButton.icon(
-                        onPressed: _signOut,
-                        icon: const Icon(Icons.logout),
-                        label: const Text('Logout')),
+                      onPressed: _signOut,
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Logout'),
+                    ),
                   ],
                 ),
               ),
@@ -177,6 +183,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
           ),
         ),
       ),
+      bottomNavigationBar: const NavBar(active: 0),
     );
   }
 }
