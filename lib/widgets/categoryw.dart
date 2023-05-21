@@ -36,7 +36,7 @@ class CategoryW extends ConsumerWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
-                      child: category.icon,
+                      //child: category.icon,
                     ),
                     Text(
                       category.name,
