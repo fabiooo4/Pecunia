@@ -1,15 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/accounts/card.dart';
 import 'package:pecunia/model/accounts/card_provider.dart';
 import 'package:pecunia/model/categories/category.dart';
-import 'package:pecunia/model/categories/category_provider.dart';
+import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../model/users/user.dart';
 import '../model/users/users_provider.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart'; // Import the GoRouter instance
@@ -58,7 +58,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Category> categoryList = ref.read(categoryProvider);
+    final categoryList = ref.watch(categoriesProvider);
     final List<CardAccount> cardAccountList = ref.read(accountProvider);
     final user = ref
         .watch(userProvider(id: Supabase.instance.client.auth.currentUser!.id));
@@ -112,10 +112,9 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       child: const Icon(Icons.add),
                     ),
                     ElevatedButton.icon(
-                      onPressed: _signOut,
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Logout'),
-                    ),
+                        onPressed: _signOut,
+                        icon: const Icon(Icons.logout),
+                        label: const Text('Logout')),
                   ],
                 ),
               ),
@@ -129,7 +128,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   itemBuilder: (_, i) {
                     final isActive = i == activeCardIndex;
                     final CardAccount card = cardAccountList[i];
-                    print(card);
 
                     return AnimatedScale(
                       duration: const Duration(milliseconds: 300),
@@ -152,29 +150,35 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: SizedBox(
-                      height: 50,
-                      child: PageView.builder(
-                        itemCount: categoryList.length,
-                        controller: PageController(viewportFraction: 0.7),
-                        itemBuilder: (context, index) {
-                          var id = categoryList[index].id;
-                          var total = 0.0;
-                          // for (Expense item in _expenseList) {
-                          //   if (item.category == id) {
-                          //     total += item.amount;
-                          //   }
-                          // }
-                          return GestureDetector(
-                            onTap: () =>
-                                context.go('/dashboard/category_expenses/$id'),
-                            child: CategoryW(
-                              category: categoryList[index],
-                              total: total,
-                            ),
-                          );
-                        },
-                      ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: categoryList.when(
+                        data: (categoryListdata) => SizedBox(
+                          height: 50,
+                          child: PageView.builder(
+                            padEnds: false,
+                            itemCount: categoryListdata.length,
+                            controller: PageController(viewportFraction: 0.7),
+                            itemBuilder: (context, index) {
+                              var id = categoryListdata[index].id;
+                              var total = 0.0;
+                              return GestureDetector(
+                                onTap: () => context
+                                    .go('/dashboard/category_expenses/$id'),
+                                child: CategoryW(
+                                  category: categoryListdata[index],
+                                  total: total,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        loading: () => const CircularProgressIndicator(),
+                        error: (error, stackTrace) => Text(
+                          error.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ), 
                     ),
                   ),
                 ],

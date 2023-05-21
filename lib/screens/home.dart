@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pecunia/model/categories/category_provider.dart';
+import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import '../model/categories/category.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +22,6 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Category> categoryList = ref.read(categoryProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -42,26 +41,6 @@ class _HomeState extends ConsumerState<Home> {
         backgroundColor: Colors.white,
       ),
       body: Column(children: [
-        Expanded(
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: categoryList.length,
-                controller: ScrollController(keepScrollOffset: false),
-                itemBuilder: (context, index) {
-                  var id = categoryList[index].id;
-                  var total = 0.0;
-                  // for (Expense item in _expenseList) {
-                  //   if (item.category == id) {
-                  //     total += item.amount;
-                  //   }
-                  // }
-                  return GestureDetector(
-                      onTap: () => context.go('/home/category_expenses/$id'),
-                      child: CategoryW(
-                          category: categoryList[index], total: total));
-                })),
       ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

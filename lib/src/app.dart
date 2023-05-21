@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return AnimatedBuilder(
       animation: settingsController,
-      builder: (BuildContext context, Widget? child) {
+      builder: (BuildContext context, Widget? child,) {
+      
         return MaterialApp.router(
           routerConfig: router,
 
