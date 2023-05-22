@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dart_emoji/dart_emoji.dart';
 
 import '../model/categories/category.dart';
 

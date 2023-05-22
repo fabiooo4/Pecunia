@@ -6,6 +6,8 @@ import 'category.dart';
 part 'categories_provider.g.dart';
 
 @riverpod
-Future<List<Category>> categories(CategoriesRef ref,) {
+Future<List<Category>> categories(
+  CategoriesRef ref,
+) {
   return ref.read(categoriesRepositoryProvider).getCategories();
 }

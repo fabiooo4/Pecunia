@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pecunia/widgets/expensew.dart';
+import 'package:pecunia/widgets/transactionw.dart';
 import '../model/categories/category.dart';
 import '../model/categories/categories_provider.dart';
 
