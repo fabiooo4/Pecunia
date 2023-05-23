@@ -1,53 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AccountCard
-    extends StatefulWidget {
+class AccountCard extends StatefulWidget {
   const AccountCard(
-      {Key?
-          key,
+      {Key? key,
       required this.name,
       required this.onTap,
       required this.totalBalance,
       required this.income,
       required this.expense,
       required this.active})
-      : super(
-            key: key);
+      : super(key: key);
 
-  final String
-      name;
-  final VoidCallback
-      onTap;
-  final double
-      totalBalance;
-  final double
-      income;
-  final double
-      expense;
-  final bool
-      active;
+  final String name;
+  final VoidCallback onTap;
+  final double totalBalance;
+  final double income;
+  final double expense;
+  final bool active;
 
   @override
-  State<AccountCard>
-      createState() =>
-          _AccountCardState();
+  State<AccountCard> createState() => _AccountCardState();
 }
 
-class _AccountCardState
-    extends State<
-        AccountCard> {
+class _AccountCardState extends State<AccountCard> {
   @override
-  Widget build(
-      BuildContext
-          context) {
-    final cardColor = widget.active
-        ? Colors
-            .green
-        : Colors
-            .blue;
-    final shadow = widget
-            .active
+  Widget build(BuildContext context) {
+    final cardColor = widget.active ? Colors.green : Colors.blue;
+    final shadow = widget.active
         ? const BoxShadow(
             color: Colors.green,
             blurRadius: 5,
@@ -59,25 +39,17 @@ class _AccountCardState
             offset: Offset(0, 0),
           );
     return InkWell(
-      enableFeedback:
-          true,
-      customBorder:
-          RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(32),
+      enableFeedback: true,
+      customBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
       ),
-      onTap:
-          () {
-        widget
-            .onTap();
+      onTap: () {
+        widget.onTap();
 
-        HapticFeedback
-            .mediumImpact();
+        HapticFeedback.mediumImpact();
       },
-      child:
-          Stack(
-        fit: StackFit
-            .expand,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
           Container(
             width: 300,
@@ -95,7 +67,10 @@ class _AccountCardState
             left: 20,
             child: Text(
               widget.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           Positioned(
@@ -103,7 +78,10 @@ class _AccountCardState
             left: 20,
             child: Text(
               '€ ${widget.totalBalance.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           Positioned(
@@ -111,7 +89,10 @@ class _AccountCardState
             left: 20,
             child: Text(
               '€ ${widget.income.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           Positioned(
@@ -119,7 +100,10 @@ class _AccountCardState
             right: 20,
             child: Text(
               '€ ${widget.expense.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
         ],

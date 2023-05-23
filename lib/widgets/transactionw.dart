@@ -3,15 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/transactions/transaction.dart';
 import '../model/categories/category.dart';
+import '../model/accounts/account.dart';
 
 class Transactionw extends ConsumerWidget {
   const Transactionw({
     Key? key,
     required this.transaction,
+    required this.account,
     this.category,
   }) : super(key: key);
 
   final Transaction transaction;
+  final Account account;
   final Category? category;
 
   @override
@@ -26,7 +29,7 @@ class Transactionw extends ConsumerWidget {
           ],
         ),
         title: Text(transaction.description ?? ''),
-        subtitle: Text('account'),
+        subtitle: Text(account.name),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
           style: const TextStyle(color: Colors.red),
@@ -42,7 +45,7 @@ class Transactionw extends ConsumerWidget {
           ],
         ),
         title: Text(transaction.description ?? ''),
-        subtitle: Text('account'),
+        subtitle: Text(account.name),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
           style: const TextStyle(color: Colors.blue),
