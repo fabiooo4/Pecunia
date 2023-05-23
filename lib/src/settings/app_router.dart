@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/category_expenses.dart';
+import 'package:pecunia/screens/transaction.dart';
 import 'package:pecunia/screens/dashboard.dart';
 import 'package:pecunia/screens/login.dart';
 import 'package:pecunia/screens/sign_up.dart';
@@ -90,7 +91,21 @@ final router = GoRouter(
                 categoryId: state.pathParameters['categoryId']!,
               ),
             ),
-          )
+          ),
+          GoRoute(
+            path: 'transaction/:transactionId',
+            builder: (context, state) => TransactionPage(
+              transactionId: state.pathParameters['transactionId']!,
+            ),
+            pageBuilder: (context, state) =>
+                buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: TransactionPage(
+                transactionId: state.pathParameters['transactionId']!,
+              ),
+            ),
+          ),
         ]),
     GoRoute(
       path: '/statistics',
@@ -107,7 +122,7 @@ final router = GoRouter(
           final params = state.extra as VerificationPageParams;
 
           return Validation(params: params);
-          },
+        },
         pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
               context: context,
               state: state,

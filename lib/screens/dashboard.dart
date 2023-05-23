@@ -179,25 +179,48 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: categoryList.when(
-                        data: (categoryListdata) => SizedBox(
-                          height: 50,
-                          child: PageView.builder(
-                            padEnds: false,
-                            itemCount: categoryListdata.length,
-                            controller: PageController(viewportFraction: 0.7),
-                            itemBuilder: (context, index) {
-                              var id = categoryListdata[index].id;
-                              var total = 0.0;
-                              return GestureDetector(
-                                onTap: () => context
-                                    .go('/dashboard/category_expenses/$id'),
-                                child: CategoryW(
-                                  category: categoryListdata[index],
-                                  total: total,
-                                ),
-                              );
-                            },
+                        data: (categoryListdata) => transactionList.when(
+                          data: (transactionListdata) => SizedBox(
+                            height: 50,
+                            child: PageView.builder(
+                              padEnds: false,
+                              itemCount: categoryListdata.length,
+                              controller: PageController(viewportFraction: 0.7),
+                              itemBuilder: (context, index) {
+                                var id = categoryListdata[index].id;
+                                var total = transactionListdata
+                                    .where((element) =>
+                                        element.category ==
+                                        categoryListdata[index].id)
+                                    .fold<double>(
+                                        0,
+                                        (previousValue, element) =>
+                                            previousValue +
+                                            element.amount *
+                                                (element.type == 'income'
+                                                    ? 1
+                                                    : -1));
+
+                                return GestureDetector(
+                                  onTap: () => context
+                                      .go('/dashboard/category_expenses/$id'),
+                                  child: CategoryW(
+                                    category: categoryListdata[index],
+                                    total: total,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
+                          loading: () {
+                            return const CircularProgressIndicator();
+                          },
+                          error: (error, stackTrace) {
+                            return Text(
+                              error.toString(),
+                              style: const TextStyle(color: Colors.red),
+                            );
+                          },
                         ),
                         loading: () => const CircularProgressIndicator(),
                         error: (error, stackTrace) => Text(

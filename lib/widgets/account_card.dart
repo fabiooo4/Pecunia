@@ -103,7 +103,7 @@ class _AccountCardState extends State<AccountCard> {
               style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.redAccent),
+                  color: Colors.white),
             ),
           ),
         ],
