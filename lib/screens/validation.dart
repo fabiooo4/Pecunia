@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/api/sign_up/signup_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class VerificationPageParams {
   const VerificationPageParams({this.email, this.password, this.username});

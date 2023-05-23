@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart';
-import 'package:pecunia/api/users/users_repository.dart';
 import 'package:pecunia/widgets/provider_tile.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';

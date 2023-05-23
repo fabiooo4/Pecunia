@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pecunia/widgets/transactionw.dart';
-import '../model/categories/category.dart';
-import '../model/categories/categories_provider.dart';
 
 class CategoryExpenses extends ConsumerWidget {
   const CategoryExpenses({super.key, required this.categoryId});
@@ -29,6 +26,6 @@ class CategoryExpenses extends ConsumerWidget {
     //         }),
     //       ),
     //     ));
-    return Text("prova");
+    return const Text("prova");
   }
 }

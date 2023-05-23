@@ -33,8 +33,8 @@ class CategoryW extends ConsumerWidget {
                   direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 2, 0),
                       //child: category.icon,
                     ),
                     Text(

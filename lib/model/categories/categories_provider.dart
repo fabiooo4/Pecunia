@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/api/categories/categories_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'category.dart';

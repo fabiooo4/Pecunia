@@ -1,11 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/accounts/card.dart';
 import 'package:pecunia/model/accounts/card_provider.dart';
-import 'package:pecunia/model/categories/category.dart';
-import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
@@ -180,7 +177,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         loading: () => const CircularProgressIndicator(),
                         error: (error, stackTrace) => Text(
                           error.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     ),
