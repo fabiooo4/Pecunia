@@ -8,7 +8,7 @@ class Transaction {
       required this.type,
       required this.amount,
       this.date,
-      required this.description,
+      this.description,
       this.category,
       this.account});
 
@@ -16,7 +16,7 @@ class Transaction {
   String type;
   double amount;
   DateTime? date;
-  String description;
+  String? description;
   String? category;
   String? account;
 
@@ -26,6 +26,9 @@ class Transaction {
       type: json['type'],
       description: json['description'],
       amount: json['amount'].toDouble(),
+      date: DateTime.parse(json['created_at']),
+      category: json['category_id'],
+      account: json['account_id'],
     );
   }
 }

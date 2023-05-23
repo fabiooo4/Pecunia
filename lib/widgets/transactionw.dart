@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/transactions/transaction.dart';
+import '../model/categories/category.dart';
 
 class Transactionw extends ConsumerWidget {
   const Transactionw({
     Key? key,
     required this.transaction,
+    this.category,
   }) : super(key: key);
 
   final Transaction transaction;
+  final Category? category;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (transaction.type == 'expense') {
       return ListTile(
-        leading: Text('category'),
-        title: Text(transaction.description),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.arrow_downward, color: Colors.red),
+            Text(category?.name ?? ''),
+          ],
+        ),
+        title: Text(transaction.description ?? ''),
         subtitle: Text('account'),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
@@ -25,8 +34,14 @@ class Transactionw extends ConsumerWidget {
       );
     } else if (transaction.type == 'income') {
       return ListTile(
-        leading: Text('category'),
-        title: Text(transaction.description),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.arrow_upward, color: Colors.blue),
+            Text(category?.name ?? ''),
+          ],
+        ),
+        title: Text(transaction.description ?? ''),
         subtitle: Text('account'),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
@@ -34,7 +49,7 @@ class Transactionw extends ConsumerWidget {
         ),
       );
     } else {
-      return const SizedBox();
+      return const ListTile();
     }
 
     // return SizedBox(

@@ -189,9 +189,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: transactionList.when(
-                    data: (transactionListdata) => SizedBox(
-                      child: PageView.builder(
-                        padEnds: false,
+                    data: (transactionListdata) => categoryList.when(
+                      data: (categoryListdata) => ListView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: transactionListdata.length,
                         controller: PageController(viewportFraction: 1),
@@ -202,9 +201,19 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                 context.go('/dashboard/transaction/$id'),
                             child: Transactionw(
                               transaction: transactionListdata[index],
+                              category: categoryListdata.firstWhere(
+                                (element) =>
+                                    element.id ==
+                                    transactionListdata[index].category,
+                              ),
                             ),
                           );
                         },
+                      ),
+                      loading: () => const CircularProgressIndicator(),
+                      error: (error, stackTrace) => Text(
+                        error.toString(),
+                        style: const TextStyle(color: Colors.red),
                       ),
                     ),
                     loading: () => const CircularProgressIndicator(),
