@@ -1,7 +1,3 @@
-import 'package:uuid/uuid.dart';
-
-const uuid = Uuid();
-
 class Transaction {
   Transaction(
       {required this.id,

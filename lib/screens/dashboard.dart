@@ -112,10 +112,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       onPressed: () {},
                       child: const Icon(Icons.add),
                     ),
-                    ElevatedButton.icon(
-                        onPressed: _signOut,
-                        icon: const Icon(Icons.logout),
-                        label: const Text('Logout')),
                   ],
                 ),
               ),

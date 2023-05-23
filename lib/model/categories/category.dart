@@ -1,7 +1,3 @@
-import 'package:uuid/uuid.dart';
-
-const uuid = Uuid();
-
 class Category {
   Category({required this.id, required this.name, this.categoryIcon});
 
