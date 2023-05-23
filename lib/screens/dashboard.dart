@@ -192,11 +192,11 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     data: (transactionListdata) => SizedBox(
                       child: PageView.builder(
                         padEnds: false,
+                        scrollDirection: Axis.vertical,
                         itemCount: transactionListdata.length,
-                        controller: PageController(viewportFraction: 0.7),
+                        controller: PageController(viewportFraction: 1),
                         itemBuilder: (context, index) {
                           var id = transactionListdata[index].id;
-                          print(transactionListdata[index].type);
                           return GestureDetector(
                             onTap: () =>
                                 context.go('/dashboard/transaction/$id'),

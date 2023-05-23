@@ -25,7 +25,7 @@ class Transaction {
       id: json['id'],
       type: json['type'],
       description: json['description'],
-      amount: json['amount'],
+      amount: json['amount'].toDouble(),
     );
   }
 }

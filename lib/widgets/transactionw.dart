@@ -13,18 +13,59 @@ class Transactionw extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height / 10,
-      child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return const ListTile(
-            title: Text('Transaction'),
-            subtitle: Text('Transaction'),
-            trailing: Text('Transaction'),
-          );
-        },
-      ),
-    );
+    if (transaction.type == 'expense') {
+      return ListTile(
+        leading: Text('category'),
+        title: Text(transaction.description),
+        subtitle: Text('account'),
+        trailing: Text(
+          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    } else if (transaction.type == 'income') {
+      return ListTile(
+        leading: Text('category'),
+        title: Text(transaction.description),
+        subtitle: Text('account'),
+        trailing: Text(
+          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          style: const TextStyle(color: Colors.blue),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+
+    // return SizedBox(
+    //   child: ListView.builder(
+    //     itemCount: 2,
+    //     scrollDirection: Axis.vertical,
+    //     itemBuilder: (context, index) {
+    //       if (transaction.type == 'expense') {
+    //         return ListTile(
+    //           leading: Text('category'),
+    //           title: Text(transaction.description),
+    //           subtitle: Text('account'),
+    //           trailing: Text(
+    //             '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+    //             style: const TextStyle(color: Colors.red),
+    //           ),
+    //         );
+    //       } else if (transaction.type == 'income') {
+    //         return ListTile(
+    //           leading: Text('category'),
+    //           title: Text(transaction.description),
+    //           subtitle: Text('account'),
+    //           trailing: Text(
+    //             '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+    //             style: const TextStyle(color: Colors.blue),
+    //           ),
+    //         );
+    //       }
+    //       return null;
+    //     },
+    //   ),
+    // );
   }
 }
