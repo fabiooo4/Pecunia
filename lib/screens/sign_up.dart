@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/api/sign_up/signup_repository.dart';
+import 'package:pecunia/screens/validation.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     final String password = _passwordController.text;
 
     try {
+
       await ref.read(signUpRepositoryProvider).signUp(
             email: email,
             password: password,
@@ -31,7 +33,11 @@ class _SignupPageState extends ConsumerState<SignupPage> {
           );
 
       if (mounted) {
-        context.go('/home');
+        context.go('/validation', extra: VerificationPageParams(
+          email: email,
+          password: password,
+          username: username,
+          ));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("An email has been sent to $email for verification"),

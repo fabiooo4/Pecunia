@@ -12,7 +12,7 @@ class Transaction {
       this.category,
       this.account});
 
-  String id = uuid.v4();
+  String id;
   String type;
   double amount;
   DateTime? date;
