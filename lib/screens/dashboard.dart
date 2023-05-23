@@ -138,13 +138,17 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             onTap: () => _onCardTapped(i),
                             totalBalance: accountListdata[i].totalBalance,
                             income: transactionListdata
-                                .where((element) => element.type == 'income')
+                                .where((element) =>
+                                    element.type == 'income' &&
+                                    element.account == accountListdata[i].id)
                                 .fold<double>(
                                     0,
                                     (previousValue, element) =>
                                         previousValue + element.amount),
                             expense: transactionListdata
-                                .where((element) => element.type == 'expense')
+                                .where((element) =>
+                                    element.type == 'expense' &&
+                                    element.account == accountListdata[i].id)
                                 .fold<double>(
                                     0,
                                     (previousValue, element) =>
