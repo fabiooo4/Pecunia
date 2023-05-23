@@ -16,10 +16,10 @@ class CategoriesRepository {
     final data = await client
         .from('categories')
         .select()
-        .eq("account_id", client.auth.currentUser!.id);
+        .eq("user_id", client.auth.currentUser!.id);
     data.forEach((element) {
       result.add(Category.fromJson(element));
-      });
+    });
     return result;
   }
 }

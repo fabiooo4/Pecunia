@@ -1,14 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/accounts/card.dart';
 import 'package:pecunia/model/accounts/card_provider.dart';
-import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
+import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import 'package:pecunia/widgets/navigation_bar.dart';
+import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../model/users/user.dart';
 import '../model/users/users_provider.dart';
@@ -59,6 +59,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final categoryList = ref.watch(categoriesProvider);
+    final transactionList = ref.watch(transactionsProvider);
     final List<CardAccount> cardAccountList = ref.read(accountProvider);
     final user = ref
         .watch(userProvider(id: Supabase.instance.client.auth.currentUser!.id));
@@ -176,12 +177,52 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         loading: () => const CircularProgressIndicator(),
                         error: (error, stackTrace) => Text(
                           error.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                      ), 
+                      ),
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: transactionList.when(
+                    data: (transactionListdata) => categoryList.when(
+                      data: (categoryListdata) => ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: transactionListdata.length,
+                        controller: PageController(viewportFraction: 1),
+                        itemBuilder: (context, index) {
+                          var id = transactionListdata[index].id;
+                          return GestureDetector(
+                            onTap: () =>
+                                context.go('/dashboard/transaction/$id'),
+                            child: Transactionw(
+                              transaction: transactionListdata[index],
+                              category: categoryListdata.firstWhere(
+                                (element) =>
+                                    element.id ==
+                                    transactionListdata[index].category,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      loading: () => const CircularProgressIndicator(),
+                      error: (error, stackTrace) => Text(
+                        error.toString(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    loading: () => const CircularProgressIndicator(),
+                    error: (error, stackTrace) => Text(
+                      error.toString(),
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

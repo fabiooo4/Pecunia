@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pecunia/model/categories/categories_provider.dart';
-import 'package:pecunia/widgets/categoryw.dart';
-import '../model/categories/category.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -40,7 +37,7 @@ class _HomeState extends ConsumerState<Home> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: Column(children: [
+      body: const Column(children: [
       ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
