@@ -24,13 +24,21 @@ class _StatisticsState extends ConsumerState<Statistics> {
           heightFactor: 1,
           child: SizedBox(
               height: 300,
-              width: 300,
               child: SfCartesianChart(
+                  title: ChartTitle(text: 'Incomes and Expenses'),
+                  legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.bottom,
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      title: LegendTitle(
+                          text: "Tap on the legend to hide/show the series",
+                          textStyle: const TextStyle(fontSize: 9))),
                   primaryXAxis: CategoryAxis(
                     isInversed: true,
                   ),
                   series: <ChartSeries>[
                     LineSeries<TransactionsData, String>(
+                        name: "Expenses",
                         markerSettings: const MarkerSettings(isVisible: true),
                         onPointTap: (pointInteractionDetails) => showDialog(
                             context: context,
@@ -52,6 +60,19 @@ class _StatisticsState extends ConsumerState<Statistics> {
                             isVisible: true,
                             labelAlignment: ChartDataLabelAlignment.top)),
                     LineSeries<TransactionsData, String>(
+                        name: "Incomes",
+                        markerSettings: const MarkerSettings(isVisible: true),
+                        onPointTap: (pointInteractionDetails) => showDialog(
+                            context: context,
+                            builder: (context) {
+                              int index = pointInteractionDetails.pointIndex!;
+                              return AlertDialog(
+                                title: Text(
+                                    "Date: ${pointInteractionDetails.dataPoints![index].x}"),
+                                content: Text(
+                                    "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
+                              );
+                            }),
                         color: Colors.green,
                         dataSource: getChartDataIncome(transactions),
                         xAxisName: "Date",
@@ -80,7 +101,7 @@ List<TransactionsData> getChartDataExpense(
     for (var transaction in transactions) {
       if (transaction.type == 'expense') {
         chartData.add(TransactionsData(
-            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}",
+            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
             transaction.amount));
       }
     }
@@ -97,7 +118,7 @@ List<TransactionsData> getChartDataIncome(
     for (var transaction in transactions) {
       if (transaction.type == 'income') {
         chartData.add(TransactionsData(
-            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}",
+            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
             transaction.amount));
       }
     }
