@@ -342,14 +342,12 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             itemCount: transactionListdata.length,
                             controller: PageController(viewportFraction: 1),
                             itemBuilder: (context, index) {
-                              var id = transactionListdata[index].id;
                               if (transactionListdata[index].account !=
                                   accountListdata[activeCardIndex].id) {
                                 return const SizedBox.shrink();
                               }
 
                               return GestureDetector(
-<<<<<<< HEAD
                                 onTap: () => context.go(
                                     '/dashboard/transaction',
                                     extra: TransactionPageParams(
@@ -365,10 +363,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                             transactionListdata[index].category,
                                       ),
                                     )),
-=======
-                                onTap: () =>
-                                    context.push('/dashboard/transaction/$id'),
->>>>>>> f1ea67a290f274bc37bf20a189c3d7592c6abe0e
                                 child: Transactionw(
                                   transaction: transactionListdata[index],
                                   account: accountListdata.firstWhere(
