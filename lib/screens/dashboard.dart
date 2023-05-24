@@ -5,15 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
+import 'package:pecunia/screens/category_expenses.dart';
 import 'package:pecunia/screens/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../model/accounts/account.dart';
-import '../model/categories/category.dart';
-import '../model/transactions/transaction.dart';
 import '../model/users/user.dart';
 import '../model/users/users_provider.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart';
@@ -256,37 +254,49 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: categoryList.when(
                           data: (categoryListdata) => transactionList.when(
-                            data: (transactionListdata) => SizedBox(
-                              height: 50,
-                              child: PageView.builder(
-                                padEnds: false,
-                                itemCount: categoryListdata.length,
-                                controller:
-                                    PageController(viewportFraction: 0.7),
-                                itemBuilder: (context, index) {
-                                  var id = categoryListdata[index].id;
-                                  var total = transactionListdata
-                                      .where((element) =>
-                                          element.category ==
-                                          categoryListdata[index].id)
-                                      .fold<double>(
-                                          0,
-                                          (previousValue, element) =>
-                                              previousValue +
-                                              element.amount *
-                                                  (element.type == 'income'
-                                                      ? 1
-                                                      : -1));
+                            data: (transactionListdata) => accountList.when(
+                              data: (accountListdata) => SizedBox(
+                                height: 50,
+                                child: PageView.builder(
+                                  padEnds: false,
+                                  itemCount: categoryListdata.length,
+                                  controller:
+                                      PageController(viewportFraction: 0.7),
+                                  itemBuilder: (context, index) {
+                                    var id = categoryListdata[index].id;
+                                    var total = transactionListdata
+                                        .where((element) =>
+                                            element.category ==
+                                            categoryListdata[index].id)
+                                        .fold<double>(
+                                            0,
+                                            (previousValue, element) =>
+                                                previousValue +
+                                                element.amount *
+                                                    (element.type == 'income'
+                                                        ? 1
+                                                        : -1));
 
-                                  return GestureDetector(
-                                    onTap: () => context
-                                        .go('/dashboard/category_expenses/$id'),
-                                    child: CategoryW(
-                                      category: categoryListdata[index],
-                                      total: total,
-                                    ),
-                                  );
-                                },
+                                    return GestureDetector(
+                                      onTap: () => context.go(
+                                          '/dashboard/category_expenses/$id',
+                                          extra: CategoryTransactionsParams(
+                                            category: categoryListdata[index],
+                                            transactions: transactionListdata,
+                                            accounts: accountListdata,
+                                          )),
+                                      child: CategoryW(
+                                        category: categoryListdata[index],
+                                        total: total,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              loading: () => const CircularProgressIndicator(),
+                              error: (error, stackTrace) => Text(
+                                error.toString(),
+                                style: const TextStyle(color: Colors.red),
                               ),
                             ),
                             loading: () {
@@ -340,7 +350,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                           data: (accountListdata) => ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: transactionListdata.length,
-                            controller: PageController(viewportFraction: 1),
                             itemBuilder: (context, index) {
                               if (transactionListdata[index].account !=
                                   accountListdata[activeCardIndex].id) {
@@ -349,7 +358,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
                               return GestureDetector(
                                 onTap: () => context.go(
-                                    '/dashboard/transaction',
+                                    '/dashboard/transaction/${transactionListdata[index].id}',
                                     extra: TransactionPageParams(
                                       transaction: transactionListdata[index],
                                       account: accountListdata.firstWhere(
@@ -416,7 +425,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(child: Text("Account"));
+          return const Dialog(child: Text("Account"));
         });
   }
 
@@ -424,7 +433,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
+          return const Dialog(
               backgroundColor: Colors.grey,
               alignment: Alignment.topCenter,
               child: Text("Category", style: TextStyle(fontSize: 30)));
@@ -435,7 +444,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(child: Text("Transaction"));
+          return const Dialog(child: Text("Transaction"));
         });
   }
 }

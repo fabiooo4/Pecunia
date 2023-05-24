@@ -27,32 +27,6 @@ CustomTransitionPage buildPageWithDefaultTransition<T>({
 final router = GoRouter(
   routes: <GoRoute>[
     GoRoute(
-        path: '/home',
-        builder: (context, state) {
-          return const Dashboard();
-        },
-        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: const Dashboard(),
-            ),
-        routes: <GoRoute>[
-          GoRoute(
-            path: 'category_expenses/:categoryId',
-            builder: (context, state) => CategoryExpenses(
-              categoryId: state.pathParameters['categoryId']!,
-            ),
-            pageBuilder: (context, state) =>
-                buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: CategoryExpenses(
-                categoryId: state.pathParameters['categoryId']!,
-              ),
-            ),
-          )
-        ]),
-    GoRoute(
       path: '/',
       builder: (context, state) => const LoginPage(),
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
@@ -80,20 +54,22 @@ final router = GoRouter(
         routes: <GoRoute>[
           GoRoute(
             path: 'category_expenses/:categoryId',
-            builder: (context, state) => CategoryExpenses(
-              categoryId: state.pathParameters['categoryId']!,
-            ),
+            builder: (context, state) {
+              final params = state.extra as CategoryTransactionsParams;
+
+              return CategoryTransactions(params: params);
+            },
             pageBuilder: (context, state) =>
                 buildPageWithDefaultTransition<void>(
               context: context,
               state: state,
-              child: CategoryExpenses(
-                categoryId: state.pathParameters['categoryId']!,
+              child: CategoryTransactions(
+                params: state.extra as CategoryTransactionsParams,
               ),
             ),
           ),
           GoRoute(
-            path: 'transaction',
+            path: 'transaction/:transactionId',
             builder: (context, state) {
               final params = state.extra as TransactionPageParams;
 
