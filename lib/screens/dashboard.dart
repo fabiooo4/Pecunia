@@ -345,7 +345,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
                               return GestureDetector(
                                 onTap: () =>
-                                    context.go('/dashboard/transaction/$id'),
+                                    context.push('/dashboard/transaction/$id'),
                                 child: Transactionw(
                                   transaction: transactionListdata[index],
                                   account: accountListdata.firstWhere(
