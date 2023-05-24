@@ -117,167 +117,63 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 ),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                height: 200,
-                child: accountList.when(
-                  data: (accountListdata) => transactionList.when(
-                    data: (transactionListdata) => PageView.builder(
-                      itemCount: accountListdata.length,
-                      controller: PageController(viewportFraction: 0.7),
-                      onPageChanged: (int index) =>
-                          setState(() => _index = index),
-                      itemBuilder: (_, i) {
-                        final isActive = i == activeCardIndex;
+              // if accountList is not empty
+              if (accountList.when(
+                data: (accountListdata) => accountListdata.isNotEmpty,
+                loading: () => false,
+                error: (error, stackTrace) => false,
+              )) ...[
+                SizedBox(
+                  height: 200,
+                  child: accountList.when(
+                    data: (accountListdata) => transactionList.when(
+                      data: (transactionListdata) => PageView.builder(
+                        itemCount: accountListdata.length,
+                        controller: PageController(viewportFraction: 0.7),
+                        onPageChanged: (int index) =>
+                            setState(() => _index = index),
+                        itemBuilder: (_, i) {
+                          final isActive = i == activeCardIndex;
 
-                        return AnimatedScale(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOutExpo,
-                          scale: isActive ? 1 : 0.9,
-                          child: AccountCard(
-                            name: accountListdata[i].name,
-                            onTap: () => _onCardTapped(i),
-                            totalBalance: transactionListdata
-                                .where((element) =>
-                                    element.account == accountListdata[i].id)
-                                .fold<double>(
-                                    0,
-                                    (previousValue, element) =>
-                                        previousValue +
-                                        element.amount *
-                                            (element.type == 'income' ? 1 : -1))
-                                .toDouble(),
-                            income: transactionListdata
-                                .where((element) =>
-                                    element.type == 'income' &&
-                                    element.account == accountListdata[i].id)
-                                .fold<double>(
-                                    0,
-                                    (previousValue, element) =>
-                                        previousValue + element.amount),
-                            expense: transactionListdata
-                                .where((element) =>
-                                    element.type == 'expense' &&
-                                    element.account == accountListdata[i].id)
-                                .fold<double>(
-                                    0,
-                                    (previousValue, element) =>
-                                        previousValue + element.amount),
-                            active: isActive,
-                          ),
-                        );
-                      },
-                    ),
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, stackTrace) => Text(
-                      error.toString(),
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) => Text(
-                    error.toString(),
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: categoryList.when(
-                        data: (categoryListdata) => transactionList.when(
-                          data: (transactionListdata) => SizedBox(
-                            height: 50,
-                            child: PageView.builder(
-                              padEnds: false,
-                              itemCount: categoryListdata.length,
-                              controller: PageController(viewportFraction: 0.7),
-                              itemBuilder: (context, index) {
-                                var id = categoryListdata[index].id;
-                                var total = transactionListdata
-                                    .where((element) =>
-                                        element.category ==
-                                        categoryListdata[index].id)
-                                    .fold<double>(
-                                        0,
-                                        (previousValue, element) =>
-                                            previousValue +
-                                            element.amount *
-                                                (element.type == 'income'
-                                                    ? 1
-                                                    : -1));
-
-                                return GestureDetector(
-                                  onTap: () => context
-                                      .go('/dashboard/category_expenses/$id'),
-                                  child: CategoryW(
-                                    category: categoryListdata[index],
-                                    total: total,
-                                  ),
-                                );
-                              },
+                          return AnimatedScale(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutExpo,
+                            scale: isActive ? 1 : 0.9,
+                            child: AccountCard(
+                              name: accountListdata[i].name,
+                              onTap: () => _onCardTapped(i),
+                              totalBalance: transactionListdata
+                                  .where((element) =>
+                                      element.account == accountListdata[i].id)
+                                  .fold<double>(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue +
+                                          element.amount *
+                                              (element.type == 'income'
+                                                  ? 1
+                                                  : -1))
+                                  .toDouble(),
+                              income: transactionListdata
+                                  .where((element) =>
+                                      element.type == 'income' &&
+                                      element.account == accountListdata[i].id)
+                                  .fold<double>(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue + element.amount),
+                              expense: transactionListdata
+                                  .where((element) =>
+                                      element.type == 'expense' &&
+                                      element.account == accountListdata[i].id)
+                                  .fold<double>(
+                                      0,
+                                      (previousValue, element) =>
+                                          previousValue + element.amount),
+                              active: isActive,
                             ),
-                          ),
-                          loading: () {
-                            return const CircularProgressIndicator();
-                          },
-                          error: (error, stackTrace) {
-                            return Text(
-                              error.toString(),
-                              style: const TextStyle(color: Colors.red),
-                            );
-                          },
-                        ),
-                        loading: () => const CircularProgressIndicator(),
-                        error: (error, stackTrace) => Text(
-                          error.toString(),
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: transactionList.when(
-                    data: (transactionListdata) => categoryList.when(
-                      data: (categoryListdata) => accountList.when(
-                        data: (accountListdata) => ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: transactionListdata.length,
-                          controller: PageController(viewportFraction: 1),
-                          itemBuilder: (context, index) {
-                            var id = transactionListdata[index].id;
-                            return GestureDetector(
-                              onTap: () =>
-                                  context.go('/dashboard/transaction/$id'),
-                              child: Transactionw(
-                                transaction: transactionListdata[index],
-                                account: accountListdata.firstWhere(
-                                  (element) =>
-                                      element.id ==
-                                      transactionListdata[index].account,
-                                ),
-                                category: categoryListdata.firstWhere(
-                                  (element) =>
-                                      element.id ==
-                                      transactionListdata[index].category,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        loading: () => const CircularProgressIndicator(),
-                        error: (error, stackTrace) => Text(
-                          error.toString(),
-                          style: const TextStyle(color: Colors.red),
-                        ),
+                          );
+                        },
                       ),
                       loading: () => const CircularProgressIndicator(),
                       error: (error, stackTrace) => Text(
@@ -292,7 +188,161 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     ),
                   ),
                 ),
-              ),
+              ] else ...[
+                const SizedBox(
+                  height: 200,
+                  child: Center(child: Text("No accounts found")),
+                ),
+              ],
+
+              const SizedBox(height: 10),
+
+              if (categoryList.when(
+                data: (categoryListdata) => categoryListdata.isNotEmpty,
+                loading: () => false,
+                error: (error, stackTrace) => false,
+              )) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: categoryList.when(
+                          data: (categoryListdata) => transactionList.when(
+                            data: (transactionListdata) => SizedBox(
+                              height: 50,
+                              child: PageView.builder(
+                                padEnds: false,
+                                itemCount: categoryListdata.length,
+                                controller:
+                                    PageController(viewportFraction: 0.7),
+                                itemBuilder: (context, index) {
+                                  var id = categoryListdata[index].id;
+                                  var total = transactionListdata
+                                      .where((element) =>
+                                          element.category ==
+                                          categoryListdata[index].id)
+                                      .fold<double>(
+                                          0,
+                                          (previousValue, element) =>
+                                              previousValue +
+                                              element.amount *
+                                                  (element.type == 'income'
+                                                      ? 1
+                                                      : -1));
+
+                                  return GestureDetector(
+                                    onTap: () => context
+                                        .go('/dashboard/category_expenses/$id'),
+                                    child: CategoryW(
+                                      category: categoryListdata[index],
+                                      total: total,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            loading: () {
+                              return const CircularProgressIndicator();
+                            },
+                            error: (error, stackTrace) {
+                              return Text(
+                                error.toString(),
+                                style: const TextStyle(color: Colors.red),
+                              );
+                            },
+                          ),
+                          loading: () => const CircularProgressIndicator(),
+                          error: (error, stackTrace) => Text(
+                            error.toString(),
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SizedBox(
+                          height: 50,
+                          child: Center(child: Text("No categories found")),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              const SizedBox(height: 10),
+
+              if (categoryList.when(
+                data: (categoryListdata) => categoryListdata.isNotEmpty,
+                loading: () => false,
+                error: (error, stackTrace) => false,
+              )) ...[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: transactionList.when(
+                      data: (transactionListdata) => categoryList.when(
+                        data: (categoryListdata) => accountList.when(
+                          data: (accountListdata) => ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: transactionListdata.length,
+                            controller: PageController(viewportFraction: 1),
+                            itemBuilder: (context, index) {
+                              var id = transactionListdata[index].id;
+                              return GestureDetector(
+                                onTap: () =>
+                                    context.go('/dashboard/transaction/$id'),
+                                child: Transactionw(
+                                  transaction: transactionListdata[index],
+                                  account: accountListdata.firstWhere(
+                                    (element) =>
+                                        element.id ==
+                                        transactionListdata[index].account,
+                                  ),
+                                  category: categoryListdata.firstWhere(
+                                    (element) =>
+                                        element.id ==
+                                        transactionListdata[index].category,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          loading: () => const CircularProgressIndicator(),
+                          error: (error, stackTrace) => Text(
+                            error.toString(),
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        loading: () => const CircularProgressIndicator(),
+                        error: (error, stackTrace) => Text(
+                          error.toString(),
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      loading: () => const CircularProgressIndicator(),
+                      error: (error, stackTrace) => Text(
+                        error.toString(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                ),
+              ] else ...[
+                const Expanded(
+                  child: Center(child: Text("No transactions found")),
+                ),
+              ],
             ],
           ),
         ),
