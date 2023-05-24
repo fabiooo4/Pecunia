@@ -5,14 +5,18 @@ import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
+import 'package:pecunia/screens/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../model/accounts/account.dart';
+import '../model/categories/category.dart';
+import '../model/transactions/transaction.dart';
 import '../model/users/user.dart';
 import '../model/users/users_provider.dart';
-import 'package:pecunia/api/sign_in/signin_repository.dart'; // Import the GoRouter instance
+import 'package:pecunia/api/sign_in/signin_repository.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -23,6 +27,7 @@ class Dashboard extends ConsumerStatefulWidget {
 
 class _DashboardState extends ConsumerState<Dashboard> {
   int activeCardIndex = 0;
+  // ignore: unused_field
   int _index = 0;
 
   late UserModel user;
@@ -104,7 +109,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       ],
                     ),
                     DecoratedBox(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.horizontal(
                             left: Radius.elliptical(25, 15),
                             right: Radius.elliptical(25, 15)),
@@ -139,18 +144,18 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             items: const [
                               DropdownMenuItem(
                                 alignment: Alignment.center,
-                                child: const Icon(Icons.settings),
                                 value: 1,
+                                child: Icon(Icons.settings),
                               ),
                               DropdownMenuItem(
                                 alignment: Alignment.center,
-                                child: const Icon(Icons.logout),
                                 value: 2,
+                                child: Icon(Icons.logout),
                               ),
                               DropdownMenuItem(
                                 alignment: Alignment.center,
-                                child: const Icon(Icons.add),
                                 value: 3,
+                                child: Icon(Icons.add),
                               ),
                             ],
                           ),
@@ -344,8 +349,21 @@ class _DashboardState extends ConsumerState<Dashboard> {
                               }
 
                               return GestureDetector(
-                                onTap: () =>
-                                    context.go('/dashboard/transaction/$id'),
+                                onTap: () => context.go(
+                                    '/dashboard/transaction',
+                                    extra: TransactionPageParams(
+                                      transaction: transactionListdata[index],
+                                      account: accountListdata.firstWhere(
+                                        (element) =>
+                                            element.id ==
+                                            transactionListdata[index].account,
+                                      ),
+                                      category: categoryListdata.firstWhere(
+                                        (element) =>
+                                            element.id ==
+                                            transactionListdata[index].category,
+                                      ),
+                                    )),
                                 child: Transactionw(
                                   transaction: transactionListdata[index],
                                   account: accountListdata.firstWhere(
@@ -403,15 +421,18 @@ class _DashboardState extends ConsumerState<Dashboard> {
         });
   }
 
-    void _showSimpleModalDialogCategory() {
+  void _showSimpleModalDialogCategory() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(backgroundColor: Colors.grey, alignment: Alignment.topCenter, child: Text("Category", style: TextStyle(fontSize: 30)));
+          return Dialog(
+              backgroundColor: Colors.grey,
+              alignment: Alignment.topCenter,
+              child: Text("Category", style: TextStyle(fontSize: 30)));
         });
   }
 
-    void _showSimpleModalDialogTransaction() {
+  void _showSimpleModalDialogTransaction() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {

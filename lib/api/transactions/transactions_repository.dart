@@ -22,4 +22,14 @@ class TransactionsRepository {
     });
     return result;
   }
+
+  Future<Transaction> getTransaction(String id) async {
+    final data = await client
+        .from('transactions')
+        .select()
+        .eq("user_id", client.auth.currentUser!.id)
+        .eq("id", id)
+        .single();
+    return Transaction.fromJson(data);
+  }
 }

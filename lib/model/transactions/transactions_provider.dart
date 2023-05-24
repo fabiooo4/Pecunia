@@ -12,3 +12,11 @@ Future<List<Transaction>> transactions(
   // return all the functions from the repository
   return ref.read(transactionsRepositoryProvider).getTransactions();
 }
+
+@riverpod
+Future<Transaction> transaction(
+  TransactionsRef ref,
+  String id,
+) {
+  return ref.read(transactionsRepositoryProvider).getTransaction(id);
+}

@@ -93,16 +93,18 @@ final router = GoRouter(
             ),
           ),
           GoRoute(
-            path: 'transaction/:transactionId',
-            builder: (context, state) => TransactionPage(
-              transactionId: state.pathParameters['transactionId']!,
-            ),
+            path: 'transaction',
+            builder: (context, state) {
+              final params = state.extra as TransactionPageParams;
+
+              return TransactionPage(params: params);
+            },
             pageBuilder: (context, state) =>
                 buildPageWithDefaultTransition<void>(
               context: context,
               state: state,
               child: TransactionPage(
-                transactionId: state.pathParameters['transactionId']!,
+                params: state.extra as TransactionPageParams,
               ),
             ),
           ),

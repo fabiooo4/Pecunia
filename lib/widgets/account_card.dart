@@ -29,17 +29,17 @@ class _AccountCardState extends State<AccountCard> {
   @override
   Widget build(BuildContext context) {
     final cardColor = widget.active ? Colors.green : Colors.blue;
-    final shadow = widget.active
-        ? const BoxShadow(
-            color: Colors.green,
-            blurRadius: 5,
-            offset: Offset(0, 8),
-          )
-        : const BoxShadow(
-            color: Colors.blueAccent,
-            blurRadius: 0,
-            offset: Offset(0, 0),
-          );
+    // final shadow = widget.active
+    //     ? const BoxShadow(
+    //         color: Colors.green,
+    //         blurRadius: 5,
+    //         offset: Offset(0, 8),
+    //       )
+    //     : const BoxShadow(
+    //         color: Colors.blueAccent,
+    //         blurRadius: 0,
+    //         offset: Offset(0, 0),
+    //       );
     return InkWell(
       enableFeedback: true,
       customBorder: RoundedRectangleBorder(
