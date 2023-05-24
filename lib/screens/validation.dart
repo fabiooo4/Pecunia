@@ -29,7 +29,7 @@ class _ValidationState extends ConsumerState<Validation> {
           .read(signUpRepositoryProvider)
           .VerifyCode(email: widget.params.email, code: codeController.text);
       if (mounted) {
-        context.go('/login');
+        context.go('/');
         
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

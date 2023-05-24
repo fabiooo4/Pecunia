@@ -74,7 +74,7 @@ class _NavBarState extends State<NavBar> {
       elevation: 0,
       currentIndex: _index,
       onTap: (index) {
-        context.go(_pages[index]);
+        context.push(_pages[index]);
         _onItemTapped(index);
       },
       items: const <BottomNavigationBarItem>[

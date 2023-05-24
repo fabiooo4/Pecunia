@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -102,16 +103,59 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(0.0),
-                        minimumSize: const Size(50, 50),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.horizontal(
+                            left: Radius.elliptical(25, 15),
+                            right: Radius.elliptical(25, 15)),
+                        color: Color.fromARGB(255, 88, 166, 66),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            dropdownStyleData: DropdownStyleData(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white),
+                                width: 100,
+                                direction: DropdownDirection.left),
+                            hint: const Text('Add',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 17)),
+                            onChanged: (value) {
+                              switch (value) {
+                                case 1:
+                                  _showSimpleModalDialogAccount();
+                                  break;
+                                case 2:
+                                  _showSimpleModalDialogCategory();
+                                  break;
+                                case 3:
+                                  _showSimpleModalDialogTransaction();
+                                  break;
+                              }
+                            },
+                            items: const [
+                              DropdownMenuItem(
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.settings),
+                                value: 1,
+                              ),
+                              DropdownMenuItem(
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.logout),
+                                value: 2,
+                              ),
+                              DropdownMenuItem(
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.add),
+                                value: 3,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      onPressed: () {},
-                      child: const Icon(Icons.add),
                     ),
                   ],
                 ),
@@ -349,5 +393,29 @@ class _DashboardState extends ConsumerState<Dashboard> {
       ),
       bottomNavigationBar: const NavBar(active: 0),
     );
+  }
+
+  void _showSimpleModalDialogAccount() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(child: Text("Account"));
+        });
+  }
+
+    void _showSimpleModalDialogCategory() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(backgroundColor: Colors.grey, alignment: Alignment.topCenter, child: Text("Category", style: TextStyle(fontSize: 30)));
+        });
+  }
+
+    void _showSimpleModalDialogTransaction() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(child: Text("Transaction"));
+        });
   }
 }
