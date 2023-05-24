@@ -136,7 +136,16 @@ class _DashboardState extends ConsumerState<Dashboard> {
                           child: AccountCard(
                             name: accountListdata[i].name,
                             onTap: () => _onCardTapped(i),
-                            totalBalance: accountListdata[i].totalBalance,
+                            totalBalance: transactionListdata
+                                .where((element) =>
+                                    element.account == accountListdata[i].id)
+                                .fold<double>(
+                                    0,
+                                    (previousValue, element) =>
+                                        previousValue +
+                                        element.amount *
+                                            (element.type == 'income' ? 1 : -1))
+                                .toDouble(),
                             income: transactionListdata
                                 .where((element) =>
                                     element.type == 'income' &&
