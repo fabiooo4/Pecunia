@@ -16,72 +16,87 @@ class _StatisticsState extends ConsumerState<Statistics> {
   Widget build(BuildContext context) {
     final transactions = ref.watch(transactionsProvider);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: const Text('Statistics'),
       ),
-      body: Center(
-          heightFactor: 1,
-          child: SizedBox(
-              height: 300,
-              child: SfCartesianChart(
-                  title: ChartTitle(text: 'Incomes and Expenses'),
-                  legend: Legend(
-                      isVisible: true,
-                      position: LegendPosition.bottom,
-                      overflowMode: LegendItemOverflowMode.wrap,
-                      title: LegendTitle(
-                          text: "Tap on the legend to hide/show the series",
-                          textStyle: const TextStyle(fontSize: 9))),
-                  primaryXAxis: CategoryAxis(
-                    isInversed: true,
-                  ),
-                  series: <ChartSeries>[
-                    LineSeries<TransactionsData, String>(
-                        name: "Expenses",
-                        markerSettings: const MarkerSettings(isVisible: true),
-                        onPointTap: (pointInteractionDetails) => showDialog(
-                            context: context,
-                            builder: (context) {
-                              int index = pointInteractionDetails.pointIndex!;
-                              return AlertDialog(
-                                title: Text(
-                                    "Date: ${pointInteractionDetails.dataPoints![index].x}"),
-                                content: Text(
-                                    "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
-                              );
-                            }),
-                        color: Colors.red,
-                        dataSource: getChartDataExpense(transactions),
-                        xAxisName: "Date",
-                        xValueMapper: (TransactionsData trans, _) => trans.x,
-                        yValueMapper: (TransactionsData trans, _) => trans.y,
-                        dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.top)),
-                    LineSeries<TransactionsData, String>(
-                        name: "Incomes",
-                        markerSettings: const MarkerSettings(isVisible: true),
-                        onPointTap: (pointInteractionDetails) => showDialog(
-                            context: context,
-                            builder: (context) {
-                              int index = pointInteractionDetails.pointIndex!;
-                              return AlertDialog(
-                                title: Text(
-                                    "Date: ${pointInteractionDetails.dataPoints![index].x}"),
-                                content: Text(
-                                    "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
-                              );
-                            }),
-                        color: Colors.green,
-                        dataSource: getChartDataIncome(transactions),
-                        xAxisName: "Date",
-                        xValueMapper: (TransactionsData trans, _) => trans.x,
-                        yValueMapper: (TransactionsData trans, _) => trans.y,
-                        dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.top))
-                  ]))),
+      body: Column(
+        children: [
+          Center(
+              heightFactor: 1,
+              child: SizedBox(
+                  height: 300,
+                  child: SfCartesianChart(
+                      title: ChartTitle(text: 'Incomes and Expenses'),
+                      legend: Legend(
+                          isVisible: true,
+                          position: LegendPosition.bottom,
+                          overflowMode: LegendItemOverflowMode.wrap,
+                          title: LegendTitle(
+                              text: "Tap on the legend to hide/show the series",
+                              textStyle: const TextStyle(fontSize: 9))),
+                      primaryXAxis: CategoryAxis(
+                        isInversed: true,
+                      ),
+                      series: <ChartSeries>[
+                        LineSeries<TransactionsData, String>(
+                            name: "Expenses",
+                            markerSettings:
+                                const MarkerSettings(isVisible: true),
+                            onPointTap: (pointInteractionDetails) => showDialog(
+                                context: context,
+                                builder: (context) {
+                                  int index =
+                                      pointInteractionDetails.pointIndex!;
+                                  return AlertDialog(
+                                    title: Text(
+                                        "Date: ${pointInteractionDetails.dataPoints![index].x}"),
+                                    content: Text(
+                                        "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
+                                  );
+                                }),
+                            color: Colors.red,
+                            dataSource: getChartDataExpense(transactions),
+                            xAxisName: "Date",
+                            xValueMapper: (TransactionsData trans, _) =>
+                                trans.x,
+                            yValueMapper: (TransactionsData trans, _) =>
+                                trans.y,
+                            dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.top)),
+                        LineSeries<TransactionsData, String>(
+                            name: "Incomes",
+                            markerSettings:
+                                const MarkerSettings(isVisible: true),
+                            onPointTap: (pointInteractionDetails) => showDialog(
+                                context: context,
+                                builder: (context) {
+                                  int index =
+                                      pointInteractionDetails.pointIndex!;
+                                  return AlertDialog(
+                                    title: Text(
+                                        "Date: ${pointInteractionDetails.dataPoints![index].x}"),
+                                    content: Text(
+                                        "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
+                                  );
+                                }),
+                            color: Colors.green,
+                            dataSource: getChartDataIncome(transactions),
+                            xAxisName: "Date",
+                            xValueMapper: (TransactionsData trans, _) =>
+                                trans.x,
+                            yValueMapper: (TransactionsData trans, _) =>
+                                trans.y,
+                            dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.top))
+                      ]))),
+          const SizedBox(height: 20),
+        ],
+      ),
       bottomNavigationBar: const NavBar(active: 1),
     );
   }
