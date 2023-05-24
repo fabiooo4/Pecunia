@@ -117,7 +117,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 ),
               ),
               const SizedBox(height: 20),
-              // if accountList is not empty
               if (accountList.when(
                 data: (accountListdata) => accountListdata.isNotEmpty,
                 loading: () => false,
@@ -134,12 +133,12 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             setState(() => _index = index),
                         itemBuilder: (_, i) {
                           final isActive = i == activeCardIndex;
-
                           return AnimatedScale(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeOutExpo,
                             scale: isActive ? 1 : 0.9,
                             child: AccountCard(
+                              id: accountListdata[i].id,
                               name: accountListdata[i].name,
                               onTap: () => _onCardTapped(i),
                               totalBalance: transactionListdata
@@ -194,9 +193,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   child: Center(child: Text("No accounts found")),
                 ),
               ],
-
               const SizedBox(height: 10),
-
               if (categoryList.when(
                 data: (categoryListdata) => categoryListdata.isNotEmpty,
                 loading: () => false,
@@ -279,9 +276,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   ],
                 ),
               ],
-
               const SizedBox(height: 10),
-
               if (categoryList.when(
                 data: (categoryListdata) => categoryListdata.isNotEmpty,
                 loading: () => false,
@@ -299,6 +294,11 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             controller: PageController(viewportFraction: 1),
                             itemBuilder: (context, index) {
                               var id = transactionListdata[index].id;
+                              if (transactionListdata[index].account !=
+                                  accountListdata[activeCardIndex].id) {
+                                return const SizedBox.shrink();
+                              }
+
                               return GestureDetector(
                                 onTap: () =>
                                     context.go('/dashboard/transaction/$id'),

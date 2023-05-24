@@ -21,15 +21,15 @@ class Transactionw extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (transaction.type == 'expense') {
       return ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.arrow_downward, color: Colors.red),
-            Text(category?.name ?? ''),
-          ],
+        leading: const Icon(
+          Icons.arrow_downward,
+          color: Colors.red,
         ),
         title: Text(transaction.description ?? ''),
-        subtitle: Text(account.name),
+        subtitle: Text(
+          category?.name ?? '',
+          style: const TextStyle(color: Colors.black54),
+        ),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
           style: const TextStyle(color: Colors.red),
@@ -37,15 +37,13 @@ class Transactionw extends ConsumerWidget {
       );
     } else if (transaction.type == 'income') {
       return ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.arrow_upward, color: Colors.blue),
-            Text(category?.name ?? ''),
-          ],
+        leading: const Icon(
+          Icons.arrow_upward,
+          color: Colors.blue,
         ),
         title: Text(transaction.description ?? ''),
-        subtitle: Text(account.name),
+        subtitle: Text(category?.name ?? '',
+            style: const TextStyle(color: Colors.black54)),
         trailing: Text(
           '€ ${transaction.amount.toString().replaceAll('.', ',')}',
           style: const TextStyle(color: Colors.blue),

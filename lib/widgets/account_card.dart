@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class AccountCard extends StatefulWidget {
   const AccountCard(
       {Key? key,
+      required this.id,
       required this.name,
       required this.onTap,
       required this.totalBalance,
@@ -12,6 +13,7 @@ class AccountCard extends StatefulWidget {
       required this.active})
       : super(key: key);
 
+  final String id;
   final String name;
   final VoidCallback onTap;
   final double totalBalance;
