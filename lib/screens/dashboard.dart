@@ -30,6 +30,11 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   late UserModel user;
 
+  final PageController _cardController =
+      PageController(viewportFraction: 0.7, initialPage: 0);
+
+  final PageController _transactionsController = PageController(initialPage: 0);
+
   void _onCardTapped(int index) {
     setState(() {
       activeCardIndex = index;
@@ -175,9 +180,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     data: (accountListdata) => transactionList.when(
                       data: (transactionListdata) => PageView.builder(
                         itemCount: accountListdata.length,
-                        controller: PageController(viewportFraction: 0.7),
-                        onPageChanged: (int index) =>
-                            setState(() => _index = index),
+                        controller: _cardController,
+                        onPageChanged: (index) => onCardSwipe(index),
                         itemBuilder: (_, i) {
                           final isActive = i == activeCardIndex;
                           return AnimatedScale(
@@ -187,7 +191,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             child: AccountCard(
                               id: accountListdata[i].id,
                               name: accountListdata[i].name,
-                              onTap: () => _onCardTapped(i),
+                              onTap: () => {},
+                              // onTap: () => _onCardTapped(i),
                               totalBalance: transactionListdata
                                   .where((element) =>
                                       element.account == accountListdata[i].id)
@@ -347,19 +352,43 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     child: transactionList.when(
                       data: (transactionListdata) => categoryList.when(
                         data: (categoryListdata) => accountList.when(
-                          data: (accountListdata) => ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: transactionListdata.length,
-                            itemBuilder: (context, index) {
-                              if (transactionListdata[index].account !=
-                                  accountListdata[activeCardIndex].id) {
-                                return const SizedBox.shrink();
-                              }
+                          data: (accountListdata) => PageView.builder(
+                            itemCount: accountListdata.length,
+                            controller: _transactionsController,
+                            onPageChanged: (index) {
+                              onTransactionsSwipe(index);
+                            },
+                            itemBuilder: (BuildContext context, int pageIndex) {
+                              // for each page show a listviewbuilder with transactions filtered by account
+                              return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: transactionListdata.length,
+                                itemBuilder: (context, index) {
+                                  if (transactionListdata[index].account !=
+                                      accountListdata[pageIndex].id) {
+                                    return const SizedBox.shrink();
+                                  }
 
-                              return GestureDetector(
-                                onTap: () => context.go(
-                                    '/dashboard/transaction/${transactionListdata[index].id}',
-                                    extra: TransactionPageParams(
+                                  return GestureDetector(
+                                    onTap: () => context.go(
+                                        '/dashboard/transaction/${transactionListdata[index].id}',
+                                        extra: TransactionPageParams(
+                                          transaction:
+                                              transactionListdata[index],
+                                          account: accountListdata.firstWhere(
+                                            (element) =>
+                                                element.id ==
+                                                transactionListdata[index]
+                                                    .account,
+                                          ),
+                                          category: categoryListdata.firstWhere(
+                                            (element) =>
+                                                element.id ==
+                                                transactionListdata[index]
+                                                    .category,
+                                          ),
+                                        )),
+                                    child: Transactionw(
                                       transaction: transactionListdata[index],
                                       account: accountListdata.firstWhere(
                                         (element) =>
@@ -371,20 +400,9 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                             element.id ==
                                             transactionListdata[index].category,
                                       ),
-                                    )),
-                                child: Transactionw(
-                                  transaction: transactionListdata[index],
-                                  account: accountListdata.firstWhere(
-                                    (element) =>
-                                        element.id ==
-                                        transactionListdata[index].account,
-                                  ),
-                                  category: categoryListdata.firstWhere(
-                                    (element) =>
-                                        element.id ==
-                                        transactionListdata[index].category,
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -419,6 +437,24 @@ class _DashboardState extends ConsumerState<Dashboard> {
       ),
       bottomNavigationBar: const NavBar(active: 0),
     );
+  }
+
+  void onCardSwipe(int index) {
+    return setState(() {
+      activeCardIndex = index;
+      _transactionsController.animateToPage(activeCardIndex,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.decelerate);
+    });
+  }
+
+  void onTransactionsSwipe(int index) {
+    return setState(() {
+      activeCardIndex = index;
+      _cardController.animateToPage(activeCardIndex,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.decelerate);
+    });
   }
 
   void _showSimpleModalDialogAccount() {
