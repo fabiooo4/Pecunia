@@ -42,7 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           .signIn(email: email, password: password);
 
       if (mounted) {
-        context.go('/dashboard');
+        context.go('/home');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

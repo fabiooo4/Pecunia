@@ -9,7 +9,6 @@ import 'package:pecunia/screens/dashboard/category_expenses.dart';
 import 'package:pecunia/screens/dashboard/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
-import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../model/users/user.dart';
@@ -25,8 +24,6 @@ class Dashboard extends ConsumerStatefulWidget {
 
 class _DashboardState extends ConsumerState<Dashboard> {
   int activeCardIndex = 0;
-  // ignore: unused_field
-  int _index = 0;
 
   late UserModel user;
 
@@ -34,12 +31,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
       PageController(viewportFraction: 0.7, initialPage: 0);
 
   final PageController _transactionsController = PageController(initialPage: 0);
-
-  void _onCardTapped(int index) {
-    setState(() {
-      activeCardIndex = index;
-    });
-  }
 
   Future<void> _signOut() async {
     try {
@@ -285,7 +276,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
                                     return GestureDetector(
                                       onTap: () => context.go(
-                                          '/dashboard/category_expenses/$id',
+                                          '/home/dashboard/category_expenses/$id',
                                           extra: CategoryTransactionsParams(
                                             category: categoryListdata[index],
                                             transactions: transactionListdata,
@@ -372,7 +363,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
                                   return GestureDetector(
                                     onTap: () => context.go(
-                                        '/dashboard/transaction/${transactionListdata[index].id}',
+                                        '/home/dashboard/transaction/${transactionListdata[index].id}',
                                         extra: TransactionPageParams(
                                           transaction:
                                               transactionListdata[index],
@@ -436,7 +427,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
           ),
         ),
       ),
-      bottomNavigationBar: const NavBar(active: 0),
     );
   }
 

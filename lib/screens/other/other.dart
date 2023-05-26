@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../api/sign_in/signin_repository.dart';
-import '../../widgets/navigation_bar.dart';
 import '../../widgets/menu_tile.dart';
 
 class Other extends ConsumerStatefulWidget {
@@ -108,21 +107,21 @@ class _OtherState extends ConsumerState<Other> {
                             leadingIcon: Icons.settings,
                             title: const Text('Settings'),
                             onTap: () {
-                              context.go('/other/settings');
+                              context.go('/home/other/settings');
                             },
                           ),
                           MenuTileWidget(
                             leadingIcon: Icons.category,
                             title: const Text('Categories'),
                             onTap: () {
-                              context.go('/other/categories');
+                              context.go('/home/other/categories');
                             },
                           ),
                           MenuTileWidget(
                             leadingIcon: Icons.account_balance_wallet,
                             title: const Text('Accounts'),
                             onTap: () {
-                              context.go('/other/accounts');
+                              context.go('/home/other/accounts');
                             },
                           ),
                           const SizedBox(height: 10),
@@ -166,7 +165,6 @@ class _OtherState extends ConsumerState<Other> {
           ),
         ),
       ),
-      bottomNavigationBar: const NavBar(active: 2),
     );
   }
 }

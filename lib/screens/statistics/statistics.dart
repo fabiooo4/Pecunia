@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
-import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Statistics extends ConsumerStatefulWidget {
@@ -97,7 +96,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
           const SizedBox(height: 20),
         ],
       ),
-      bottomNavigationBar: const NavBar(active: 1),
     );
   }
 }

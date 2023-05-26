@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class NavBar extends StatefulWidget {
-  final int active;
+  const NavBar({Key? key, required this.active, required this.onTabChange})
+      : super(key: key);
 
-  const NavBar({Key? key, required this.active}) : super(key: key);
+  final int active;
+  final Function(int) onTabChange;
 
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  late int _index;
-
-  @override
-  void initState() {
-    super.initState();
-    _index = widget.active;
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _index = index;
-    });
-  }
-
-  static final List<String> _pages = [
-    '/dashboard',
-    '/statistics',
-    '/other',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,8 +20,8 @@ class _NavBarState extends State<NavBar> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: GNav(
-          selectedIndex: _index,
-          duration: const Duration(milliseconds: 400),
+          selectedIndex: widget.active,
+          duration: const Duration(milliseconds: 300),
           backgroundColor: const Color(0xFF072E08),
           color: Colors.lightGreen,
           activeColor: Colors.white,
@@ -48,10 +29,7 @@ class _NavBarState extends State<NavBar> {
           gap: 8,
           padding: const EdgeInsets.all(18),
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          onTabChange: (index) {
-            context.push(_pages[index]);
-            _onItemTapped(index);
-          },
+          onTabChange: widget.onTabChange,
           tabs: const [
             GButton(
               icon: Icons.dashboard,

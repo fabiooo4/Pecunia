@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/dashboard/category_expenses.dart';
 import 'package:pecunia/screens/dashboard/transaction.dart';
-import 'package:pecunia/screens/dashboard/dashboard.dart';
 import 'package:pecunia/screens/auth/login.dart';
 import 'package:pecunia/screens/auth/sign_up.dart';
-import 'package:pecunia/screens/statistics/statistics.dart';
-import 'package:pecunia/screens/other/other.dart';
+import 'package:pecunia/screens/home_layout.dart';
 import 'package:pecunia/screens/auth/validation.dart';
 
 import '../../screens/other/accounts.dart';
@@ -48,79 +46,46 @@ final router = GoRouter(
               child: const SignupPage(),
             )),
     GoRoute(
-        path: '/dashboard',
-        builder: (context, state) => const Dashboard(),
-        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: const Dashboard(),
-            ),
-        routes: <GoRoute>[
-          GoRoute(
-            path: 'category_expenses/:categoryId',
-            builder: (context, state) {
-              final params = state.extra as CategoryTransactionsParams;
-
-              return CategoryTransactions(params: params);
-            },
-            pageBuilder: (context, state) =>
-                buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: CategoryTransactions(
-                params: state.extra as CategoryTransactionsParams,
-              ),
-            ),
-          ),
-          GoRoute(
-            path: 'transaction/:transactionId',
-            builder: (context, state) {
-              final params = state.extra as TransactionPageParams;
-
-              return TransactionPage(params: params);
-            },
-            pageBuilder: (context, state) =>
-                buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: TransactionPage(
-                params: state.extra as TransactionPageParams,
-              ),
-            ),
-          ),
-        ]),
-    GoRoute(
-      path: '/statistics',
-      builder: (context, state) => const Statistics(),
+      path: '/home',
+      builder: (context, state) => const HomeLayout(),
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
         context: context,
         state: state,
-        child: const Statistics(),
-      ),
-    ),
-    GoRoute(
-        path: '/validation',
-        builder: (context, state) {
-          final params = state.extra as VerificationPageParams;
-
-          return Validation(params: params);
-        },
-        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
-              context: context,
-              state: state,
-              child: Validation(params: state.extra as VerificationPageParams),
-            )),
-    GoRoute(
-      path: '/other',
-      builder: (context, state) => const Other(),
-      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
-        context: context,
-        state: state,
-        child: const Other(),
+        child: const HomeLayout(),
       ),
       routes: <GoRoute>[
         GoRoute(
-          path: 'settings',
+          path: 'dashboard/category_expenses/:categoryId',
+          builder: (context, state) {
+            final params = state.extra as CategoryTransactionsParams;
+
+            return CategoryTransactions(params: params);
+          },
+          pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+            context: context,
+            state: state,
+            child: CategoryTransactions(
+              params: state.extra as CategoryTransactionsParams,
+            ),
+          ),
+        ),
+        GoRoute(
+          path: 'dashboard/transaction/:transactionId',
+          builder: (context, state) {
+            final params = state.extra as TransactionPageParams;
+
+            return TransactionPage(params: params);
+          },
+          pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+            context: context,
+            state: state,
+            child: TransactionPage(
+              params: state.extra as TransactionPageParams,
+            ),
+          ),
+        ),
+        GoRoute(
+          path: 'other/settings',
           builder: (context, state) => const Settings(),
           pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
@@ -136,7 +101,7 @@ final router = GoRouter(
                       )),
         ),
         GoRoute(
-          path: 'categories',
+          path: 'other/categories',
           builder: (context, state) => const Categories(),
           pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
@@ -152,7 +117,7 @@ final router = GoRouter(
                       )),
         ),
         GoRoute(
-          path: 'accounts',
+          path: 'other/accounts',
           builder: (context, state) => const Accounts(),
           pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
@@ -169,5 +134,17 @@ final router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+        path: '/validation',
+        builder: (context, state) {
+          final params = state.extra as VerificationPageParams;
+
+          return Validation(params: params);
+        },
+        pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+              context: context,
+              state: state,
+              child: Validation(params: state.extra as VerificationPageParams),
+            )),
   ],
 );
