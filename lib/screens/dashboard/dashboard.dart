@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -282,10 +283,29 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                             transactions: transactionListdata,
                                             accounts: accountListdata,
                                           )),
-                                      child: CategoryW(
-                                        category: categoryListdata[index],
-                                        total: total,
+                                      child: OpenContainer(
+                                        closedElevation: 0,
+                                        openElevation: 0,
+                                        closedColor: Colors.transparent,
+                                        openColor: Colors.transparent,
+                                        closedBuilder: (context, action) =>
+                                            CategoryW(
+                                          category: categoryListdata[index],
+                                          total: total,
+                                        ),
+                                        openBuilder: (context, action) =>
+                                            CategoryTransactions(
+                                          params: CategoryTransactionsParams(
+                                            category: categoryListdata[index],
+                                            transactions: transactionListdata,
+                                            accounts: accountListdata,
+                                          ),
+                                        ),
                                       ),
+                                      // child: CategoryW(
+                                      //   category: categoryListdata[index],
+                                      //   total: total,
+                                      // ),
                                     );
                                   },
                                 ),
@@ -380,19 +400,61 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                     .category,
                                           ),
                                         )),
-                                    child: Transactionw(
-                                      transaction: transactionListdata[index],
-                                      account: accountListdata.firstWhere(
-                                        (element) =>
-                                            element.id ==
-                                            transactionListdata[index].account,
+                                    child: OpenContainer(
+                                      closedElevation: 0,
+                                      openElevation: 0,
+                                      closedColor: Colors.transparent,
+                                      openColor: Colors.transparent,
+                                      closedBuilder: (context, action) =>
+                                          Transactionw(
+                                        transaction: transactionListdata[index],
+                                        account: accountListdata.firstWhere(
+                                          (element) =>
+                                              element.id ==
+                                              transactionListdata[index]
+                                                  .account,
+                                        ),
+                                        category: categoryListdata.firstWhere(
+                                          (element) =>
+                                              element.id ==
+                                              transactionListdata[index]
+                                                  .category,
+                                        ),
                                       ),
-                                      category: categoryListdata.firstWhere(
-                                        (element) =>
-                                            element.id ==
-                                            transactionListdata[index].category,
+                                      openBuilder: (context, action) =>
+                                          TransactionPage(
+                                        params: TransactionPageParams(
+                                          transaction:
+                                              transactionListdata[index],
+                                          account: accountListdata.firstWhere(
+                                            (element) =>
+                                                element.id ==
+                                                transactionListdata[index]
+                                                    .account,
+                                          ),
+                                          category: categoryListdata.firstWhere(
+                                            (element) =>
+                                                element.id ==
+                                                transactionListdata[index]
+                                                    .category,
+                                          ),
+                                        ),
                                       ),
                                     ),
+                                    // child: Transactionw(
+                                    //   transaction: transactionListdata[index],
+                                    //   account: accountListdata.firstWhere(
+                                    //     (element) =>
+                                    //         element.id ==
+                                    //         transactionListdata[index].account,
+                                    //   ),
+                                    //   category: categoryListdata.firstWhere(
+                                    //     (element) =>
+                                    //         element.id ==
+                                    //         transactionListdata[index]
+                                    //             .category,
+                                    //   ),
+                                    // ),
                                   );
                                 },
                               );

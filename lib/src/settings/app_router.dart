@@ -76,13 +76,6 @@ final router = GoRouter(
 
             return TransactionPage(params: params);
           },
-          pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
-            context: context,
-            state: state,
-            child: TransactionPage(
-              params: state.extra as TransactionPageParams,
-            ),
-          ),
         ),
         GoRoute(
           path: 'other/settings',
