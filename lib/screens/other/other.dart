@@ -114,12 +114,16 @@ class _OtherState extends ConsumerState<Other> {
                           MenuTileWidget(
                             leadingIcon: Icons.category,
                             title: const Text('Categories'),
-                            onTap: () {},
+                            onTap: () {
+                              context.go('/other/categories');
+                            },
                           ),
                           MenuTileWidget(
                             leadingIcon: Icons.account_balance_wallet,
                             title: const Text('Accounts'),
-                            onTap: () {},
+                            onTap: () {
+                              context.go('/other/accounts');
+                            },
                           ),
                           const SizedBox(height: 10),
                           const Divider(

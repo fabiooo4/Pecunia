@@ -9,6 +9,8 @@ import 'package:pecunia/screens/statistics/statistics.dart';
 import 'package:pecunia/screens/other/other.dart';
 import 'package:pecunia/screens/auth/validation.dart';
 
+import '../../screens/other/accounts.dart';
+import '../../screens/other/categories.dart';
 import '../../screens/other/settings.dart';
 
 // Custom transition between pages
@@ -135,10 +137,10 @@ final router = GoRouter(
         ),
         GoRoute(
           path: 'categories',
-          builder: (context, state) => const Settings(),
+          builder: (context, state) => const Categories(),
           pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
-              child: const Settings(),
+              child: const Categories(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) =>
                       SlideTransition(
@@ -151,10 +153,10 @@ final router = GoRouter(
         ),
         GoRoute(
           path: 'accounts',
-          builder: (context, state) => const Settings(),
+          builder: (context, state) => const Accounts(),
           pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
-              child: const Settings(),
+              child: const Accounts(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) =>
                       SlideTransition(
