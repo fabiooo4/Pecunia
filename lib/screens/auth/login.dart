@@ -46,8 +46,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
+        const SnackBar(
+          content: Text('Invalid email or password'),
           backgroundColor: Colors.red,
         ),
       );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../api/sign_in/signin_repository.dart';
 import '../../widgets/navigation_bar.dart';
 import '../../widgets/menu_tile.dart';
 
@@ -16,11 +17,11 @@ class Other extends ConsumerStatefulWidget {
 class _OtherState extends ConsumerState<Other> {
   @override
   Widget build(BuildContext context) {
-    final username = Supabase.instance.client.auth.currentUser!
-            .userMetadata!['username'] as String? ??
+    final username = Supabase.instance.client.auth.currentUser
+            ?.userMetadata!['username'] as String? ??
         'User';
 
-    final email = Supabase.instance.client.auth.currentUser!.email ?? 'Email';
+    final email = Supabase.instance.client.auth.currentUser?.email ?? 'Email';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -131,7 +132,24 @@ class _OtherState extends ConsumerState<Other> {
                               'Logout',
                               style: TextStyle(color: Colors.red),
                             ),
-                            onTap: () {},
+                            onTap: () async {
+                              await ref
+                                  .read(signInRepositoryProvider)
+                                  .signOut()
+                                  .then(
+                                    (value) => {
+                                      context.go('/'),
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text("Logged out succesfully!"),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      )
+                                    },
+                                  );
+                            },
                             endIcon: false,
                           ),
                         ],

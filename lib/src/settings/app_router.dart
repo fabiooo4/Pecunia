@@ -133,6 +133,38 @@ final router = GoRouter(
                         child: child,
                       )),
         ),
+        GoRoute(
+          path: 'categories',
+          builder: (context, state) => const Settings(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const Settings(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(3.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      )),
+        ),
+        GoRoute(
+          path: 'accounts',
+          builder: (context, state) => const Settings(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const Settings(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(3.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      )),
+        ),
       ],
     ),
   ],
