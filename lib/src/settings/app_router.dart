@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pecunia/screens/category_expenses.dart';
-import 'package:pecunia/screens/transaction.dart';
-import 'package:pecunia/screens/dashboard.dart';
-import 'package:pecunia/screens/login.dart';
-import 'package:pecunia/screens/sign_up.dart';
-import 'package:pecunia/screens/statistics.dart';
-import 'package:pecunia/screens/profile.dart';
-import 'package:pecunia/screens/validation.dart';
+import 'package:pecunia/screens/dashboard/category_expenses.dart';
+import 'package:pecunia/screens/dashboard/transaction.dart';
+import 'package:pecunia/screens/dashboard/dashboard.dart';
+import 'package:pecunia/screens/auth/login.dart';
+import 'package:pecunia/screens/auth/sign_up.dart';
+import 'package:pecunia/screens/statistics/statistics.dart';
+import 'package:pecunia/screens/other/other.dart';
+import 'package:pecunia/screens/auth/validation.dart';
+
+import '../../screens/other/settings.dart';
 
 // Custom transition between pages
 CustomTransitionPage buildPageWithDefaultTransition<T>({
@@ -107,13 +109,31 @@ final router = GoRouter(
               child: Validation(params: state.extra as VerificationPageParams),
             )),
     GoRoute(
-      path: '/profile',
-      builder: (context, state) => const Statistics(),
+      path: '/other',
+      builder: (context, state) => const Other(),
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
         context: context,
         state: state,
-        child: const Profile(),
+        child: const Other(),
       ),
+      routes: <GoRoute>[
+        GoRoute(
+          path: 'settings',
+          builder: (context, state) => const Settings(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const Settings(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(3.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      )),
+        ),
+      ],
     ),
   ],
 );

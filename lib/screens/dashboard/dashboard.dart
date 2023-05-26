@@ -5,15 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
-import 'package:pecunia/screens/category_expenses.dart';
-import 'package:pecunia/screens/transaction.dart';
+import 'package:pecunia/screens/dashboard/category_expenses.dart';
+import 'package:pecunia/screens/dashboard/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
 import 'package:pecunia/widgets/navigation_bar.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../model/users/user.dart';
-import '../model/users/users_provider.dart';
+import '../../model/users/user.dart';
+import '../../model/users/users_provider.dart';
 import 'package:pecunia/api/sign_in/signin_repository.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
@@ -74,6 +74,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
         .watch(userProvider(id: Supabase.instance.client.auth.currentUser!.id));
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: SafeArea(
           child: Column(

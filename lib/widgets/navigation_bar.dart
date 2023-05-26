@@ -28,7 +28,7 @@ class _NavBarState extends State<NavBar> {
   static final List<String> _pages = [
     '/dashboard',
     '/statistics',
-    '/profile',
+    '/other',
   ];
 
   @override
@@ -87,8 +87,8 @@ class _NavBarState extends State<NavBar> {
           label: 'Statistics',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.more_horiz),
+          label: 'Other',
         ),
       ],
     );

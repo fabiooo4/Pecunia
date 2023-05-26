@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/widgets/category_transactions.dart';
 
-import '../model/accounts/account.dart';
-import '../model/categories/category.dart';
-import '../model/transactions/transaction.dart';
+import '../../model/accounts/account.dart';
+import '../../model/categories/category.dart';
+import '../../model/transactions/transaction.dart';
 
 class CategoryTransactionsParams {
   const CategoryTransactionsParams({
