@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +13,6 @@ import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../model/users/user.dart';
 import '../../model/users/users_provider.dart';
-import 'package:pecunia/api/sign_in/signin_repository.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -32,29 +30,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
       PageController(viewportFraction: 0.7, initialPage: 0);
 
   final PageController _transactionsController = PageController(initialPage: 0);
-
-  Future<void> _signOut() async {
-    try {
-      await ref.read(signInRepositoryProvider).signOut();
-
-      if (mounted) {
-        context.go('/');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Logged out successfully"),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,58 +79,16 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         ),
                       ],
                     ),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(
-                            left: Radius.elliptical(25, 15),
-                            right: Radius.elliptical(25, 15)),
-                        color: Color.fromARGB(255, 88, 166, 66),
+                    ElevatedButton(
+                      onPressed: () => transactionModalDialog(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightGreen,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            dropdownStyleData: DropdownStyleData(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.white),
-                                width: 100,
-                                direction: DropdownDirection.left),
-                            hint: const Text('Add',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 17)),
-                            onChanged: (value) {
-                              switch (value) {
-                                case 1:
-                                  _showSimpleModalDialogAccount();
-                                  break;
-                                case 2:
-                                  _showSimpleModalDialogCategory();
-                                  break;
-                                case 3:
-                                  _showSimpleModalDialogTransaction();
-                                  break;
-                              }
-                            },
-                            items: const [
-                              DropdownMenuItem(
-                                alignment: Alignment.center,
-                                value: 1,
-                                child: Icon(Icons.settings),
-                              ),
-                              DropdownMenuItem(
-                                alignment: Alignment.center,
-                                value: 2,
-                                child: Icon(Icons.logout),
-                              ),
-                              DropdownMenuItem(
-                                alignment: Alignment.center,
-                                value: 3,
-                                child: Icon(Icons.add),
-                              ),
-                            ],
-                          ),
-                        ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -510,30 +443,16 @@ class _DashboardState extends ConsumerState<Dashboard> {
     });
   }
 
-  void _showSimpleModalDialogAccount() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return const Dialog(child: Text("Account"));
-        });
-  }
-
-  void _showSimpleModalDialogCategory() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return const Dialog(
-              backgroundColor: Colors.grey,
-              alignment: Alignment.topCenter,
-              child: Text("Category", style: TextStyle(fontSize: 30)));
-        });
-  }
-
-  void _showSimpleModalDialogTransaction() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return const Dialog(child: Text("Transaction"));
-        });
+  Future<dynamic> transactionModalDialog(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return const Dialog(
+            alignment: Alignment.topCenter,
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            child: Text("Add Transaction", style: TextStyle(fontSize: 30)));
+      },
+    );
   }
 }

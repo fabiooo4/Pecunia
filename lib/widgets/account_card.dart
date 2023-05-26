@@ -28,7 +28,8 @@ class AccountCard extends StatefulWidget {
 class _AccountCardState extends State<AccountCard> {
   @override
   Widget build(BuildContext context) {
-    final cardColor = widget.active ? Colors.green : Colors.blue;
+    final cardColor =
+        widget.active ? Colors.lightGreen : const Color(0xFF072E08);
     // final shadow = widget.active
     //     ? const BoxShadow(
     //         color: Colors.green,
