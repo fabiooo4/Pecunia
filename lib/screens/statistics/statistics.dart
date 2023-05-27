@@ -28,63 +28,71 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: const Text('Statistics'),
-      ),
       body: Column(
         children: [
-          Text(
-            "Movement of ${accountList.when(
-              data: (accountListdata) => accountListdata[activeChipIndex].name,
-              loading: () => '',
-              error: (error, stackTrace) => '',
-            )}",
-            style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.lightGreen),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+            child: Text(
+              "Movement of ${accountList.when(
+                data: (accountListdata) =>
+                    accountListdata[activeChipIndex].name,
+                loading: () => '',
+                error: (error, stackTrace) => '',
+              )}",
+              style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightGreen),
+            ),
           ),
           if (accountList.when(
             data: (accountListdata) => accountListdata.isNotEmpty,
             loading: () => false,
             error: (error, stackTrace) => false,
           )) ...[
-            Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: accountList.when(
-                  data: (accountListdata) => accountListdata.length,
-                  loading: () => 0,
-                  error: (error, stackTrace) => 0,
-                ),
-                itemBuilder: (context, index) {
-                  final isActive = index == activeChipIndex;
-                  final account = accountList.when(
-                    data: (accountListdata) => accountListdata[index],
-                    loading: () => null,
-                    error: (error, stackTrace) => null,
-                  );
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: AnimatedScale(
-                      scale: isActive ? 1.1 : 1,
-                      duration: const Duration(milliseconds: 200),
-                      child: Filter(
-                        name: account!.name,
-                        active: isActive,
-                        onTap: () => _onChipTapped(index),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        accountList.when(
+                          data: (accountListdata) => accountListdata.length,
+                          loading: () => 0,
+                          error: (error, stackTrace) => 0,
+                        ),
+                        (index) {
+                          final isActive = index == activeChipIndex;
+                          final account = accountList.when(
+                            data: (accountListdata) => accountListdata[index],
+                            loading: () => null,
+                            error: (error, stackTrace) => null,
+                          );
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: AnimatedScale(
+                              scale: isActive ? 1.1 : 1,
+                              duration: const Duration(milliseconds: 200),
+                              child: Filter(
+                                name: account!.name,
+                                active: isActive,
+                                onTap: () => _onChipTapped(index),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            )
+            ),
           ],
           Center(
               heightFactor: 1,
