@@ -23,18 +23,21 @@ class _FilterState extends State<Filter> {
       onTap: () {
         widget.onTap();
       },
-      child: Chip(
-          label: Text(widget.name),
-          labelStyle: const TextStyle(color: Colors.white),
-          backgroundColor: cardColor,
-          padding: const EdgeInsets.all(5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          side: const BorderSide(
-            color: Colors.transparent,
-            width: 0,
-          )),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Chip(
+            label: Text(widget.name),
+            labelStyle: const TextStyle(color: Colors.white),
+            backgroundColor: cardColor,
+            padding: const EdgeInsets.all(5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            side: const BorderSide(
+              color: Colors.transparent,
+              width: 0,
+            )),
+      ),
     );
   }
 }
