@@ -192,7 +192,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           ])),
                 )),
             const SizedBox(height: 20),
-            const Text("Expenses in categories",
+            const Text("Expenses by Category",
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 26,
@@ -226,6 +226,24 @@ class _StatisticsState extends ConsumerState<Statistics> {
                         ),
                         xValueMapper: (TransactionsData data, _) => data.x,
                         yValueMapper: (TransactionsData data, _) => data.y,
+                        innerRadius: '0%',
+                        dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                          labelPosition: ChartDataLabelPosition.outside,
+                          labelAlignment: ChartDataLabelAlignment.auto,
+                          labelIntersectAction: LabelIntersectAction.hide,
+                          connectorLineSettings: ConnectorLineSettings(
+                            type: ConnectorType.curve,
+                            width: 1,
+                          ),
+                        ),
+                        selectionBehavior: SelectionBehavior(
+                          enable: true,
+                          selectedOpacity: 1,
+                          unselectedOpacity: 0.8,
+                          selectedBorderColor: Colors.white,
+                          selectedBorderWidth: 5,
+                        ),
                       )
                     ],
                   ),
@@ -294,11 +312,9 @@ List<TransactionsData> getExpensesByCategory(
             .firstWhere(
               (element) => element.id == transaction.category,
             )
-            ?.name;
+            .name;
 
-        if (categoryName != null) {
-          chartData.add(TransactionsData(categoryName, transaction.amount));
-        }
+        chartData.add(TransactionsData(categoryName, transaction.amount));
       }
     }
     return chartData;
