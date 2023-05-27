@@ -27,7 +27,7 @@ class _NavBarState extends State<NavBar> {
           activeColor: Colors.white,
           tabBackgroundColor: Colors.lightGreen,
           gap: 8,
-          padding: const EdgeInsets.all(18),
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           onTabChange: widget.onTabChange,
           tabs: const [
