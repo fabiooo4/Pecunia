@@ -20,7 +20,11 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   void _onChipTapped(int index) {
     setState(() {
-      activeChipIndex = index;
+      if (activeChipIndex == index) {
+        activeChipIndex = -1;
+      } else {
+        activeChipIndex = index;
+      }
     });
   }
 
@@ -71,9 +75,11 @@ class _StatisticsState extends ConsumerState<Statistics> {
                             ),
                             (index) {
                               final isActive = index == activeChipIndex;
+
                               final account = accountList.when(
-                                data: (accountListdata) =>
-                                    accountListdata[index],
+                                data: (accountListdata) {
+                                  return accountListdata[activeChipIndex];
+                                },
                                 loading: () => null,
                                 error: (error, stackTrace) => null,
                               );
