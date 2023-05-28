@@ -5,6 +5,7 @@ import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
+import 'package:pecunia/screens/other/categories.dart';
 import 'package:pecunia/widgets/filters.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -19,11 +20,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   void _onChipTapped(int index) {
     setState(() {
-      if (activeChipIndex == index) {
-        activeChipIndex = -1;
-      } else {
-        activeChipIndex = index;
-      }
+      activeChipIndex = index;
     });
   }
 
@@ -74,11 +71,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                             ),
                             (index) {
                               final isActive = index == activeChipIndex;
-
                               final account = accountList.when(
-                                data: (accountListdata) {
-                                  return accountListdata[activeChipIndex];
-                                },
+                                data: (accountListdata) =>
+                                    accountListdata[index],
                                 loading: () => null,
                                 error: (error, stackTrace) => null,
                               );
@@ -184,9 +179,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                             enableAxisAnimation: true,
                             tooltipBehavior: TooltipBehavior(
                                 enable: true,
-                                header: "Transactions",
+                                header: "Transaction",
                                 canShowMarker: true,
-                                format: "point.x : point.y",
+                                format: "point.x : point.y €",
                                 textStyle: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
