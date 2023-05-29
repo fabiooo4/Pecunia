@@ -94,28 +94,34 @@ class _CategoriesState extends ConsumerState<Categories> {
         ),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: categories.when(
-                data: (accountListdata) => accountListdata.length,
-                loading: () => 0,
-                error: (error, stackTrace) => 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemCount: categories.when(
+                  data: (accountListdata) => accountListdata.length,
+                  loading: () => 0,
+                  error: (error, stackTrace) => 0,
+                ),
+                controller: ScrollController(keepScrollOffset: false),
+                itemBuilder: (context, index) {
+                  final category = categories.when(
+                    data: (accountListdata) => accountListdata[index],
+                    loading: () => null,
+                    error: (error, stackTrace) => null,
+                  );
+                  return CategoryTile(
+                    name: category!.name.toString(),
+                    onTap: () {
+                      print('Category $category.name tapped');
+                    },
+                  );
+                },
               ),
-              itemBuilder: (context, index) {
-                final category = categories.when(
-                  data: (accountListdata) => accountListdata[index],
-                  loading: () => null,
-                  error: (error, stackTrace) => null,
-                );
-                return CategoryTile(
-                  name: category!.name.toString(),
-                  onTap: () {
-                    print('Category $category.name tapped');
-                  },
-                );
-              },
             ),
           ),
         ],
