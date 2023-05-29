@@ -61,63 +61,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
         child: SafeArea(
           child: Column(
             children: [
-              const Text(
-                "Choose an account",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black),
-              ),
-              if (accountList.when(
-                data: (accountListdata) => accountListdata.isNotEmpty,
-                loading: () => false,
-                error: (error, stackTrace) => false,
-              )) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            accountList.when(
-                              data: (accountListdata) => accountListdata.length,
-                              loading: () => 0,
-                              error: (error, stackTrace) => 0,
-                            ),
-                            (index) {
-                              final account = accountList.when(
-                                data: (accountListdata) =>
-                                    accountListdata[index],
-                                loading: () => null,
-                                error: (error, stackTrace) => null,
-                              );
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: AnimatedScale(
-                                  scale: isSelected[index] ? 1.1 : 1,
-                                  duration: const Duration(milliseconds: 200),
-                                  child: Filter(
-                                    name: account!.name,
-                                    active: isSelected[index],
-                                    onTap: () => _onChipTapped(index),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
               DefaultTabController(
                 length: 2,
                 child: Column(
@@ -135,14 +78,21 @@ class _StatisticsState extends ConsumerState<Statistics> {
                       ],
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.31,
+                      height: MediaQuery.of(context).size.height * 0.3,
                       child: TabBarView(
                         children: [
                           Center(
                             heightFactor: 1,
                             child: SfCircularChart(
+                              palette: const [
+                                Color(0xFF377A39),
+                                Color(0xFF204721),
+                                Color(0xFF1EC723),
+                                Color(0xFF127A16),
+                                Color(0xFF072E08),
+                              ],
                               legend: Legend(
-                                isVisible: true,
+                                isVisible: false,
                                 position: LegendPosition.bottom,
                                 overflowMode: LegendItemOverflowMode.wrap,
                                 title: LegendTitle(
@@ -156,7 +106,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                               ),
                               series: <CircularSeries>[
                                 DoughnutSeries<TransactionsData, String>(
+                                  radius: '50%',
                                   animationDuration: 400,
+                                  legendIconType: LegendIconType.circle,
                                   dataSource: getExpensesByCategory(
                                     transactions,
                                     categories,
@@ -181,19 +133,37 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   yValueMapper: (TransactionsData data, _) =>
                                       data.y,
                                   innerRadius: '0%',
-                                  dataLabelSettings: const DataLabelSettings(
+                                  dataLabelSettings: DataLabelSettings(
                                     isVisible: true,
                                     labelPosition:
                                         ChartDataLabelPosition.outside,
                                     labelAlignment:
                                         ChartDataLabelAlignment.auto,
                                     labelIntersectAction:
-                                        LabelIntersectAction.hide,
+                                        LabelIntersectAction.shift,
                                     connectorLineSettings:
-                                        ConnectorLineSettings(
+                                        const ConnectorLineSettings(
                                       type: ConnectorType.curve,
                                       width: 1,
                                     ),
+                                    builder: (data, point, series, pointIndex,
+                                        seriesIndex) {
+                                      return TextButton.icon(
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.category,
+                                          color: point.fill,
+                                          size: 18,
+                                        ),
+                                        label: Text(
+                                          data.x,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                   selectionBehavior: SelectionBehavior(
                                     enable: true,
@@ -209,8 +179,15 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           Center(
                             heightFactor: 1,
                             child: SfCircularChart(
+                              palette: const [
+                                Color(0xFF377A39),
+                                Color(0xFF204721),
+                                Color(0xFF1EC723),
+                                Color(0xFF127A16),
+                                Color(0xFF072E08),
+                              ],
                               legend: Legend(
-                                isVisible: true,
+                                isVisible: false,
                                 position: LegendPosition.bottom,
                                 overflowMode: LegendItemOverflowMode.wrap,
                                 title: LegendTitle(
@@ -224,7 +201,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                               ),
                               series: <CircularSeries>[
                                 DoughnutSeries<TransactionsData, String>(
+                                  radius: '50%',
                                   animationDuration: 400,
+                                  legendIconType: LegendIconType.circle,
                                   dataSource: getIncomesByCategory(
                                     transactions,
                                     categories,
@@ -249,19 +228,37 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   yValueMapper: (TransactionsData data, _) =>
                                       data.y,
                                   innerRadius: '0%',
-                                  dataLabelSettings: const DataLabelSettings(
+                                  dataLabelSettings: DataLabelSettings(
                                     isVisible: true,
                                     labelPosition:
                                         ChartDataLabelPosition.outside,
                                     labelAlignment:
                                         ChartDataLabelAlignment.auto,
                                     labelIntersectAction:
-                                        LabelIntersectAction.hide,
+                                        LabelIntersectAction.shift,
                                     connectorLineSettings:
-                                        ConnectorLineSettings(
+                                        const ConnectorLineSettings(
                                       type: ConnectorType.curve,
                                       width: 1,
                                     ),
+                                    builder: (data, point, series, pointIndex,
+                                        seriesIndex) {
+                                      return TextButton.icon(
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.category,
+                                          color: point.fill,
+                                          size: 18,
+                                        ),
+                                        label: Text(
+                                          data.x,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                   selectionBehavior: SelectionBehavior(
                                     enable: true,
@@ -299,104 +296,164 @@ class _StatisticsState extends ConsumerState<Statistics> {
                     color: Colors.lightGreen),
               ),
               Center(
-                  heightFactor: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                        height: 300,
-                        child: SfCartesianChart(
-                            tooltipBehavior: TooltipBehavior(
-                                enable: true,
-                                canShowMarker: true,
-                                format: "point.x : point.y €",
-                                textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
-                            legend: Legend(
-                              isVisible: true,
-                              position: LegendPosition.bottom,
-                              overflowMode: LegendItemOverflowMode.wrap,
-                              title: LegendTitle(
-                                text:
-                                    "Tap on the legend to hide/show the series",
-                                textStyle: const TextStyle(
-                                  fontSize: 9,
-                                  overflow: TextOverflow.visible,
-                                ),
-                              ),
-                            ),
-                            primaryXAxis: CategoryAxis(
-                              isInversed: true,
-                            ),
-                            series: <ChartSeries>[
-                              LineSeries<TransactionsData, String>(
-                                  name: "Expenses",
-                                  markerSettings:
-                                      const MarkerSettings(isVisible: true),
-                                  color: Colors.red,
-                                  dataSource: getChartDataForAccountExpenses(
-                                      transactions,
-                                      accountList.when(
-                                        data: (accountListdata) {
-                                          if (isSelected.indexWhere(
-                                                  (element) => element) !=
-                                              -1) {
-                                            return accountListdata[
-                                                    tappedChipindex]
-                                                .id;
-                                          } else {
-                                            return '';
-                                          }
-                                        },
-                                        loading: () => '',
-                                        error: (error, stackTrace) => '',
-                                      )),
-                                  xAxisName: "Date",
-                                  xValueMapper: (TransactionsData trans, _) =>
-                                      trans.x,
-                                  yValueMapper: (TransactionsData trans, _) =>
-                                      trans.y,
-                                  dataLabelSettings: const DataLabelSettings(
-                                      isVisible: true,
-                                      labelAlignment:
-                                          ChartDataLabelAlignment.top)),
-                              LineSeries<TransactionsData, String>(
-                                  name: "Incomes",
-                                  markerSettings:
-                                      const MarkerSettings(isVisible: true),
-                                  color: Colors.green,
-                                  dataSource: getChartDataForAccountIncomes(
-                                      transactions,
-                                      accountList.when(
-                                        data: (accountListdata) {
-                                          if (isSelected.indexWhere(
-                                                  (element) => element) !=
-                                              -1) {
-                                            return accountListdata[
-                                                    tappedChipindex]
-                                                .id;
-                                          } else {
-                                            return '';
-                                          }
-                                        },
-                                        loading: () => '',
-                                        error: (error, stackTrace) => '',
-                                      )),
-                                  xAxisName: "Date",
-                                  xValueMapper: (TransactionsData trans, _) =>
-                                      trans.x,
-                                  yValueMapper: (TransactionsData trans, _) =>
-                                      trans.y,
-                                  dataLabelSettings: const DataLabelSettings(
-                                      isVisible: true,
-                                      labelAlignment:
-                                          ChartDataLabelAlignment.top))
-                            ])),
-                  )),
+                heightFactor: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    height: 300,
+                    child: SfCartesianChart(
+                      tooltipBehavior: TooltipBehavior(
+                          enable: true,
+                          canShowMarker: true,
+                          format: "point.x : point.y €",
+                          textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12)),
+                      legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        title: LegendTitle(
+                          text: "Tap on the legend to hide/show the series",
+                          textStyle: const TextStyle(
+                            fontSize: 9,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                      ),
+                      primaryXAxis: CategoryAxis(
+                        isInversed: true,
+                      ),
+                      series: <ChartSeries>[
+                        LineSeries<TransactionsData, String>(
+                            legendIconType: LegendIconType.circle,
+                            name: "Expenses",
+                            markerSettings:
+                                const MarkerSettings(isVisible: true),
+                            color: Colors.red,
+                            dataSource: getChartDataForAccountExpenses(
+                                transactions,
+                                accountList.when(
+                                  data: (accountListdata) {
+                                    if (isSelected
+                                            .indexWhere((element) => element) !=
+                                        -1) {
+                                      return accountListdata[tappedChipindex]
+                                          .id;
+                                    } else {
+                                      return '';
+                                    }
+                                  },
+                                  loading: () => '',
+                                  error: (error, stackTrace) => '',
+                                )),
+                            xAxisName: "Date",
+                            xValueMapper: (TransactionsData trans, _) =>
+                                trans.x,
+                            yValueMapper: (TransactionsData trans, _) =>
+                                trans.y,
+                            dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.top)),
+                        LineSeries<TransactionsData, String>(
+                            legendIconType: LegendIconType.circle,
+                            name: "Incomes",
+                            markerSettings:
+                                const MarkerSettings(isVisible: true),
+                            color: Colors.lightGreen,
+                            dataSource: getChartDataForAccountIncomes(
+                                transactions,
+                                accountList.when(
+                                  data: (accountListdata) {
+                                    if (isSelected
+                                            .indexWhere((element) => element) !=
+                                        -1) {
+                                      return accountListdata[tappedChipindex]
+                                          .id;
+                                    } else {
+                                      return '';
+                                    }
+                                  },
+                                  loading: () => '',
+                                  error: (error, stackTrace) => '',
+                                )),
+                            xAxisName: "Date",
+                            xValueMapper: (TransactionsData trans, _) =>
+                                trans.x,
+                            yValueMapper: (TransactionsData trans, _) =>
+                                trans.y,
+                            dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.top))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            "Choose an account",
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                color: Colors.black),
+          ),
+          if (accountList.when(
+            data: (accountListdata) => accountListdata.isNotEmpty,
+            loading: () => false,
+            error: (error, stackTrace) => false,
+          )) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        accountList.when(
+                          data: (accountListdata) => accountListdata.length,
+                          loading: () => 0,
+                          error: (error, stackTrace) => 0,
+                        ),
+                        (index) {
+                          final account = accountList.when(
+                            data: (accountListdata) => accountListdata[index],
+                            loading: () => null,
+                            error: (error, stackTrace) => null,
+                          );
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: AnimatedScale(
+                              scale: isSelected[index] ? 1.1 : 1,
+                              duration: const Duration(milliseconds: 200),
+                              child: Filter(
+                                name: account!.name,
+                                active: isSelected[index],
+                                onTap: () => _onChipTapped(index),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
