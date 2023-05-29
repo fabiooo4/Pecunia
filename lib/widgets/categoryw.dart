@@ -35,13 +35,14 @@ class CategoryW extends ConsumerWidget {
                   children: [
                     const Padding(
                       padding: EdgeInsets.fromLTRB(0, 0, 2, 0),
-                      //child: category.icon,
+                      // child: category.icon,
                     ),
                     Text(
                       category.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -50,7 +51,9 @@ class CategoryW extends ConsumerWidget {
               ),
               Text(
                 '${total.toString().replaceAll('.', ',')}€',
-                style: const TextStyle(fontSize: 20),
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).textTheme.bodyLarge!.color),
               ),
             ],
           ),
@@ -58,65 +61,4 @@ class CategoryW extends ConsumerWidget {
       ),
     );
   }
-  /* return Container(
-      height: 150, // Set a fixed height to restrict the overall height
-      padding: const EdgeInsets.all(2), // Adjust the padding value
-      child: Card(
-        shape: const CircleBorder(),
-        elevation: 0,
-        color: Colors.grey[200],
-        child: Column(
-          children: [
-            if (EmojiParser().hasEmoji(category.name.split(' ')[0])) ...[
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      category.name.split(' ')[0],
-                      style: const TextStyle(fontSize: 20),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      category.name.substring(category.name.indexOf(' ') + 1),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '${total.toString().replaceAll('.', ',')}€',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-            ] else ...[
-              Flexible(
-                // Wrap the Column with Flexible
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      category.name,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '${total.toString().replaceAll('.', ',')}€',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  } */
 }

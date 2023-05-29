@@ -15,26 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Glue the SettingsController to the MaterialApp.
-    //
-    // The AnimatedBuilder Widget listens to the SettingsController for changes.
-    // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return AnimatedBuilder(
       animation: settingsController,
-      builder: (BuildContext context, Widget? child,) {
-      
+      builder: (
+        BuildContext context,
+        Widget? child,
+      ) {
         return MaterialApp.router(
           routerConfig: router,
-
-          // Providing a restorationScopeId allows the Navigator built by the
-          // MaterialApp to restore the navigation stack when a user leaves and
-          // returns to the app after it has been killed while running in the
-          // background.
           restorationScopeId: 'app',
-
-          // Provide the generated AppLocalizations to the MaterialApp. This
-          // allows descendant Widgets to display the correct translations
-          // depending on the user's locale.
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -42,33 +31,64 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [
-            Locale('en', ''), // English, no country code
+            Locale('en', ''),
           ],
-
-          // Use AppLocalizations to configure the correct application title
-          // depending on the user's locale.
-          //
-          // The appTitle is defined in .arb files found in the localization
-          // directory.
           onGenerateTitle: (BuildContext context) =>
               AppLocalizations.of(context)!.appTitle,
-
-          // Define a light and dark color theme. Then, read the user's
-          // preferred ThemeMode (light, dark, or system default) from the
-          // SettingsController to display the correct theme.
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-          ),
-          darkTheme: ThemeData.dark(
-            useMaterial3: true,
-          ),
+          theme: AppTheme().lightTheme,
+          darkTheme: AppTheme().darkTheme,
           themeMode: ThemeMode.light,
-
-          // Define a function to handle named routes in order to support
-          // Flutter web url navigation and deep linking.
+          debugShowCheckedModeBanner: false,
         );
       },
     );
   }
+}
+
+class AppColors {
+  static const MaterialColor lightGreen = MaterialColor(
+    0xFF00C853, // Primary color value
+    <int, Color>{
+      50: Color(0xFFF1F8E9),
+      100: Color(0xFFDCEDC8),
+      200: Color(0xFFC5E1A5),
+      300: Color(0xFFAED581),
+      400: Color(0xFF9CCC65),
+      500: Color(0xFF8BC34A),
+      600: Color(0xFF7CB342),
+      700: Color(0xFF689F38),
+      800: Color(0xFF558B2F),
+      900: Color(0xFF33691E),
+    },
+  );
+
+  static const MaterialColor darkGreen = MaterialColor(
+    0xFF00C853, // Primary color value
+    <int, Color>{
+      50: Color(0xFF1B5E20),
+      100: Color(0xFF22492D),
+      200: Color(0xFF1E3A23),
+      300: Color(0xFF15291A),
+      400: Color(0xFF0E1F15),
+      500: Color(0xFF0A140F),
+      600: Color(0xFF080E0A),
+      700: Color(0xFF050A08),
+      800: Color(0xFF020505),
+      900: Color(0xFF000000),
+    },
+  );
+}
+
+class AppTheme {
+  ThemeData get lightTheme => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        primarySwatch: AppColors.lightGreen,
+      );
+
+  ThemeData get darkTheme => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        primarySwatch: AppColors.darkGreen,
+      );
 }

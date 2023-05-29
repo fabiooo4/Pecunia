@@ -41,7 +41,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
         .watch(userProvider(id: Supabase.instance.client.auth.currentUser!.id));
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: SafeArea(
           child: Column(
