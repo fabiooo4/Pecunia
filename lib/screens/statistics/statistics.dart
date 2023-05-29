@@ -157,9 +157,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   return '';
                                 }
                               },
-                              loading: () => null,
-                              error: (error, stackTrace) => null,
-                            )!,
+                              loading: () => '',
+                              error: (error, stackTrace) => '',
+                            ),
                           ),
                           xValueMapper: (TransactionsData data, _) => data.x,
                           yValueMapper: (TransactionsData data, _) => data.y,
@@ -256,9 +256,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                             return '';
                                           }
                                         },
-                                        loading: () => null,
-                                        error: (error, stackTrace) => null,
-                                      )!),
+                                        loading: () => '',
+                                        error: (error, stackTrace) => '',
+                                      )),
                                   xAxisName: "Date",
                                   xValueMapper: (TransactionsData trans, _) =>
                                       trans.x,
@@ -287,9 +287,9 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                             return '';
                                           }
                                         },
-                                        loading: () => null,
-                                        error: (error, stackTrace) => null,
-                                      )!),
+                                        loading: () => '',
+                                        error: (error, stackTrace) => '',
+                                      )),
                                   xAxisName: "Date",
                                   xValueMapper: (TransactionsData trans, _) =>
                                       trans.x,
