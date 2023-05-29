@@ -122,71 +122,247 @@ class _StatisticsState extends ConsumerState<Statistics> {
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                       color: Colors.lightGreen)),
-              Center(
-                heightFactor: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 300,
-                    child: SfCircularChart(
-                      legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.bottom,
-                        overflowMode: LegendItemOverflowMode.wrap,
-                        title: LegendTitle(
-                          text: "Tap on the legend to hide/show the series",
-                          textStyle: const TextStyle(
-                            fontSize: 9,
-                            overflow: TextOverflow.visible,
-                          ),
+              DefaultTabController(
+                length: 2,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const TabBar(
+                      indicatorColor: Colors.lightGreen,
+                      tabs: [
+                        Tab(
+                          text: "Expenses",
                         ),
-                      ),
-                      series: <CircularSeries>[
-                        DoughnutSeries<TransactionsData, String>(
-                          animationDuration: 400,
-                          dataSource: getExpensesByCategory(
-                            transactions,
-                            categories,
-                            accountList.when(
-                              data: (accountListdata) {
-                                if (isSelected
-                                        .indexWhere((element) => element) !=
-                                    -1) {
-                                  return accountListdata[tappedChipindex].id;
-                                } else {
-                                  return '';
-                                }
-                              },
-                              loading: () => '',
-                              error: (error, stackTrace) => '',
-                            ),
-                          ),
-                          xValueMapper: (TransactionsData data, _) => data.x,
-                          yValueMapper: (TransactionsData data, _) => data.y,
-                          innerRadius: '0%',
-                          dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
-                            labelPosition: ChartDataLabelPosition.outside,
-                            labelAlignment: ChartDataLabelAlignment.auto,
-                            labelIntersectAction: LabelIntersectAction.hide,
-                            connectorLineSettings: ConnectorLineSettings(
-                              type: ConnectorType.curve,
-                              width: 1,
-                            ),
-                          ),
-                          selectionBehavior: SelectionBehavior(
-                            enable: true,
-                            selectedOpacity: 1,
-                            unselectedOpacity: 0.8,
-                            selectedBorderColor: Colors.white,
-                            selectedBorderWidth: 5,
-                          ),
-                        )
+                        Tab(
+                          text: "Incomes",
+                        ),
                       ],
                     ),
-                  ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.31,
+                      child: TabBarView(
+                        children: [
+                          Center(
+                            heightFactor: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SizedBox(
+                                height: 300,
+                                child: SfCircularChart(
+                                  legend: Legend(
+                                    isVisible: true,
+                                    position: LegendPosition.bottom,
+                                    overflowMode: LegendItemOverflowMode.wrap,
+                                    title: LegendTitle(
+                                      text:
+                                          "Tap on the legend to hide/show the series",
+                                      textStyle: const TextStyle(
+                                        fontSize: 9,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ),
+                                  series: <CircularSeries>[
+                                    DoughnutSeries<TransactionsData, String>(
+                                      animationDuration: 400,
+                                      dataSource: getExpensesByCategory(
+                                        transactions,
+                                        categories,
+                                        accountList.when(
+                                          data: (accountListdata) {
+                                            if (isSelected.indexWhere(
+                                                    (element) => element) !=
+                                                -1) {
+                                              return accountListdata[
+                                                      tappedChipindex]
+                                                  .id;
+                                            } else {
+                                              return '';
+                                            }
+                                          },
+                                          loading: () => '',
+                                          error: (error, stackTrace) => '',
+                                        ),
+                                      ),
+                                      xValueMapper:
+                                          (TransactionsData data, _) => data.x,
+                                      yValueMapper:
+                                          (TransactionsData data, _) => data.y,
+                                      innerRadius: '0%',
+                                      dataLabelSettings:
+                                          const DataLabelSettings(
+                                        isVisible: true,
+                                        labelPosition:
+                                            ChartDataLabelPosition.outside,
+                                        labelAlignment:
+                                            ChartDataLabelAlignment.auto,
+                                        labelIntersectAction:
+                                            LabelIntersectAction.hide,
+                                        connectorLineSettings:
+                                            ConnectorLineSettings(
+                                          type: ConnectorType.curve,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      selectionBehavior: SelectionBehavior(
+                                        enable: true,
+                                        selectedOpacity: 1,
+                                        unselectedOpacity: 0.8,
+                                        selectedBorderColor: Colors.white,
+                                        selectedBorderWidth: 5,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            heightFactor: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SizedBox(
+                                height: 300,
+                                child: SfCircularChart(
+                                  legend: Legend(
+                                    isVisible: true,
+                                    position: LegendPosition.bottom,
+                                    overflowMode: LegendItemOverflowMode.wrap,
+                                    title: LegendTitle(
+                                      text:
+                                          "Tap on the legend to hide/show the series",
+                                      textStyle: const TextStyle(
+                                        fontSize: 9,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ),
+                                  series: <CircularSeries>[
+                                    DoughnutSeries<TransactionsData, String>(
+                                      animationDuration: 400,
+                                      dataSource: getExpensesByCategory(
+                                        transactions,
+                                        categories,
+                                        accountList.when(
+                                          data: (accountListdata) {
+                                            if (isSelected.indexWhere(
+                                                    (element) => element) !=
+                                                -1) {
+                                              return accountListdata[
+                                                      tappedChipindex]
+                                                  .id;
+                                            } else {
+                                              return '';
+                                            }
+                                          },
+                                          loading: () => '',
+                                          error: (error, stackTrace) => '',
+                                        ),
+                                      ),
+                                      xValueMapper:
+                                          (TransactionsData data, _) => data.x,
+                                      yValueMapper:
+                                          (TransactionsData data, _) => data.y,
+                                      innerRadius: '0%',
+                                      dataLabelSettings:
+                                          const DataLabelSettings(
+                                        isVisible: true,
+                                        labelPosition:
+                                            ChartDataLabelPosition.outside,
+                                        labelAlignment:
+                                            ChartDataLabelAlignment.auto,
+                                        labelIntersectAction:
+                                            LabelIntersectAction.hide,
+                                        connectorLineSettings:
+                                            ConnectorLineSettings(
+                                          type: ConnectorType.curve,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      selectionBehavior: SelectionBehavior(
+                                        enable: true,
+                                        selectedOpacity: 1,
+                                        unselectedOpacity: 0.8,
+                                        selectedBorderColor: Colors.white,
+                                        selectedBorderWidth: 5,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              // Center(
+              //   heightFactor: 1,
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(10.0),
+              //     child: SizedBox(
+              //       height: 300,
+              //       child: SfCircularChart(
+              //         legend: Legend(
+              //           isVisible: true,
+              //           position: LegendPosition.bottom,
+              //           overflowMode: LegendItemOverflowMode.wrap,
+              //           title: LegendTitle(
+              //             text: "Tap on the legend to hide/show the series",
+              //             textStyle: const TextStyle(
+              //               fontSize: 9,
+              //               overflow: TextOverflow.visible,
+              //             ),
+              //           ),
+              //         ),
+              //         series: <CircularSeries>[
+              //           DoughnutSeries<TransactionsData, String>(
+              //             animationDuration: 400,
+              //             dataSource: getExpensesByCategory(
+              //               transactions,
+              //               categories,
+              //               accountList.when(
+              //                 data: (accountListdata) {
+              //                   if (isSelected
+              //                           .indexWhere((element) => element) !=
+              //                       -1) {
+              //                     return accountListdata[tappedChipindex].id;
+              //                   } else {
+              //                     return '';
+              //                   }
+              //                 },
+              //                 loading: () => '',
+              //                 error: (error, stackTrace) => '',
+              //               ),
+              //             ),
+              //             xValueMapper: (TransactionsData data, _) => data.x,
+              //             yValueMapper: (TransactionsData data, _) => data.y,
+              //             innerRadius: '0%',
+              //             dataLabelSettings: const DataLabelSettings(
+              //               isVisible: true,
+              //               labelPosition: ChartDataLabelPosition.outside,
+              //               labelAlignment: ChartDataLabelAlignment.auto,
+              //               labelIntersectAction: LabelIntersectAction.hide,
+              //               connectorLineSettings: ConnectorLineSettings(
+              //                 type: ConnectorType.curve,
+              //                 width: 1,
+              //               ),
+              //             ),
+              //             selectionBehavior: SelectionBehavior(
+              //               enable: true,
+              //               selectedOpacity: 1,
+              //               unselectedOpacity: 0.8,
+              //               selectedBorderColor: Colors.white,
+              //               selectedBorderWidth: 5,
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Text(
                 "Movements of ${accountList.when(
                   data: (accountListdata) {
