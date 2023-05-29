@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Statistics extends ConsumerStatefulWidget {
   const Statistics({Key? key}) : super(key: key);
+
   @override
   _StatisticsState createState() => _StatisticsState();
 }
@@ -35,12 +36,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
         child: SafeArea(
           child: Column(
             children: [
-              const Text("Statistics",
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightGreen)),
               const Text("Choose an account",
                   style: TextStyle(
                       fontFamily: 'Poppins',
@@ -111,12 +106,16 @@ class _StatisticsState extends ConsumerState<Statistics> {
                     height: 300,
                     child: SfCircularChart(
                       legend: Legend(
-                          isVisible: true,
-                          position: LegendPosition.bottom,
-                          overflowMode: LegendItemOverflowMode.wrap,
-                          title: LegendTitle(
-                              text: "Tap on the legend to hide/show the series",
-                              textStyle: const TextStyle(fontSize: 9))),
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        title: LegendTitle(
+                          text: "Tap on the legend to hide/show the series",
+                          textStyle: const TextStyle(
+                            fontSize: 9,
+                          ),
+                        ),
+                      ),
                       series: <CircularSeries>[
                         DoughnutSeries<TransactionsData, String>(
                           animationDuration: 400,
@@ -157,7 +156,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                 ),
               ),
               Text(
-                "Movement of ${accountList.when(
+                "Movements of ${accountList.when(
                   data: (accountListdata) =>
                       accountListdata[activeChipIndex].name,
                   loading: () => '',

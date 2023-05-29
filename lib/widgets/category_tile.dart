@@ -137,7 +137,7 @@ class _CategoryTileState extends State<CategoryTile> {
             const Icon(Icons.category, color: Colors.white),
             SizedBox(
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
                   widget.name,
                   style: const TextStyle(
