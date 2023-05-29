@@ -16,11 +16,19 @@ class Statistics extends ConsumerStatefulWidget {
 }
 
 class _StatisticsState extends ConsumerState<Statistics> {
-  int activeChipIndex = 0;
+  int tappedChipindex = 0;
+  List<bool> isSelected = [];
 
   void _onChipTapped(int index) {
     setState(() {
-      activeChipIndex = index;
+      tappedChipindex = index;
+      // if chip is selected, toggle it, else set to true only the selected chip
+      isSelected = List.generate(
+        isSelected.length,
+        (index) => index == tappedChipindex ? !isSelected[index] : false,
+      );
+      print(isSelected);
+      print(tappedChipindex);
     });
   }
 
@@ -29,6 +37,23 @@ class _StatisticsState extends ConsumerState<Statistics> {
     final transactions = ref.watch(transactionsProvider);
     final accountList = ref.watch(accountsProvider);
     final categories = ref.watch(categoriesProvider);
+
+    if (accountList.when(
+      data: (accountListdata) => accountListdata.isNotEmpty,
+      loading: () => false,
+      error: (error, stackTrace) => false,
+    )) {
+      if (isSelected.isEmpty) {
+        isSelected = List.generate(
+          accountList.when(
+            data: (accountListdata) => accountListdata.length,
+            loading: () => 0,
+            error: (error, stackTrace) => 0,
+          ),
+          (index) => index == 0,
+        );
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -64,7 +89,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
                               error: (error, stackTrace) => 0,
                             ),
                             (index) {
-                              final isActive = index == activeChipIndex;
                               final account = accountList.when(
                                 data: (accountListdata) =>
                                     accountListdata[index],
@@ -75,11 +99,11 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: AnimatedScale(
-                                  scale: isActive ? 1.1 : 1,
+                                  scale: isSelected[index] ? 1.1 : 1,
                                   duration: const Duration(milliseconds: 200),
                                   child: Filter(
                                     name: account!.name,
-                                    active: isActive,
+                                    active: isSelected[index],
                                     onTap: () => _onChipTapped(index),
                                   ),
                                 ),
@@ -113,6 +137,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           text: "Tap on the legend to hide/show the series",
                           textStyle: const TextStyle(
                             fontSize: 9,
+                            overflow: TextOverflow.visible,
                           ),
                         ),
                       ),
@@ -123,8 +148,15 @@ class _StatisticsState extends ConsumerState<Statistics> {
                             transactions,
                             categories,
                             accountList.when(
-                              data: (accountListdata) =>
-                                  accountListdata[activeChipIndex].id,
+                              data: (accountListdata) {
+                                if (isSelected
+                                        .indexWhere((element) => element) !=
+                                    -1) {
+                                  return accountListdata[tappedChipindex].id;
+                                } else {
+                                  return '';
+                                }
+                              },
                               loading: () => null,
                               error: (error, stackTrace) => null,
                             )!,
@@ -157,8 +189,13 @@ class _StatisticsState extends ConsumerState<Statistics> {
               ),
               Text(
                 "Movements of ${accountList.when(
-                  data: (accountListdata) =>
-                      accountListdata[activeChipIndex].name,
+                  data: (accountListdata) {
+                    if (isSelected.indexWhere((element) => element) == -1) {
+                      return "everything";
+                    } else {
+                      return accountListdata[tappedChipindex].name;
+                    }
+                  },
                   loading: () => '',
                   error: (error, stackTrace) => '',
                 )}",
@@ -177,7 +214,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
                         child: SfCartesianChart(
                             tooltipBehavior: TooltipBehavior(
                                 enable: true,
-                                header: "Transaction",
                                 canShowMarker: true,
                                 format: "point.x : point.y €",
                                 textStyle: const TextStyle(
@@ -185,13 +221,18 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12)),
                             legend: Legend(
-                                isVisible: true,
-                                position: LegendPosition.bottom,
-                                overflowMode: LegendItemOverflowMode.wrap,
-                                title: LegendTitle(
-                                    text:
-                                        "Tap on the legend to hide/show the series",
-                                    textStyle: const TextStyle(fontSize: 9))),
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.wrap,
+                              title: LegendTitle(
+                                text:
+                                    "Tap on the legend to hide/show the series",
+                                textStyle: const TextStyle(
+                                  fontSize: 9,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                            ),
                             primaryXAxis: CategoryAxis(
                               isInversed: true,
                             ),
@@ -204,8 +245,17 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   dataSource: getChartDataForAccountExpenses(
                                       transactions,
                                       accountList.when(
-                                        data: (accountListdata) =>
-                                            accountListdata[activeChipIndex].id,
+                                        data: (accountListdata) {
+                                          if (isSelected.indexWhere(
+                                                  (element) => element) !=
+                                              -1) {
+                                            return accountListdata[
+                                                    tappedChipindex]
+                                                .id;
+                                          } else {
+                                            return '';
+                                          }
+                                        },
                                         loading: () => null,
                                         error: (error, stackTrace) => null,
                                       )!),
@@ -226,8 +276,17 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   dataSource: getChartDataForAccountIncomes(
                                       transactions,
                                       accountList.when(
-                                        data: (accountListdata) =>
-                                            accountListdata[activeChipIndex].id,
+                                        data: (accountListdata) {
+                                          if (isSelected.indexWhere(
+                                                  (element) => element) !=
+                                              -1) {
+                                            return accountListdata[
+                                                    tappedChipindex]
+                                                .id;
+                                          } else {
+                                            return '';
+                                          }
+                                        },
                                         loading: () => null,
                                         error: (error, stackTrace) => null,
                                       )!),
@@ -262,10 +321,19 @@ List<TransactionsData> getChartDataForAccountIncomes(
     final transactions = transactionsData.value;
     List<TransactionsData> chartData = [];
     for (var transaction in transactions) {
-      if (transaction.type == 'income' && transaction.account == accountName) {
-        chartData.add(TransactionsData(
-            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
-            transaction.amount));
+      if (accountName == '') {
+        if (transaction.type == 'income') {
+          chartData.add(TransactionsData(
+              "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
+              transaction.amount));
+        }
+      } else {
+        if (transaction.type == 'income' &&
+            transaction.account == accountName) {
+          chartData.add(TransactionsData(
+              "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
+              transaction.amount));
+        }
       }
     }
     return chartData;
@@ -279,10 +347,19 @@ List<TransactionsData> getChartDataForAccountExpenses(
     final transactions = transactionsData.value;
     List<TransactionsData> chartData = [];
     for (var transaction in transactions) {
-      if (transaction.type == 'expense' && transaction.account == accountName) {
-        chartData.add(TransactionsData(
-            "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
-            transaction.amount));
+      if (accountName == '') {
+        if (transaction.type == 'expense') {
+          chartData.add(TransactionsData(
+              "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
+              transaction.amount));
+        }
+      } else {
+        if (transaction.type == 'expense' &&
+            transaction.account == accountName) {
+          chartData.add(TransactionsData(
+              "${transaction.date!.day.toString()}-${transaction.date!.month.toString()}-${transaction.date!.year.toString()}",
+              transaction.amount));
+        }
       }
     }
     return chartData;
@@ -300,14 +377,27 @@ List<TransactionsData> getExpensesByCategory(
     final categories = categoriesData.value;
     List<TransactionsData> chartData = [];
     for (var transaction in transactions) {
-      if (transaction.type == 'expense' && transaction.account == accountName) {
-        final categoryName = categories
-            .firstWhere(
-              (element) => element.id == transaction.category,
-            )
-            .name;
+      if (accountName == '') {
+        if (transaction.type == 'expense') {
+          final categoryName = categories
+              .firstWhere(
+                (element) => element.id == transaction.category,
+              )
+              .name;
 
-        chartData.add(TransactionsData(categoryName, transaction.amount));
+          chartData.add(TransactionsData(categoryName, transaction.amount));
+        }
+      } else {
+        if (transaction.type == 'expense' &&
+            transaction.account == accountName) {
+          final categoryName = categories
+              .firstWhere(
+                (element) => element.id == transaction.category,
+              )
+              .name;
+
+          chartData.add(TransactionsData(categoryName, transaction.amount));
+        }
       }
     }
     return chartData;
