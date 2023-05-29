@@ -119,6 +119,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                               textStyle: const TextStyle(fontSize: 9))),
                       series: <CircularSeries>[
                         DoughnutSeries<TransactionsData, String>(
+                          animationDuration: 400,
                           dataSource: getExpensesByCategory(
                             transactions,
                             categories,
@@ -175,7 +176,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
                     child: SizedBox(
                         height: 300,
                         child: SfCartesianChart(
-                            enableAxisAnimation: true,
                             tooltipBehavior: TooltipBehavior(
                                 enable: true,
                                 header: "Transaction",
@@ -201,19 +201,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   name: "Expenses",
                                   markerSettings:
                                       const MarkerSettings(isVisible: true),
-                                  /* onPointTap: (pointInteractionDetails) =>
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            int index = pointInteractionDetails
-                                                .pointIndex!;
-                                            return AlertDialog(
-                                              title: Text(
-                                                  "Date: ${pointInteractionDetails.dataPoints![index].x}"),
-                                              content: Text(
-                                                  "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
-                                            );
-                                          }), */
                                   color: Colors.red,
                                   dataSource: getChartDataForAccountExpenses(
                                       transactions,
@@ -236,19 +223,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                   name: "Incomes",
                                   markerSettings:
                                       const MarkerSettings(isVisible: true),
-                                  /* onPointTap: (pointInteractionDetails) =>
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            int index = pointInteractionDetails
-                                                .pointIndex!;
-                                            return AlertDialog(
-                                              title: Text(
-                                                  "Date: ${pointInteractionDetails.dataPoints![index].x}"),
-                                              content: Text(
-                                                  "Amount: ${pointInteractionDetails.dataPoints![index].y}"),
-                                            );
-                                          }), */
                                   color: Colors.green,
                                   dataSource: getChartDataForAccountIncomes(
                                       transactions,
