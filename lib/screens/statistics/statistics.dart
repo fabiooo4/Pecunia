@@ -5,7 +5,6 @@ import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/categories/category.dart';
 import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
-import 'package:pecunia/screens/other/categories.dart';
 import 'package:pecunia/widgets/filters.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

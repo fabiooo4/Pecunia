@@ -33,9 +33,7 @@ class _CategoryTileState extends State<CategoryTile> {
     return GestureDetector(
       onLongPressStart: (LongPressStartDetails details) {
         final RenderBox overlay =
-            Overlay.of(context)!.context.findRenderObject() as RenderBox;
-        final RenderBox box = context.findRenderObject() as RenderBox;
-        final Offset target = box.localToGlobal(Offset.zero);
+            Overlay.of(context).context.findRenderObject() as RenderBox;
 
         final relativePosition = RelativeRect.fromRect(
           Rect.fromPoints(
