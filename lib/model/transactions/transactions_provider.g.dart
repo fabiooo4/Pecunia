@@ -21,7 +21,7 @@ final transactionsProvider =
 );
 
 typedef TransactionsRef = AutoDisposeFutureProviderRef<List<Transaction>>;
-String _$transactionHash() => r'ebe27623a46b64b40b740576aa5ac65ee5bf8e69';
+String _$transactionHash() => r'6a6f27f9bbda9924daa2e8611737bb1adf50aa48';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -95,7 +95,7 @@ class TransactionProvider extends AutoDisposeFutureProvider<Transaction> {
     this.id,
   ) : super.internal(
           (ref) => transaction(
-            ref as TransactionsRef,
+            ref,
             id,
           ),
           from: transactionProvider,

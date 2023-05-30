@@ -15,7 +15,7 @@ Future<List<Transaction>> transactions(
 
 @riverpod
 Future<Transaction> transaction(
-  TransactionsRef ref,
+  TransactionRef ref,
   String id,
 ) {
   return ref.read(transactionsRepositoryProvider).getTransaction(id);

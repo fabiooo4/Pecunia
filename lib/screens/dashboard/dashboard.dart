@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
+import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/screens/dashboard/category_expenses.dart';
 import 'package:pecunia/screens/dashboard/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
+import 'package:pecunia/widgets/transaction_modal.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../model/users/user.dart';
@@ -445,11 +447,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
     return showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return const Dialog(
-            alignment: Alignment.topCenter,
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            child: Text("Add Transaction", style: TextStyle(fontSize: 30)));
+        return TransactionModal(modalContext: context);
       },
     );
   }
