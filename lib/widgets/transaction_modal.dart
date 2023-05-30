@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/src/utils/capitalize.dart';
 
 enum TransactionType { income, expense }
 
@@ -27,40 +28,64 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(children: [
+        const SizedBox(height: 20),
         const Text('Add Transaction',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            DropdownButton(
-                items: TransactionType.values.map((e) {
-                  final value = e.toString().split(".").last;
-                  return DropdownMenuItem(value: value, child: Text(value));
-                }).toList(),
-                onChanged: (value) {
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
+        DefaultTabController(
+          length: TransactionType.values.length,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TabBar(
+                indicatorColor: Colors.lightGreen,
+                onTap: (index) {
                   setState(() {
-                    _expenseType = value.toString();
+                    _expenseType = TransactionType.values[index]
+                        .toString()
+                        .split(".")
+                        .last;
                   });
                 },
-                value: _expenseType),
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 0.4,
-              height: MediaQuery.sizeOf(context).height * 0.03,
-              child: TextField(
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    border: OutlineInputBorder(),
-                    hintText: 'Description'),
-                    controller: _descriptionController,
+                tabs: TransactionType.values
+                    .map((type) =>
+                        Tab(text: type.toString().split(".").last.capitalize()))
+                    .toList(),
               ),
-            ),
-          ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TabBarView(
+                  children: TransactionType.values
+                      .map((type) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: _descriptionController,
+                                  decoration: const InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                      labelText: 'Description'),
+                                ),
+                                const TextField(
+                                  decoration: InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                      labelText: 'Amount'),
+                                ),
+                              ],
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
         ),
         FilledButton(
             onPressed: Navigator.of(widget.modalContext).pop,
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red)),
-            child: const Text('Cancel')),
+                backgroundColor: MaterialStateProperty.all(Colors.lightGreen)),
+            child: const Text('Add')),
       ]),
     );
   }
