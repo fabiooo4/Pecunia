@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
-import 'package:pecunia/model/transactions/transaction.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/screens/dashboard/category_expenses.dart';
@@ -445,6 +444,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   Future<dynamic> transactionModalDialog(BuildContext context) {
     return showModalBottomSheet(
+      isScrollControlled: true,
+      showDragHandle: true,
       context: context,
       builder: (BuildContext context) {
         return TransactionModal(modalContext: context);
