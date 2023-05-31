@@ -136,16 +136,29 @@ class _CategoryTileState extends State<CategoryTile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              widget.icon,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            if (widget.icon != '') ...[
+              Text(
+                widget.icon,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Text(
+                    widget.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ] else ...[
+              SizedBox(
                 child: Text(
                   widget.name,
                   style: const TextStyle(
@@ -155,7 +168,7 @@ class _CategoryTileState extends State<CategoryTile> {
                   ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),

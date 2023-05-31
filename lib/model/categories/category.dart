@@ -1,14 +1,13 @@
 class Category {
-  Category(
-      {required this.id,
-      required this.name,
-      required this.icon,
-      this.categoryIcon});
+  Category({
+    required this.id,
+    required this.name,
+    this.icon,
+  });
 
   String id;
   String name;
-  String icon;
-  String? categoryIcon;
+  String? icon;
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(

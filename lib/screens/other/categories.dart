@@ -62,11 +62,7 @@ class _CategoriesState extends ConsumerState<Categories> {
                 controller: ScrollController(keepScrollOffset: false),
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return CategoryTileAdd(
-                      onTap: () {
-                        print('Add Category tapped');
-                      },
-                    );
+                    return const CategoryTileAdd();
                   }
                   final category = categories.when(
                     data: (accountListdata) => accountListdata[index - 1],
