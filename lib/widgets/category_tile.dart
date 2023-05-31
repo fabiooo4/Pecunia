@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CategoryTile extends StatefulWidget {
-  const CategoryTile({Key? key, required this.name, required this.onTap})
+  const CategoryTile(
+      {Key? key, required this.name, required this.icon, required this.onTap})
       : super(key: key);
 
   final String name;
+  final String icon;
   final VoidCallback onTap;
 
   @override
@@ -14,18 +16,18 @@ class CategoryTile extends StatefulWidget {
 class _CategoryTileState extends State<CategoryTile> {
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nameController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
 
     @override
     void initState() {
-      _nameController.addListener(() => setState(() {}));
+      nameController.addListener(() => setState(() {}));
 
       super.initState();
     }
 
     @override
     void dispose() {
-      _nameController.dispose();
+      nameController.dispose();
 
       super.dispose();
     }
@@ -61,7 +63,7 @@ class _CategoryTileState extends State<CategoryTile> {
                             decoration: InputDecoration(
                               labelText: "Current name: ${widget.name}",
                             ),
-                            controller: _nameController,
+                            controller: nameController,
                           ),
                           actions: [
                             TextButton(
@@ -72,7 +74,7 @@ class _CategoryTileState extends State<CategoryTile> {
                             ),
                             TextButton(
                               onPressed: () {
-                                print(_nameController.text);
+                                print(nameController.text);
                               },
                               child: const Text("Save"),
                             ),
@@ -134,7 +136,7 @@ class _CategoryTileState extends State<CategoryTile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.category, color: Colors.white),
+            Icon(Icons.category, color: Colors.white),
             SizedBox(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
