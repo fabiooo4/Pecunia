@@ -466,7 +466,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
 class TransactionsData {
   TransactionsData(this.x, this.y, [this.icon]);
   final String x;
-  late final double y;
+  late double y;
   final String? icon;
 }
 
@@ -531,6 +531,7 @@ List<TransactionsData> getExpensesByCategory(
     final transactions = transactionsData.value;
     final categories = categoriesData.value;
     List<TransactionsData> chartData = [];
+    List<TransactionsData> newChartData = [];
     for (var transaction in transactions) {
       if (accountName == '') {
         if (transaction.type == 'expense') {
@@ -570,7 +571,21 @@ List<TransactionsData> getExpensesByCategory(
         }
       }
     }
-    return chartData;
+    for (var data in chartData) {
+      // sum all the amounts of the same category and add it to the newChartData
+      if (newChartData.indexWhere((element) => element.x == data.x) == -1) {
+        newChartData.add(data);
+      } else {
+        newChartData[newChartData.indexWhere((element) => element.x == data.x)]
+            .y += data.y;
+      }
+    }
+
+    for (var data in newChartData) {
+      print('${data.x} ${data.y}');
+    }
+
+    return newChartData;
   }
   return [];
 }
@@ -584,6 +599,7 @@ List<TransactionsData> getIncomesByCategory(
     final transactions = transactionsData.value;
     final categories = categoriesData.value;
     List<TransactionsData> chartData = [];
+    List<TransactionsData> newChartData = [];
     for (var transaction in transactions) {
       if (accountName == '') {
         if (transaction.type == 'income') {
@@ -622,7 +638,16 @@ List<TransactionsData> getIncomesByCategory(
         }
       }
     }
-    return chartData;
+    for (var data in chartData) {
+      // sum all the amounts of the same category and add it to the newChartData
+      if (newChartData.indexWhere((element) => element.x == data.x) == -1) {
+        newChartData.add(data);
+      } else {
+        newChartData[newChartData.indexWhere((element) => element.x == data.x)]
+            .y += data.y;
+      }
+    }
+    return newChartData;
   }
   return [];
 }
