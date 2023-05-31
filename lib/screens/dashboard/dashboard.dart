@@ -303,7 +303,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                               onTransactionsSwipe(index);
                             },
                             itemBuilder: (BuildContext context, int pageIndex) {
-                              // for each page show a listviewbuilder with transactions filtered by account
                               return ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 itemCount: transactionListdata.length,

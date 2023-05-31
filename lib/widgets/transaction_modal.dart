@@ -6,6 +6,7 @@ import 'package:pecunia/src/utils/capitalize.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../model/categories/categories_provider.dart';
+import '../model/transactions/transactions_provider.dart';
 
 enum TransactionType { expense, income }
 
@@ -561,20 +562,22 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   }
 
   Future<void> addTransaction() async {
-    await Supabase.instance.client
-        .from('transactions')
-        .insert([
-          {
-            'user_id': Supabase.instance.client.auth.currentUser!.id,
-            'description': _descriptionController.text,
-            'amount': _amountController.text,
-            'created_at': _dateController.text,
-            'category_id': selectedCategoryId,
-            'account_id': selectedAccountId,
-            'type': _expenseType,
-          }
-        ])
-        .then((value) => Navigator.of(context).pop())
-        .catchError((error) => print(error));
+    await Supabase.instance.client.from('transactions').insert([
+      {
+        'user_id': Supabase.instance.client.auth.currentUser!.id,
+        'description': _descriptionController.text,
+        'amount': _amountController.text,
+        'created_at': _dateController.text,
+        'category_id': selectedCategoryId,
+        'account_id': selectedAccountId,
+        'type': _expenseType,
+      }
+    ]).then((value) {
+      // ignore: unused_result
+      ref.refresh(transactionsProvider);
+      Navigator.of(context).pop();
+    }).catchError((error) {
+      print(error);
+    });
   }
 }
