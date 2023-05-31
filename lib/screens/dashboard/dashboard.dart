@@ -315,6 +315,9 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                     return const SizedBox.shrink();
                                   }
 
+                                  transactionListdata.sort(
+                                      (a, b) => b.date!.compareTo(a.date!));
+
                                   final transaction =
                                       transactionListdata[index];
                                   final account = accountListdata.firstWhere(
