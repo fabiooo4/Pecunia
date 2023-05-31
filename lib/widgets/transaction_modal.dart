@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/src/utils/capitalize.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../model/categories/categories_provider.dart';
 
@@ -24,10 +26,11 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
     _dateController.text = DateTime.now().toString().split(" ").first;
   }
 
-  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   String _expenseType = TransactionType.expense.toString().split(".").last;
   String selectedCategoryId = '';
@@ -250,8 +253,13 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                                           0.6,
                                       height: 40,
                                       child: TextField(
-                                        controller: _descriptionController,
+                                        controller: _amountController,
                                         keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                              // allow digits and dot
+                                              RegExp(r'^\d+\.?\d{0,2}')),
+                                        ],
                                         decoration: InputDecoration(
                                           enabledBorder:
                                               const UnderlineInputBorder(
@@ -319,7 +327,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: FilledButton(
-                onPressed: Navigator.of(widget.modalContext).pop,
+                onPressed: addTransaction,
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Colors.lightGreen)),
@@ -550,5 +558,23 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
 
   void createAccount() {
     print('TODO create account');
+  }
+
+  Future<void> addTransaction() async {
+    await Supabase.instance.client
+        .from('transactions')
+        .insert([
+          {
+            'user_id': Supabase.instance.client.auth.currentUser!.id,
+            'description': _descriptionController.text,
+            'amount': _amountController.text,
+            'created_at': _dateController.text,
+            'category_id': selectedCategoryId,
+            'account_id': selectedAccountId,
+            'type': _expenseType,
+          }
+        ])
+        .then((value) => Navigator.of(context).pop())
+        .catchError((error) => print(error));
   }
 }
