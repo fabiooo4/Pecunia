@@ -39,7 +39,7 @@ class Transactionw extends ConsumerWidget {
           style: const TextStyle(color: Colors.black54),
         ),
         trailing: Text(
-          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          '€ ${transaction.amount.toString().replaceAll(',', '.')}',
           style: const TextStyle(color: Colors.red),
         ),
       );
@@ -61,43 +61,12 @@ class Transactionw extends ConsumerWidget {
         subtitle: Text(category?.name ?? '',
             style: const TextStyle(color: Colors.black54)),
         trailing: Text(
-          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          '€ ${transaction.amount.toString().replaceAll(',', '.')}',
           style: const TextStyle(color: Colors.blue),
         ),
       );
     } else {
       return const ListTile();
     }
-
-    // return SizedBox(
-    //   child: ListView.builder(
-    //     itemCount: 2,
-    //     scrollDirection: Axis.vertical,
-    //     itemBuilder: (context, index) {
-    //       if (transaction.type == 'expense') {
-    //         return ListTile(
-    //           leading: Text('category'),
-    //           title: Text(transaction.description),
-    //           subtitle: Text('account'),
-    //           trailing: Text(
-    //             '€ ${transaction.amount.toString().replaceAll('.', ',')}',
-    //             style: const TextStyle(color: Colors.red),
-    //           ),
-    //         );
-    //       } else if (transaction.type == 'income') {
-    //         return ListTile(
-    //           leading: Text('category'),
-    //           title: Text(transaction.description),
-    //           subtitle: Text('account'),
-    //           trailing: Text(
-    //             '€ ${transaction.amount.toString().replaceAll('.', ',')}',
-    //             style: const TextStyle(color: Colors.blue),
-    //           ),
-    //         );
-    //       }
-    //       return null;
-    //     },
-    //   ),
-    // );
   }
 }

@@ -5,26 +5,43 @@ import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/src/utils/capitalize.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../model/accounts/account.dart';
 import '../model/categories/categories_provider.dart';
+import '../model/categories/category.dart';
+import '../model/transactions/transaction.dart';
 import '../model/transactions/transactions_provider.dart';
 
 enum TransactionType { expense, income }
 
-class TransactionModal extends ConsumerStatefulWidget {
-  const TransactionModal({super.key, required this.modalContext});
+class TransactionDetails extends ConsumerStatefulWidget {
+  const TransactionDetails(
+      {super.key,
+      required this.modalContext,
+      required this.transaction,
+      required this.account,
+      required this.category});
 
   final BuildContext modalContext;
+  final Transaction transaction;
+  final Account account;
+  final Category category;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _TransactionModalState();
+      _TransactionDetailsState();
 }
 
-class _TransactionModalState extends ConsumerState<TransactionModal> {
+class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
   @override
   void initState() {
     super.initState();
-    _dateController.text = DateTime.now().toString().split(" ").first;
+    _dateController.text = widget.transaction.date.toString().split(" ").first;
+    _accountController.text = widget.account.name;
+    _categoryController.text =
+        '${widget.category.icon} ${widget.category.name}';
+    _amountController.text = widget.transaction.amount.toString();
+    _descriptionController.text = widget.transaction.description ?? '';
+    _expenseType = widget.transaction.type;
   }
 
   final TextEditingController _dateController = TextEditingController();
@@ -32,8 +49,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
-  String _expenseType = TransactionType.expense.toString().split(".").last;
+  String _expenseType = '';
   String selectedCategoryId = '';
   String selectedAccountId = '';
 
@@ -49,13 +65,15 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
       child: Column(
         children: [
           const SizedBox(height: 20),
-          const Text('Add Transaction',
+          const Text('Details',
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   color: Colors.black)),
           DefaultTabController(
             length: TransactionType.values.length,
+            initialIndex: TransactionType.values.indexWhere((element) =>
+                element.toString().split(".").last == widget.transaction.type),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -329,11 +347,17 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: FilledButton(
-                onPressed: addTransaction,
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.lightGreen)),
-                child: const Text('Save')),
+              onPressed: () async {
+                await editTransaction();
+              },
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.lightGreen)),
+              child: const Text(
+                'Edit',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
         ],
       ),
@@ -551,31 +575,31 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
     );
   }
 
-  void createCategory() {
-    print('TODO create category');
-  }
-
-  void createAccount() {
-    print('TODO create account');
-  }
-
-  Future<void> addTransaction() async {
-    await Supabase.instance.client.from('transactions').insert([
-      {
+  Future<void> editTransaction() async {
+    if (_descriptionController.text != widget.transaction.description ||
+        _amountController.text != widget.transaction.amount.toString() ||
+        _dateController.text !=
+            widget.transaction.date.toString().split(" ").first ||
+        selectedCategoryId != widget.transaction.category ||
+        selectedAccountId != widget.transaction.account ||
+        _expenseType != widget.transaction.type) {
+      await Supabase.instance.client.from('transactions').update({
+        'id': widget.transaction.id,
         'user_id': Supabase.instance.client.auth.currentUser!.id,
-        'description': _descriptionController.text,
-        'amount': _amountController.text,
         'created_at': _dateController.text,
-        'category_id': selectedCategoryId,
-        'account_id': selectedAccountId,
         'type': _expenseType,
-      }
-    ]).then((value) {
-      // ignore: unused_result
-      ref.refresh(transactionsProvider);
-      Navigator.of(context).pop();
-    }).catchError((error) {
-      print(error);
-    });
+        'amount': _amountController.text,
+        'description': _descriptionController.text,
+        'category_id': widget.category.id,
+        'account_id': widget.account.id,
+      }).match({'id': widget.transaction.id}).then((value) {
+        ref.invalidate(transactionsProvider);
+        Navigator.of(context).pop();
+      }).catchError((error) {
+        print(error);
+      });
+    } else {
+      print('Nothing changed');
+    }
   }
 }

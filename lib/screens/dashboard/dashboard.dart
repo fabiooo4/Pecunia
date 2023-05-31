@@ -6,12 +6,15 @@ import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/model/transactions/transactions_provider.dart';
 import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/screens/dashboard/category_expenses.dart';
-import 'package:pecunia/screens/dashboard/transaction.dart';
 import 'package:pecunia/widgets/account_card.dart';
 import 'package:pecunia/widgets/categoryw.dart';
+import 'package:pecunia/widgets/transaction_details.dart';
 import 'package:pecunia/widgets/transaction_modal.dart';
 import 'package:pecunia/widgets/transactionw.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../model/accounts/account.dart';
+import '../../model/categories/category.dart';
+import '../../model/transactions/transaction.dart';
 import '../../model/users/user.dart';
 import '../../model/users/users_provider.dart';
 
@@ -312,64 +315,31 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                     return const SizedBox.shrink();
                                   }
 
+                                  final transaction =
+                                      transactionListdata[index];
+                                  final account = accountListdata.firstWhere(
+                                      (element) =>
+                                          element.id ==
+                                          transactionListdata[index].account);
+                                  final category = categoryListdata.firstWhere(
+                                      (element) =>
+                                          element.id ==
+                                          transactionListdata[index].category);
+
                                   return GestureDetector(
-                                    onTap: () => context.go(
-                                        '/home/dashboard/transaction/${transactionListdata[index].id}',
-                                        extra: TransactionPageParams(
-                                          transaction:
-                                              transactionListdata[index],
-                                          account: accountListdata.firstWhere(
-                                            (element) =>
-                                                element.id ==
-                                                transactionListdata[index]
-                                                    .account,
-                                          ),
-                                          category: categoryListdata.firstWhere(
-                                            (element) =>
-                                                element.id ==
-                                                transactionListdata[index]
-                                                    .category,
-                                          ),
-                                        )),
-                                    child: OpenContainer(
-                                      closedElevation: 0,
-                                      openElevation: 0,
-                                      closedColor: Colors.transparent,
-                                      openColor: Colors.transparent,
-                                      closedBuilder: (context, action) =>
-                                          Transactionw(
-                                        transaction: transactionListdata[index],
-                                        account: accountListdata.firstWhere(
-                                          (element) =>
-                                              element.id ==
-                                              transactionListdata[index]
-                                                  .account,
-                                        ),
-                                        category: categoryListdata.firstWhere(
-                                          (element) =>
-                                              element.id ==
-                                              transactionListdata[index]
-                                                  .category,
-                                        ),
+                                    onTap: () => detailsModal(context,
+                                        transaction, account, category),
+                                    child: Transactionw(
+                                      transaction: transactionListdata[index],
+                                      account: accountListdata.firstWhere(
+                                        (element) =>
+                                            element.id ==
+                                            transactionListdata[index].account,
                                       ),
-                                      openBuilder: (context, action) =>
-                                          TransactionPage(
-                                        params: TransactionPageParams(
-                                          transaction:
-                                              transactionListdata[index],
-                                          account: accountListdata.firstWhere(
-                                            (element) =>
-                                                element.id ==
-                                                transactionListdata[index]
-                                                    .account,
-                                          ),
-                                          category: categoryListdata.firstWhere(
-                                            (element) =>
-                                                element.id ==
-                                                transactionListdata[index]
-                                                    .category,
-                                          ),
-                                        ),
+                                      category: categoryListdata.firstWhere(
+                                        (element) =>
+                                            element.id ==
+                                            transactionListdata[index].category,
                                       ),
                                     ),
                                     // child: Transactionw(
@@ -448,6 +418,22 @@ class _DashboardState extends ConsumerState<Dashboard> {
       context: context,
       builder: (BuildContext context) {
         return TransactionModal(modalContext: context);
+      },
+    );
+  }
+
+  Future<dynamic> detailsModal(BuildContext context, Transaction transaction,
+      Account account, Category category) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      showDragHandle: true,
+      context: context,
+      builder: (BuildContext context) {
+        return TransactionDetails(
+            modalContext: context,
+            transaction: transaction,
+            account: account,
+            category: category);
       },
     );
   }

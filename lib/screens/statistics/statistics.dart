@@ -186,7 +186,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                     },
                                   ),
                                   selectionBehavior: SelectionBehavior(
-                                    enable: true,
+                                    enable: false,
                                     selectedOpacity: 1,
                                     unselectedOpacity: 0.8,
                                     selectedBorderColor: Colors.white,
@@ -199,6 +199,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           Center(
                             heightFactor: 1,
                             child: SfCircularChart(
+                              tooltipBehavior: _tooltipBehavior,
                               onTooltipRender: (tooltipArgs) {
                                 Future.delayed(
                                   const Duration(milliseconds: 3000),
@@ -291,7 +292,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                     },
                                   ),
                                   selectionBehavior: SelectionBehavior(
-                                    enable: true,
+                                    enable: false,
                                     selectedOpacity: 1,
                                     unselectedOpacity: 0.8,
                                     selectedBorderColor: Colors.white,

@@ -90,23 +90,39 @@ class _AccountCardState extends State<AccountCard> {
           Positioned(
             bottom: 20,
             left: 20,
-            child: Text(
-              '€ ${widget.income.toStringAsFixed(2)}',
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.arrow_drop_up,
+                  color: Colors.white,
+                ),
+                Text(
+                  '${widget.income.toStringAsFixed(2)} €',
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
             ),
           ),
           Positioned(
             bottom: 20,
             right: 20,
-            child: Text(
-              '€ ${widget.expense.toStringAsFixed(2)}',
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.white,
+                ),
+                Text(
+                  '${widget.expense.toStringAsFixed(2)} €',
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
             ),
           ),
         ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pecunia/screens/dashboard/category_expenses.dart';
-import 'package:pecunia/screens/dashboard/transaction.dart';
 import 'package:pecunia/screens/auth/login.dart';
 import 'package:pecunia/screens/auth/sign_up.dart';
 import 'package:pecunia/screens/home_layout.dart';
@@ -68,14 +67,6 @@ final router = GoRouter(
               params: state.extra as CategoryTransactionsParams,
             ),
           ),
-        ),
-        GoRoute(
-          path: 'dashboard/transaction/:transactionId',
-          builder: (context, state) {
-            final params = state.extra as TransactionPageParams;
-
-            return TransactionPage(params: params);
-          },
         ),
         GoRoute(
           path: 'other/settings',
