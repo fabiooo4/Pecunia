@@ -566,13 +566,12 @@ List<TransactionsData> getExpensesByCategory(
                 (element) => element.id == transaction.category,
               )
               .name;
-          // category icon if is null return ❔ else return the icon
           final categoryIcon = categories
                   .firstWhere(
                     (element) => element.id == transaction.category,
                   )
                   .icon ??
-              '❔';
+              '';
 
           chartData.add(
               TransactionsData(categoryName, transaction.amount, categoryIcon));
@@ -590,7 +589,7 @@ List<TransactionsData> getExpensesByCategory(
                     (element) => element.id == transaction.category,
                   )
                   .icon ??
-              '❔';
+              '';
 
           chartData.add(
               TransactionsData(categoryName, transaction.amount, categoryIcon));

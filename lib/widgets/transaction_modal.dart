@@ -413,15 +413,22 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  categoryListdata[index].icon.toString(),
-                                  style: const TextStyle(fontSize: 30),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(categoryListdata[index].name,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500)),
+                                if (categoryListdata[index].icon != '') ...[
+                                  Text(
+                                    categoryListdata[index].icon.toString(),
+                                    style: const TextStyle(fontSize: 30),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(categoryListdata[index].name,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500)),
+                                ] else ...[
+                                  Text(categoryListdata[index].name,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500)),
+                                ],
                               ],
                             ),
                           ),
