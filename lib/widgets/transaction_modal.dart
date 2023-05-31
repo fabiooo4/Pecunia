@@ -39,7 +39,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
         ? Colors.red
         : _expenseType == 'income'
             ? Colors.blue
-            : Colors.green;
+            : Colors.lightGreen;
 
     return Center(
       child: Column(
@@ -94,8 +94,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                     children: TransactionType.values
                         .map(
                           (type) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 10),
+                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 0),
                             child: Column(
                               children: [
                                 Row(
@@ -411,7 +410,10 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                               children: [
                                 const Icon(Icons.category, size: 30),
                                 const SizedBox(height: 10),
-                                Text(categoryListdata[index].name),
+                                Text(categoryListdata[index].name,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ),
@@ -513,9 +515,12 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.category, size: 30),
-                                const SizedBox(height: 10),
-                                Text(accountListdata[index].name),
+                                Text(
+                                  accountListdata[index].name,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ],
                             ),
                           ),
