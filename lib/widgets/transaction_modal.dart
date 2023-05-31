@@ -341,6 +341,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   }
 
   void categoryPicker() {
+    ref.invalidate(categoriesProvider);
     final categoryList = ref.watch(categoriesProvider);
     showModalBottomSheet(
       enableDrag: false,
@@ -374,12 +375,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: createCategory,
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              )),
                           IconButton(
                               onPressed: () => Navigator.of(context).pop(),
                               icon: const Icon(
@@ -418,7 +413,10 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.category, size: 30),
+                                Text(
+                                  categoryListdata[index].icon.toString(),
+                                  style: const TextStyle(fontSize: 30),
+                                ),
                                 const SizedBox(height: 10),
                                 Text(categoryListdata[index].name,
                                     style: const TextStyle(
@@ -481,12 +479,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: createAccount,
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              )),
                           IconButton(
                               onPressed: () => Navigator.of(context).pop(),
                               icon: const Icon(
