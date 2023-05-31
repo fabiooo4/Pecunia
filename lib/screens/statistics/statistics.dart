@@ -16,6 +16,15 @@ class Statistics extends ConsumerStatefulWidget {
 }
 
 class _StatisticsState extends ConsumerState<Statistics> {
+  final TooltipBehavior _tooltipBehavior = TooltipBehavior(
+    enable: true,
+    tooltipPosition: TooltipPosition.auto,
+    canShowMarker: true,
+    format: "point.y €",
+    textStyle: const TextStyle(
+        color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+  );
+
   int tappedChipindex = 0;
   List<bool> isSelected = [];
 
@@ -84,6 +93,15 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           Center(
                             heightFactor: 1,
                             child: SfCircularChart(
+                              tooltipBehavior: _tooltipBehavior,
+                              onTooltipRender: (tooltipArgs) {
+                                Future.delayed(
+                                  const Duration(milliseconds: 3000),
+                                  () {
+                                    _tooltipBehavior.hide();
+                                  },
+                                );
+                              },
                               palette: const [
                                 Color(0xFF377A39),
                                 Color(0xFF204721),
@@ -181,6 +199,14 @@ class _StatisticsState extends ConsumerState<Statistics> {
                           Center(
                             heightFactor: 1,
                             child: SfCircularChart(
+                              onTooltipRender: (tooltipArgs) {
+                                Future.delayed(
+                                  const Duration(milliseconds: 3000),
+                                  () {
+                                    _tooltipBehavior.hide();
+                                  },
+                                );
+                              },
                               palette: const [
                                 Color(0xFF377A39),
                                 Color(0xFF204721),
