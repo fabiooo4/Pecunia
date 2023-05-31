@@ -134,6 +134,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                                               picked != DateTime.now()) {
                                             setState(() {
                                               _dateController.text = picked
+                                                  .toIso8601String()
                                                   .toString()
                                                   .split(" ")
                                                   .first;
@@ -509,8 +510,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
                           onTap: () {
-                            print(accountListdata[index].name);
-                            print(accountListdata[index].id);
                             _accountController.text =
                                 accountListdata[index].name;
                             selectedAccountId = accountListdata[index].id;
