@@ -171,7 +171,7 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
                   config: const Config(
                     columns: 7,
                     // Issue: https://github.com/flutter/flutter/issues/28894
-                    emojiSizeMax: 20,
+                    emojiSizeMax: 30,
                     verticalSpacing: 0,
                     horizontalSpacing: 0,
                     gridPadding: EdgeInsets.zero,
@@ -187,7 +187,7 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
                     buttonMode: ButtonMode.MATERIAL,
                     showRecentsTab: true,
                     recentsLimit: 28,
-                    replaceEmojiOnLimitExceed: false,
+                    replaceEmojiOnLimitExceed: true,
                     noRecents: Text(
                       'No Recents',
                       style: TextStyle(fontSize: 20, color: Colors.black26),
