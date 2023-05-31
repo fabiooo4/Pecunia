@@ -14,14 +14,14 @@ class _CategoryTileAddState extends State<CategoryTileAdd> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _iconController = TextEditingController();
 
-  bool emojiShowed = false;
+  String defaultEmoji = "😀";
 
   @override
   void initState() {
     _nameController.addListener(() => setState(() {}));
     _iconController.addListener(() => setState(() {}));
 
-    _iconController.text = "😎";
+    _iconController.text = defaultEmoji;
 
     super.initState();
   }
@@ -39,48 +39,59 @@ class _CategoryTileAddState extends State<CategoryTileAdd> {
     return GestureDetector(
       onTap: () {
         showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Add Category"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      labelText: 'Category Name',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      prefixIcon: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: IconButton(
-                              onPressed: () {
-                                emojiPicker();
-                              },
-                              icon: Text(
-                                _iconController.text,
-                                style: const TextStyle(fontSize: 20),
-                              )))),
-                  controller: _nameController,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return AlertDialog(
+                    title: const Text("Add Category"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                              border: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              labelText: 'Category Name',
+                              labelStyle: const TextStyle(color: Colors.black),
+                              prefixIcon: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        emojiPicker(setState);
+                                      },
+                                      icon: Text(
+                                        _iconController.text,
+                                        style: const TextStyle(fontSize: 20),
+                                      )))),
+                          controller: _nameController,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          _nameController.clear();
+                          _iconController.text = defaultEmoji;
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          print("Add ${_nameController.text}");
+                          _nameController.clear();
+                          _iconController.text = defaultEmoji;
+                        },
+                        child: const Text("Add"),
+                      ),
+                    ],
+                  );
                 },
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () {
-                  print("Add ${_nameController.text}");
-                },
-                child: const Text("Add"),
-              ),
-            ],
-          ),
-        );
+              );
+            });
       },
       child: Card(
         elevation: 5,
@@ -98,8 +109,7 @@ class _CategoryTileAddState extends State<CategoryTileAdd> {
     );
   }
 
-  void emojiPicker() {
-    print(_iconController.text);
+  void emojiPicker(setState) {
     showModalBottomSheet(
         enableDrag: false,
         context: context,
@@ -110,16 +120,15 @@ class _CategoryTileAddState extends State<CategoryTileAdd> {
           ),
         ),
         builder: (context) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.36,
             width: MediaQuery.of(context).size.width,
             child: SizedBox(
                 height: 250,
                 child: EmojiPicker(
                   onEmojiSelected: (category, emoji) {
                     setState(() {
-                      _iconController.text =
-                          emoji.emoji; // Update the icon text
+                      _iconController.text = emoji.emoji;
                     });
                     Navigator.pop(context);
                   },
