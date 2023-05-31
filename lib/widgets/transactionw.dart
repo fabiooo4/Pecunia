@@ -21,10 +21,18 @@ class Transactionw extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (transaction.type == 'expense') {
       return ListTile(
-        leading: const Icon(
-          Icons.arrow_downward,
-          color: Colors.red,
-        ),
+        leading: category?.icon == ''
+            ? const Icon(
+                Icons.arrow_downward,
+                color: Colors.red,
+              )
+            : Text(
+                category!.icon ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              ),
         title: Text(transaction.description ?? ''),
         subtitle: Text(
           category?.name ?? '',
@@ -37,10 +45,18 @@ class Transactionw extends ConsumerWidget {
       );
     } else if (transaction.type == 'income') {
       return ListTile(
-        leading: const Icon(
-          Icons.arrow_upward,
-          color: Colors.blue,
-        ),
+        leading: category?.icon == ''
+            ? const Icon(
+                Icons.arrow_upward,
+                color: Colors.blue,
+              )
+            : Text(
+                category!.icon ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              ),
         title: Text(transaction.description ?? ''),
         subtitle: Text(category?.name ?? '',
             style: const TextStyle(color: Colors.black54)),
