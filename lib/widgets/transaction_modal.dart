@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:pecunia/src/utils/capitalize.dart';
+
+import '../model/categories/categories_provider.dart';
 
 enum TransactionType { expense, income }
 
@@ -24,8 +27,11 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _accountController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
 
   String _expenseType = TransactionType.expense.toString().split(".").last;
+  String selectedCategoryId = '';
+  String selectedAccountId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -86,209 +92,225 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: TransactionType.values
-                        .map((type) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 18),
-                                      Text(
-                                        'Date',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54,
-                                        ),
+                        .map(
+                          (type) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 10),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    const Text(
+                                      'Date',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
                                       ),
-                                      SizedBox(height: 21),
-                                      Text(
-                                        'Account',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                      SizedBox(height: 21),
-                                      Text(
-                                        'Category',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                      SizedBox(height: 21),
-                                      Text(
-                                        'Amount',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                      SizedBox(height: 21),
-                                      Text(
-                                        'Title',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 20),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      //! Date
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: _dateController,
-                                          keyboardType: TextInputType.none,
-                                          onTap: () async {
-                                            final DateTime? picked =
-                                                await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2015, 8),
-                                              lastDate: DateTime(2101),
-                                            );
-                                            if (picked != null &&
-                                                picked != DateTime.now()) {
-                                              setState(() {
-                                                _dateController.text = picked
-                                                    .toString()
-                                                    .split(" ")
-                                                    .first;
-                                              });
-                                            }
-                                          },
-                                          decoration: InputDecoration(
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black12),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: addColor,
-                                                width: 2,
-                                              ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _dateController,
+                                        keyboardType: TextInputType.none,
+                                        onTap: () async {
+                                          final DateTime? picked =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2015, 8),
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (picked != null &&
+                                              picked != DateTime.now()) {
+                                            setState(() {
+                                              _dateController.text = picked
+                                                  .toString()
+                                                  .split(" ")
+                                                  .first;
+                                            });
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          enabledBorder:
+                                              const UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black12),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: addColor,
+                                              width: 2,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      //! Account
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: _accountController,
-                                          keyboardType: TextInputType.none,
-                                          onTap: null,
-                                          decoration: InputDecoration(
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black12),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: addColor,
-                                                width: 2,
-                                              ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    const Text(
+                                      'Account',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _accountController,
+                                        keyboardType: TextInputType.none,
+                                        onTap: accountPicker,
+                                        decoration: InputDecoration(
+                                          enabledBorder:
+                                              const UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black12),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: addColor,
+                                              width: 2,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      //! Category
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: _accountController,
-                                          keyboardType: TextInputType.none,
-                                          onTap: categoryPicker,
-                                          decoration: InputDecoration(
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black12),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: addColor,
-                                                width: 2,
-                                              ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    const Text(
+                                      'Category',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _categoryController,
+                                        keyboardType: TextInputType.none,
+                                        onTap: categoryPicker,
+                                        decoration: InputDecoration(
+                                          enabledBorder:
+                                              const UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black12),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: addColor,
+                                              width: 2,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: _descriptionController,
-                                          decoration: InputDecoration(
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black12),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: addColor,
-                                                width: 2,
-                                              ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    const Text(
+                                      'Amount',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _descriptionController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          enabledBorder:
+                                              const UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black12),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: addColor,
+                                              width: 2,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: _descriptionController,
-                                          decoration: InputDecoration(
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black12),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: addColor,
-                                                width: 2,
-                                              ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    const Text(
+                                      'Title',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _descriptionController,
+                                        decoration: InputDecoration(
+                                          enabledBorder:
+                                              const UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black12),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: addColor,
+                                              width: 2,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ))
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -310,6 +332,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
   }
 
   void categoryPicker() {
+    final categoryList = ref.watch(categoriesProvider);
     showModalBottomSheet(
       enableDrag: false,
       context: context,
@@ -320,79 +343,207 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
         ),
       ),
       builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.4,
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: const Color(0xFF072E08),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Category',
+        height: MediaQuery.of(context).size.height * 0.45,
+        child: categoryList.when(
+          data: (categoryListdata) => Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: const Color(0xFF072E08),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Category',
                         style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    Row(
-                      children: [
-                        const IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            )),
-                        IconButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            )),
-                      ],
-                    ),
-                  ],
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: createCategory,
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              )),
+                          IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  children: List.generate(9, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: GestureDetector(
-                        onTap: () {
-                          print('Category $index');
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.category, size: 30),
-                              const SizedBox(height: 10),
-                              Text('Category $index'),
-                            ],
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    children: List.generate(categoryListdata.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () {
+                            print(categoryListdata[index].name);
+                            print(categoryListdata[index].id);
+                            _categoryController.text =
+                                categoryListdata[index].name;
+                            selectedCategoryId = categoryListdata[index].id;
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.category, size: 30),
+                                const SizedBox(height: 10),
+                                Text(categoryListdata[index].name),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
               ),
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(color: Colors.red),
             ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  void accountPicker() {
+    final accountList = ref.watch(accountsProvider);
+    showModalBottomSheet(
+      enableDrag: false,
+      context: context,
+      barrierColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(0),
+        ),
+      ),
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.45,
+        child: accountList.when(
+          data: (accountListdata) => Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: const Color(0xFF072E08),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Account',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: createAccount,
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              )),
+                          IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    children: List.generate(accountListdata.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () {
+                            print(accountListdata[index].name);
+                            print(accountListdata[index].id);
+                            _accountController.text =
+                                accountListdata[index].name;
+                            selectedAccountId = accountListdata[index].id;
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.category, size: 30),
+                                const SizedBox(height: 10),
+                                Text(accountListdata[index].name),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void createCategory() {
+    print('TODO create category');
+  }
+
+  void createAccount() {
+    print('TODO create account');
   }
 }
