@@ -136,7 +136,13 @@ class _CategoryTileState extends State<CategoryTile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.category, color: Colors.white),
+            Text(
+              widget.icon,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
             SizedBox(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
