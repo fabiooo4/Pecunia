@@ -416,6 +416,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   Future<dynamic> transactionModalDialog(BuildContext context) {
     return showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,
       context: context,
@@ -428,6 +429,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
   Future<dynamic> detailsModal(BuildContext context, Transaction transaction,
       Account account, Category category) {
     return showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,
       context: context,
