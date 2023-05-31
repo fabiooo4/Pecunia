@@ -150,10 +150,12 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                         seriesIndex) {
                                       return TextButton.icon(
                                         onPressed: null,
-                                        icon: Icon(
-                                          Icons.category,
-                                          color: point.fill,
-                                          size: 18,
+                                        icon: Text(
+                                          data.icon!,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                         label: Text(
                                           data.x,
@@ -245,10 +247,12 @@ class _StatisticsState extends ConsumerState<Statistics> {
                                         seriesIndex) {
                                       return TextButton.icon(
                                         onPressed: null,
-                                        icon: Icon(
-                                          Icons.category,
-                                          color: point.fill,
-                                          size: 18,
+                                        icon: Text(
+                                          data.icon!,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                         label: Text(
                                           data.x,
@@ -460,9 +464,10 @@ class _StatisticsState extends ConsumerState<Statistics> {
 }
 
 class TransactionsData {
-  TransactionsData(this.x, this.y);
+  TransactionsData(this.x, this.y, [this.icon]);
   final String x;
   late final double y;
+  final String? icon;
 }
 
 List<TransactionsData> getChartDataForAccountIncomes(
@@ -534,8 +539,16 @@ List<TransactionsData> getExpensesByCategory(
                 (element) => element.id == transaction.category,
               )
               .name;
+          // category icon if is null return ❔ else return the icon
+          final categoryIcon = categories
+                  .firstWhere(
+                    (element) => element.id == transaction.category,
+                  )
+                  .icon ??
+              '❔';
 
-          chartData.add(TransactionsData(categoryName, transaction.amount));
+          chartData.add(
+              TransactionsData(categoryName, transaction.amount, categoryIcon));
         }
       } else {
         if (transaction.type == 'expense' &&
@@ -545,8 +558,15 @@ List<TransactionsData> getExpensesByCategory(
                 (element) => element.id == transaction.category,
               )
               .name;
+          final categoryIcon = categories
+                  .firstWhere(
+                    (element) => element.id == transaction.category,
+                  )
+                  .icon ??
+              '❔';
 
-          chartData.add(TransactionsData(categoryName, transaction.amount));
+          chartData.add(
+              TransactionsData(categoryName, transaction.amount, categoryIcon));
         }
       }
     }
@@ -572,8 +592,15 @@ List<TransactionsData> getIncomesByCategory(
                 (element) => element.id == transaction.category,
               )
               .name;
+          final categoryIcon = categories
+                  .firstWhere(
+                    (element) => element.id == transaction.category,
+                  )
+                  .icon ??
+              '❔';
 
-          chartData.add(TransactionsData(categoryName, transaction.amount));
+          chartData.add(
+              TransactionsData(categoryName, transaction.amount, categoryIcon));
         }
       } else {
         if (transaction.type == 'income' &&
@@ -583,8 +610,15 @@ List<TransactionsData> getIncomesByCategory(
                 (element) => element.id == transaction.category,
               )
               .name;
+          final categoryIcon = categories
+                  .firstWhere(
+                    (element) => element.id == transaction.category,
+                  )
+                  .icon ??
+              '❔';
 
-          chartData.add(TransactionsData(categoryName, transaction.amount));
+          chartData.add(
+              TransactionsData(categoryName, transaction.amount, categoryIcon));
         }
       }
     }
