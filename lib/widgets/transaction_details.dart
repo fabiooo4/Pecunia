@@ -37,8 +37,9 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
     super.initState();
     _dateController.text = widget.transaction.date.toString().split(" ").first;
     _accountController.text = widget.account.name;
-    _categoryController.text =
-        '${widget.category.icon} ${widget.category.name}';
+    _categoryController.text = widget.category.icon != ''
+        ? '${widget.category.icon} ${widget.category.name}'
+        : widget.category.name;
     _amountController.text = widget.transaction.amount.toString();
     _descriptionController.text = widget.transaction.description ?? '';
     _expenseType = widget.transaction.type;
@@ -152,7 +153,6 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
                                               picked != DateTime.now()) {
                                             setState(() {
                                               _dateController.text = picked
-                                                  .toIso8601String()
                                                   .toString()
                                                   .split(" ")
                                                   .first;
@@ -580,8 +580,8 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
         _amountController.text != widget.transaction.amount.toString() ||
         _dateController.text !=
             widget.transaction.date.toString().split(" ").first ||
-        selectedCategoryId != widget.transaction.category ||
-        selectedAccountId != widget.transaction.account ||
+        selectedCategoryId != '' ||
+        selectedAccountId != '' ||
         _expenseType != widget.transaction.type) {
       await Supabase.instance.client.from('transactions').update({
         'id': widget.transaction.id,
@@ -590,10 +590,14 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
         'type': _expenseType,
         'amount': _amountController.text,
         'description': _descriptionController.text,
-        'category_id': widget.category.id,
-        'account_id': widget.account.id,
+        'category_id':
+            selectedCategoryId != '' ? selectedCategoryId : widget.category.id,
+        'account_id':
+            selectedAccountId != '' ? selectedAccountId : widget.account.id,
       }).match({'id': widget.transaction.id}).then((value) {
         ref.invalidate(transactionsProvider);
+        ref.invalidate(categoriesProvider);
+        ref.invalidate(accountsProvider);
         Navigator.of(context).pop();
       }).catchError((error) {
         print(error);

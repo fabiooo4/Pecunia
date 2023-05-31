@@ -134,7 +134,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                                               picked != DateTime.now()) {
                                             setState(() {
                                               _dateController.text = picked
-                                                  .toIso8601String()
                                                   .toString()
                                                   .split(" ")
                                                   .first;
