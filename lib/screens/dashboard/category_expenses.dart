@@ -25,6 +25,10 @@ class CategoryTransactions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final filteredTransactions = params.transactions
+        .where((element) => element.category == params.category.id)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(params.category.name),
@@ -35,7 +39,7 @@ class CategoryTransactions extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Total: € ${params.transactions.fold<double>(
+              'Total: € ${filteredTransactions.fold<double>(
                     0,
                     (previousValue, element) {
                       if (element.type == 'income') {
@@ -49,21 +53,21 @@ class CategoryTransactions extends ConsumerWidget {
                   ).toStringAsFixed(2).replaceAll('.', ',')}',
             ),
             Text(
-              'Incomes: ${params.transactions.where((element) => element.type == 'income').length}',
+              'Incomes: ${filteredTransactions.where((element) => element.type == 'income').length}',
             ),
             Text(
-              'Expenses: ${params.transactions.where((element) => element.type == 'expense').length}',
+              'Expenses: ${filteredTransactions.where((element) => element.type == 'expense').length}',
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: params.transactions.length,
+                itemCount: filteredTransactions.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   return CategoryTransactionsw(
-                    transaction: params.transactions[index],
+                    transaction: filteredTransactions[index],
                     account: params.accounts.firstWhere(
                       (element) =>
-                          element.id == params.transactions[index].account,
+                          element.id == filteredTransactions[index].account,
                     ),
                     category: params.category,
                   );
