@@ -407,7 +407,7 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
+                              color: const Color.fromARGB(100, 139, 195, 74),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -418,15 +418,23 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                                     style: const TextStyle(fontSize: 30),
                                   ),
                                   const SizedBox(height: 10),
-                                  Text(categoryListdata[index].name,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500)),
+                                  Text(
+                                    categoryListdata[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF072E08),
+                                    ),
+                                  ),
                                 ] else ...[
-                                  Text(categoryListdata[index].name,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500)),
+                                  Text(
+                                    categoryListdata[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF072E08),
+                                    ),
+                                  ),
                                 ],
                               ],
                             ),
