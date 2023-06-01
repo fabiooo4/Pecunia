@@ -31,32 +31,97 @@ class CategoryTransactions extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(params.category.name),
+        centerTitle: true,
+        title: Text(
+            params.category.icon == ''
+                ? params.category.name
+                : '${params.category.icon} ${params.category.name}',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Total: € ${filteredTransactions.fold<double>(
-                    0,
-                    (previousValue, element) {
-                      if (element.type == 'income') {
-                        return previousValue + element.amount;
-                      } else if (element.type == 'expense') {
-                        return previousValue - element.amount;
-                      } else {
-                        return previousValue;
-                      }
-                    },
-                  ).toStringAsFixed(2).replaceAll('.', ',')}',
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '€ ${filteredTransactions.fold<double>(
+                        0,
+                        (previousValue, element) {
+                          if (element.type == 'income') {
+                            return previousValue + element.amount;
+                          } else if (element.type == 'expense') {
+                            return previousValue - element.amount;
+                          } else {
+                            return previousValue;
+                          }
+                        },
+                      ).toStringAsFixed(2).replaceAll(',', '.')}',
+                  style: const TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.arrow_drop_up, color: Colors.blue),
+                    Text(
+                      '${filteredTransactions.fold<double>(
+                            0,
+                            (previousValue, element) {
+                              if (element.type == 'income') {
+                                return previousValue + element.amount;
+                              } else if (element.type == 'expense') {
+                                return previousValue;
+                              } else {
+                                return previousValue;
+                              }
+                            },
+                          ).toStringAsFixed(2).replaceAll(',', '.')} €',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    const Icon(Icons.arrow_drop_down, color: Colors.red),
+                    Text(
+                      '${filteredTransactions.fold<double>(
+                            0,
+                            (previousValue, element) {
+                              if (element.type == 'income') {
+                                return previousValue;
+                              } else if (element.type == 'expense') {
+                                return previousValue + element.amount;
+                              } else {
+                                return previousValue;
+                              }
+                            },
+                          ).toStringAsFixed(2).replaceAll(',', '.')} €',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            Text(
-              'Incomes: ${filteredTransactions.where((element) => element.type == 'income').length}',
-            ),
-            Text(
-              'Expenses: ${filteredTransactions.where((element) => element.type == 'expense').length}',
+            const Divider(
+              height: 50,
+              indent: 20,
+              endIndent: 20,
             ),
             Expanded(
               child: ListView.builder(

@@ -31,7 +31,7 @@ class CategoryTransactionsw extends ConsumerWidget {
           style: const TextStyle(color: Colors.black54),
         ),
         trailing: Text(
-          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          '€ ${transaction.amount.toString().replaceAll(',', '.')}',
           style: const TextStyle(color: Colors.red),
         ),
       );
@@ -45,7 +45,7 @@ class CategoryTransactionsw extends ConsumerWidget {
         subtitle:
             Text(account.name, style: const TextStyle(color: Colors.black54)),
         trailing: Text(
-          '€ ${transaction.amount.toString().replaceAll('.', ',')}',
+          '€ ${transaction.amount.toString().replaceAll(',', '.')}',
           style: const TextStyle(color: Colors.blue),
         ),
       );
