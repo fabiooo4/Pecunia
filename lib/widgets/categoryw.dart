@@ -29,7 +29,8 @@ class CategoryW extends ConsumerWidget {
               Flexible(
                 fit: FlexFit.loose,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
                     category.icon == ''
                         ? category.name
