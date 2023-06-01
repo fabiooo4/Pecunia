@@ -16,10 +16,14 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _iconController = TextEditingController();
 
+  String? errorMessage;
+
   @override
   void initState() {
     _nameController.addListener(() => setState(() {}));
     _iconController.addListener(() => setState(() {}));
+
+    errorMessage = null;
 
     super.initState();
   }
@@ -43,6 +47,7 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
               return StatefulBuilder(
                 builder: (context, setState) {
                   return AlertDialog(
+                    insetPadding: const EdgeInsets.all(10),
                     title: const Text(
                       "Add Category",
                       style: TextStyle(
@@ -51,58 +56,57 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
                         color: Color(0xFF072E08),
                       ),
                     ),
-                    content: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: IconButton(
-                            iconSize: 30,
-                            padding: const EdgeInsets.all(15),
-                            onPressed: () {
-                              emojiPicker(setState);
-                            },
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: const BorderSide(color: Colors.black26),
-                                ),
-                              ),
+                    content: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: MediaQuery.of(context).size.width * 0.18,
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              iconSize: 30,
+                              padding: const EdgeInsets.all(0),
+                              onPressed: () {
+                                emojiPicker(setState);
+                              },
+                              icon: _iconController.text.isEmpty
+                                  ? const Icon(
+                                      Icons.emoji_emotions,
+                                      color: Colors.black54,
+                                    )
+                                  : Text(
+                                      _iconController.text,
+                                      style: const TextStyle(fontSize: 25),
+                                    ),
                             ),
-                            icon: _iconController.text.isEmpty
-                                ? const Icon(
-                                    Icons.emoji_emotions,
-                                    color: Colors.black54,
-                                  )
-                                : Text(
-                                    _iconController.text,
-                                    style: const TextStyle(fontSize: 25),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    borderSide:
+                                        BorderSide(color: Colors.black26),
                                   ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.black26),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    borderSide:
+                                        BorderSide(color: Colors.black26),
+                                  ),
+                                  labelText: 'Category Name',
+                                  labelStyle:
+                                      const TextStyle(color: Color(0xFF072E08)),
+                                  errorText: errorMessage,
+                                ),
+                                controller: _nameController,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.black26),
-                              ),
-                              labelText: 'Category Name',
-                              labelStyle: TextStyle(color: Color(0xFF072E08)),
                             ),
-                            controller: _nameController,
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                     actions: [
                       TextButton(
@@ -115,10 +119,19 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
                       ),
                       TextButton(
                         onPressed: () {
-                          addCategory();
-                          _nameController.clear();
-                          _iconController.clear();
-                          Navigator.pop(context);
+                          if (validateName()) {
+                            setState(() {
+                              errorMessage = null;
+                            });
+                            addCategory();
+                            _nameController.clear();
+                            _iconController.clear();
+                            Navigator.pop(context);
+                          } else {
+                            setState(() {
+                              errorMessage = 'Please enter a name';
+                            });
+                          }
                         },
                         child: const Text("Add"),
                       ),
@@ -161,6 +174,11 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
             child: SizedBox(
                 height: 250,
                 child: EmojiPicker(
+                  onBackspacePressed: () {
+                    setState(() {
+                      _iconController.text = '';
+                    });
+                  },
                   onEmojiSelected: (category, emoji) {
                     setState(() {
                       _iconController.text = emoji.emoji;
@@ -216,5 +234,13 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
     }).catchError((error) {
       print(error);
     });
+  }
+
+  bool validateName() {
+    if (_nameController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
