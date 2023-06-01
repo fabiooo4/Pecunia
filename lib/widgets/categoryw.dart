@@ -38,6 +38,7 @@ class CategoryW extends ConsumerWidget {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF072E08),
                     ),
                   ),
                 ),

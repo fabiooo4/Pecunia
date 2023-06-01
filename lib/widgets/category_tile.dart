@@ -128,8 +128,8 @@ class _CategoryTileState extends State<CategoryTile> {
         );
       },
       child: Card(
-        elevation: 5,
-        color: Colors.lightGreen,
+        elevation: 0,
+        color: const Color.fromARGB(100, 139, 195, 74),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -140,7 +140,7 @@ class _CategoryTileState extends State<CategoryTile> {
               Text(
                 widget.icon,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF072E08),
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
@@ -150,7 +150,7 @@ class _CategoryTileState extends State<CategoryTile> {
                   child: Text(
                     widget.name,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF072E08),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -162,7 +162,7 @@ class _CategoryTileState extends State<CategoryTile> {
                 child: Text(
                   widget.name,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF072E08),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

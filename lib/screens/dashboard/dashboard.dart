@@ -243,74 +243,8 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                               ),
                                             ),
                                           ),
-                                          // child: CategoryW(
-                                          //   category: categoryListdata[index],
-                                          //   total: total,
-                                          // ),
                                         );
-                                      }
-                                          // child: CategoryW(
-                                          //   category: categoryListdata[index],
-                                          //   total: total,
-                                          // ),
-
-                                          ),
-
-                                      // ListView.builder(
-                                      //   scrollDirection: Axis.horizontal,
-                                      //   itemCount: categoryListdata.length,
-                                      //   controller: PageController(
-                                      //     viewportFraction: 0.4,
-                                      //   ),
-                                      //   itemBuilder: (context, index) {
-                                      //     var id = categoryListdata[index].id;
-                                      //     var total = transactionListdata
-                                      //         .where((element) =>
-                                      //             element.category ==
-                                      //             categoryListdata[index].id)
-                                      //         .fold<double>(
-                                      //             0,
-                                      //             (previousValue, element) =>
-                                      //                 previousValue +
-                                      //                 element.amount *
-                                      //                     (element.type == 'income'
-                                      //                         ? 1
-                                      //                         : -1));
-
-                                      //     return GestureDetector(
-                                      //       onTap: () => context.go(
-                                      //           '/home/dashboard/category_expenses/$id',
-                                      //           extra: CategoryTransactionsParams(
-                                      //             category: categoryListdata[index],
-                                      //             transactions: transactionListdata,
-                                      //             accounts: accountListdata,
-                                      //           )),
-                                      //       child: OpenContainer(
-                                      //         closedElevation: 0,
-                                      //         openElevation: 0,
-                                      //         closedColor: Colors.transparent,
-                                      //         openColor: Colors.transparent,
-                                      //         closedBuilder: (context, action) =>
-                                      //             CategoryW(
-                                      //           category: categoryListdata[index],
-                                      //           total: total,
-                                      //         ),
-                                      //         openBuilder: (context, action) =>
-                                      //             CategoryTransactions(
-                                      //           params: CategoryTransactionsParams(
-                                      //             category: categoryListdata[index],
-                                      //             transactions: transactionListdata,
-                                      //             accounts: accountListdata,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       // child: CategoryW(
-                                      //       //   category: categoryListdata[index],
-                                      //       //   total: total,
-                                      //       // ),
-                                      //     );
-                                      //   },
-                                      // ),
+                                      }),
                                     ),
                                   ),
                                 ),
