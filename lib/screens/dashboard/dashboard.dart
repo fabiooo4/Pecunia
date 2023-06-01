@@ -316,32 +316,29 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                     return const SizedBox.shrink();
                                   }
 
-                                  final transaction =
+                                  final transactions =
                                       transactionListdata[index];
                                   final account = accountListdata.firstWhere(
                                       (element) =>
                                           element.id ==
                                           transactionListdata[index].account);
+                                  // if category is null return "No category" else return category
                                   final category = categoryListdata.firstWhere(
                                       (element) =>
                                           element.id ==
-                                          transactionListdata[index].category);
+                                          transactionListdata[index].category,
+                                      orElse: () => Category(
+                                          id: '0',
+                                          name: 'No category',
+                                          icon: '❔'));
 
                                   return GestureDetector(
                                     onTap: () => detailsModal(context,
-                                        transaction, account, category),
+                                        transactions, account, category),
                                     child: Transactionw(
-                                      transaction: transactionListdata[index],
-                                      account: accountListdata.firstWhere(
-                                        (element) =>
-                                            element.id ==
-                                            transactionListdata[index].account,
-                                      ),
-                                      category: categoryListdata.firstWhere(
-                                        (element) =>
-                                            element.id ==
-                                            transactionListdata[index].category,
-                                      ),
+                                      transaction: transactions,
+                                      account: account,
+                                      category: category,
                                     ),
                                     // child: Transactionw(
                                     //   transaction: transactionListdata[index],
