@@ -563,14 +563,14 @@ List<TransactionsData> getExpensesByCategory(
       if (accountName == '') {
         if (transaction.type == 'expense') {
           final categoryName = categories
-              .firstWhere(
-                (element) => element.id == transaction.category,
-              )
+              .firstWhere((element) => element.id == transaction.category,
+                  orElse: () =>
+                      Category(id: '0', name: 'No category', icon: '❔'))
               .name;
           final categoryIcon = categories
-                  .firstWhere(
-                    (element) => element.id == transaction.category,
-                  )
+                  .firstWhere((element) => element.id == transaction.category,
+                      orElse: () =>
+                          Category(id: '0', name: 'No category', icon: '❔'))
                   .icon ??
               '';
 
