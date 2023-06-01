@@ -190,11 +190,12 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             data: (transactionListdata) => accountList.when(
                               data: (accountListdata) => SizedBox(
                                 height: 50,
-                                child: PageView.builder(
-                                  padEnds: false,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
                                   itemCount: categoryListdata.length,
-                                  controller:
-                                      PageController(viewportFraction: 0.7),
+                                  controller: PageController(
+                                    viewportFraction: 0.4,
+                                  ),
                                   itemBuilder: (context, index) {
                                     var id = categoryListdata[index].id;
                                     var total = transactionListdata
