@@ -359,6 +359,23 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
               ),
             ),
           ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: FilledButton(
+              onPressed: confirmDelete,
+              style: ButtonStyle(
+                side: MaterialStateProperty.all(
+                  const BorderSide(color: Colors.red, width: 2),
+                ),
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -605,5 +622,54 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
     } else {
       print('Nothing changed');
     }
+  }
+
+  void confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure you want to delete this transaction?',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF072E08),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                deleteTransaction();
+                ref.invalidate(transactionsProvider);
+              },
+              child: const Text(
+                "Delete",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void deleteTransaction() async {
+    await Supabase.instance.client
+        .from('transactions')
+        .delete()
+        .match({'id': widget.transaction.id}).then((value) {
+      Navigator.of(context).pop();
+      ref.invalidate(transactionsProvider);
+    }).catchError((error) {
+      print(error);
+    });
   }
 }
