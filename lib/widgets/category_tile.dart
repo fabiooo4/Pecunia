@@ -1,3 +1,4 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,24 +25,32 @@ class CategoryTile extends ConsumerStatefulWidget {
 }
 
 class _CategoryTileState extends ConsumerState<CategoryTile> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController iconController = TextEditingController();
+
+  String? errorMessage;
+
+  @override
+  void initState() {
+    nameController.addListener(() => setState(() {}));
+    iconController.addListener(() => setState(() {}));
+
+    nameController.text = widget.name;
+    iconController.text = widget.icon;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    iconController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-
-    @override
-    void initState() {
-      nameController.addListener(() => setState(() {}));
-
-      super.initState();
-    }
-
-    @override
-    void dispose() {
-      nameController.dispose();
-
-      super.dispose();
-    }
-
     return GestureDetector(
       onLongPressStart: (LongPressStartDetails details) {
         final RenderBox overlay =
@@ -70,46 +79,114 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            // name from widget
-                            'Edit "${widget.name}"',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF072E08),
-                            ),
-                          ),
-                          content: TextField(
-                            decoration: InputDecoration(
-                              labelText: widget.name,
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.black26),
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                              title: Text(
+                                // name from widget
+                                'Edit "${widget.name}"',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF072E08),
+                                ),
                               ),
-                              border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.black26),
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.18,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        iconSize: 30,
+                                        padding: const EdgeInsets.all(0),
+                                        onPressed: () {
+                                          emojiPicker(setState);
+                                        },
+                                        icon: iconController.text.isEmpty
+                                            ? const Icon(
+                                                Icons.emoji_emotions,
+                                                color: Colors.black54,
+                                              )
+                                            : Text(
+                                                iconController.text,
+                                                style: const TextStyle(
+                                                    fontSize: 25),
+                                              ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        child: TextFormField(
+                                          decoration: InputDecoration(
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black26),
+                                            ),
+                                            border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black26),
+                                            ),
+                                            labelText: 'Category Name',
+                                            labelStyle: const TextStyle(
+                                                color: Color(0xFF072E08)),
+                                            errorText: errorMessage,
+                                          ),
+                                          controller: nameController,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            controller: nameController,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                print(nameController.text);
-                              },
-                              child: const Text("Save"),
-                            ),
-                          ],
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    if (validateName()) {
+                                      setState(() {
+                                        errorMessage = null;
+                                      });
+                                      editCategory(
+                                          widget.id,
+                                          nameController.text,
+                                          iconController.text);
+                                      nameController.clear();
+                                      iconController.clear();
+                                      ref.invalidate(categoriesProvider);
+                                      ref.invalidate(transactionsProvider);
+                                      Navigator.pop(context);
+                                    } else {
+                                      setState(() {
+                                        errorMessage = 'Please enter a name';
+                                      });
+                                    }
+
+                                    // Navigator.pop(context);
+                                    // editCategory(widget.id, nameController.text,
+                                    //     iconController.text);
+                                    // ref.invalidate(categoriesProvider);
+                                    // ref.invalidate(transactionsProvider);
+                                  },
+                                  child: const Text("Save"),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       });
                 },
@@ -243,5 +320,83 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
         .from('categories')
         .delete()
         .match({'id': id});
+  }
+
+  void editCategory(String id, String newName, String icon) async {
+    await Supabase.instance.client
+        .from('categories')
+        .update({'name': newName, 'icon': icon}).match({'id': id});
+  }
+
+  void emojiPicker(setState) {
+    showModalBottomSheet(
+      enableDrag: false,
+      context: context,
+      barrierColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(0),
+        ),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.36,
+          width: MediaQuery.of(context).size.width,
+          child: SizedBox(
+              height: 250,
+              child: EmojiPicker(
+                onBackspacePressed: () {
+                  setState(() {
+                    iconController.text = '';
+                  });
+                },
+                onEmojiSelected: (category, emoji) {
+                  setState(() {
+                    iconController.text = emoji.emoji;
+                  });
+                  Navigator.pop(context);
+                },
+                textEditingController: iconController,
+                config: const Config(
+                  columns: 7,
+                  // Issue: https://github.com/flutter/flutter/issues/28894
+                  emojiSizeMax: 30,
+                  verticalSpacing: 0,
+                  horizontalSpacing: 0,
+                  gridPadding: EdgeInsets.zero,
+                  bgColor: Color(0xFFF2F2F2),
+                  indicatorColor: Colors.green,
+                  iconColor: Colors.grey,
+                  iconColorSelected: Colors.green,
+                  backspaceColor: Colors.green,
+                  skinToneDialogBgColor: Colors.white,
+                  skinToneIndicatorColor: Colors.grey,
+                  enableSkinTones: true,
+                  categoryIcons: CategoryIcons(),
+                  buttonMode: ButtonMode.MATERIAL,
+                  showRecentsTab: true,
+                  recentsLimit: 28,
+                  replaceEmojiOnLimitExceed: true,
+                  noRecents: Text(
+                    'No Recents',
+                    style: TextStyle(fontSize: 20, color: Colors.black26),
+                    textAlign: TextAlign.center,
+                  ),
+                  loadingIndicator: SizedBox.shrink(),
+                  tabIndicatorAnimDuration: kTabScrollDuration,
+                  checkPlatformCompatibility: true,
+                ),
+              )),
+        );
+      },
+    );
+  }
+
+  bool validateName() {
+    if (nameController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
