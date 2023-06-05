@@ -49,7 +49,7 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
                   return AlertDialog(
                     insetPadding: const EdgeInsets.all(10),
                     title: const Text(
-                      "Add Category",
+                      "Add a new category",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class _CategoryTileAddState extends ConsumerState<ConsumerStatefulWidget> {
             });
       },
       child: Card(
-        elevation: 5,
+        elevation: 0,
         color: const Color.fromARGB(255, 142, 142, 142),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),

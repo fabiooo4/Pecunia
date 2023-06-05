@@ -630,14 +630,14 @@ List<TransactionsData> getIncomesByCategory(
       if (accountName == '') {
         if (transaction.type == 'income') {
           final categoryName = categories
-              .firstWhere(
-                (element) => element.id == transaction.category,
-              )
+              .firstWhere((element) => element.id == transaction.category,
+                  orElse: () =>
+                      Category(id: '0', name: 'No category', icon: '❔'))
               .name;
           final categoryIcon = categories
-                  .firstWhere(
-                    (element) => element.id == transaction.category,
-                  )
+                  .firstWhere((element) => element.id == transaction.category,
+                      orElse: () =>
+                          Category(id: '0', name: 'No category', icon: '❔'))
                   .icon ??
               '❔';
 
@@ -648,14 +648,14 @@ List<TransactionsData> getIncomesByCategory(
         if (transaction.type == 'income' &&
             transaction.account == accountName) {
           final categoryName = categories
-              .firstWhere(
-                (element) => element.id == transaction.category,
-              )
+              .firstWhere((element) => element.id == transaction.category,
+                  orElse: () =>
+                      Category(id: '0', name: 'No category', icon: '❔'))
               .name;
           final categoryIcon = categories
-                  .firstWhere(
-                    (element) => element.id == transaction.category,
-                  )
+                  .firstWhere((element) => element.id == transaction.category,
+                      orElse: () =>
+                          Category(id: '0', name: 'No category', icon: '❔'))
                   .icon ??
               '❔';
 

@@ -56,6 +56,7 @@ class _ValidationState extends ConsumerState<Validation> {
     StreamController<ErrorAnimationType> errorController =
         StreamController<ErrorAnimationType>();
     TextEditingController textEditingController = TextEditingController();
+    // ignore: unused_local_variable
     String currentText = "";
     return Scaffold(
       body: Column(

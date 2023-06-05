@@ -70,7 +70,8 @@ class _CategoriesState extends ConsumerState<Categories> {
                     error: (error, stackTrace) => null,
                   );
                   return CategoryTile(
-                    name: category!.name.toString(),
+                    id: category!.id,
+                    name: category.name.toString(),
                     icon: category.icon.toString(),
                     onTap: () {
                       print('Category $category.name tapped');
