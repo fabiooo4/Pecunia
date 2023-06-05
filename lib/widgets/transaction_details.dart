@@ -439,8 +439,6 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
                           onTap: () {
-                            print(categoryListdata[index].name);
-                            print(categoryListdata[index].id);
                             _categoryController.text =
                                 '${categoryListdata[index].icon} ${categoryListdata[index].name}';
                             selectedCategoryId = categoryListdata[index].id;
@@ -619,8 +617,6 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
       }).catchError((error) {
         print(error);
       });
-    } else {
-      print('Nothing changed');
     }
   }
 

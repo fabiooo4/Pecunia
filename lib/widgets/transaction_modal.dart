@@ -397,8 +397,6 @@ class _TransactionModalState extends ConsumerState<TransactionModal> {
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
                           onTap: () {
-                            print(categoryListdata[index].name);
-                            print(categoryListdata[index].id);
                             _categoryController.text =
                                 '${categoryListdata[index].icon} ${categoryListdata[index].name}';
                             selectedCategoryId = categoryListdata[index].id;

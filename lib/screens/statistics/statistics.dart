@@ -52,7 +52,21 @@ class _StatisticsState extends ConsumerState<Statistics> {
       loading: () => false,
       error: (error, stackTrace) => false,
     )) {
-      if (isSelected.isEmpty) {
+      if (isSelected.length !=
+          accountList.when(
+            data: (accountListdata) => accountListdata.length,
+            loading: () => 0,
+            error: (error, stackTrace) => 0,
+          )) {
+        isSelected = List.generate(
+          accountList.when(
+            data: (accountListdata) => accountListdata.length,
+            loading: () => 0,
+            error: (error, stackTrace) => 0,
+          ),
+          (index) => index == 0,
+        );
+      } else if (isSelected.isEmpty) {
         isSelected = List.generate(
           accountList.when(
             data: (accountListdata) => accountListdata.length,
