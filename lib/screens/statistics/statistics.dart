@@ -105,7 +105,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                               palette: const [
                                 Color(0xFF377A39),
                                 Color(0xFF204721),
-                                Color(0xFF1EC723),
+                                Color(0xFF37B23B),
                                 Color(0xFF127A16),
                                 Color(0xFF072E08),
                               ],
@@ -581,14 +581,14 @@ List<TransactionsData> getExpensesByCategory(
         if (transaction.type == 'expense' &&
             transaction.account == accountName) {
           final categoryName = categories
-              .firstWhere(
-                (element) => element.id == transaction.category,
-              )
+              .firstWhere((element) => element.id == transaction.category,
+                  orElse: () =>
+                      Category(id: '0', name: 'No category', icon: '❔'))
               .name;
           final categoryIcon = categories
-                  .firstWhere(
-                    (element) => element.id == transaction.category,
-                  )
+                  .firstWhere((element) => element.id == transaction.category,
+                      orElse: () =>
+                          Category(id: '0', name: 'No category', icon: '❔'))
                   .icon ??
               '';
 
