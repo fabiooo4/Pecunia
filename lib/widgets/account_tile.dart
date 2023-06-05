@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/model/accounts/accounts_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../model/accounts/account.dart';
-import '../model/categories/categories_provider.dart';
 import '../model/transactions/transaction.dart';
 import '../model/transactions/transactions_provider.dart';
 
@@ -60,7 +60,7 @@ class _AccountTileState extends ConsumerState<AccountTile> {
             previousValue + (element.amount < 0 ? element.amount : 0));
 
     return GestureDetector(
-      onLongPressStart: (LongPressStartDetails details) {
+      onTapUp: (details) {
         final RenderBox overlay =
             Overlay.of(context).context.findRenderObject() as RenderBox;
 
@@ -104,30 +104,26 @@ class _AccountTileState extends ConsumerState<AccountTile> {
                                 height:
                                     MediaQuery.of(context).size.width * 0.18,
                                 child: Center(
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          borderSide:
-                                              BorderSide(color: Colors.black26),
-                                        ),
-                                        border: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          borderSide:
-                                              BorderSide(color: Colors.black26),
-                                        ),
-                                        labelText: 'Category Name',
-                                        labelStyle: const TextStyle(
-                                            color: Color(0xFF072E08)),
-                                        errorText: errorMessage,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black26),
                                       ),
-                                      controller: nameController,
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black26),
+                                      ),
+                                      labelText: 'Account Name',
+                                      labelStyle: const TextStyle(
+                                          color: Color(0xFF072E08)),
+                                      errorText: errorMessage,
                                     ),
+                                    controller: nameController,
                                   ),
                                 ),
                               ),
@@ -148,8 +144,7 @@ class _AccountTileState extends ConsumerState<AccountTile> {
                                         widget.account.id,
                                         nameController.text,
                                       );
-                                      nameController.clear();
-                                      ref.invalidate(categoriesProvider);
+                                      ref.invalidate(accountsProvider);
                                       ref.invalidate(transactionsProvider);
                                       Navigator.pop(context);
                                     } else {
@@ -199,7 +194,7 @@ class _AccountTileState extends ConsumerState<AccountTile> {
                               ),
                               const SizedBox(height: 5),
                               const Text(
-                                'All transactions under this category will be assigned an empty category.',
+                                'All transactions under this account will be deleted.',
                               ),
                               const SizedBox(height: 10),
                               const Text(
@@ -222,7 +217,7 @@ class _AccountTileState extends ConsumerState<AccountTile> {
                               onPressed: () {
                                 Navigator.pop(context);
                                 deleteAccount(widget.account.id);
-                                ref.invalidate(categoriesProvider);
+                                ref.invalidate(accountsProvider);
                                 ref.invalidate(transactionsProvider);
                               },
                               child: const Text(
@@ -283,13 +278,20 @@ class _AccountTileState extends ConsumerState<AccountTile> {
   }
 
   Future<void> deleteAccount(String id) async {
-    await Supabase.instance.client.from('accounts').delete().match({'id': id});
-  }
-
-  void editAccount(String id, String newName) async {
     await Supabase.instance.client
         .from('accounts')
-        .update({'name': newName}).match({'id': id});
+        .delete()
+        .match({'id': id}).then((value) {
+      ref.invalidate(accountsProvider);
+      ref.invalidate(transactionsProvider);
+    });
+  }
+
+  Future<void> editAccount(String id, String newName) async {
+    await Supabase.instance.client
+        .from('accounts')
+        .update({'name': newName}).match({'id': id}).then(
+            (value) => ref.invalidate(accountsProvider));
   }
 
   bool validateName() {

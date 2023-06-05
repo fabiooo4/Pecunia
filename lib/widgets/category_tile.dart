@@ -172,8 +172,6 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
                                           widget.id,
                                           nameController.text,
                                           iconController.text);
-                                      nameController.clear();
-                                      iconController.clear();
                                       ref.invalidate(categoriesProvider);
                                       ref.invalidate(transactionsProvider);
                                       Navigator.pop(context);

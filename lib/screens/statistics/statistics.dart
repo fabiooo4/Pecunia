@@ -36,8 +36,6 @@ class _StatisticsState extends ConsumerState<Statistics> {
         isSelected.length,
         (index) => index == tappedChipindex ? !isSelected[index] : false,
       );
-      print(isSelected);
-      print(tappedChipindex);
     });
   }
 
@@ -619,10 +617,6 @@ List<TransactionsData> getExpensesByCategory(
         newChartData[newChartData.indexWhere((element) => element.x == data.x)]
             .y += data.y;
       }
-    }
-
-    for (var data in newChartData) {
-      print('${data.x} ${data.y}');
     }
 
     return newChartData;
