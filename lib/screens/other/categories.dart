@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pecunia/model/categories/categories_provider.dart';
 import 'package:pecunia/widgets/category_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pecunia/widgets/category_tile_add.dart';
+
+import '../../model/accounts/accounts_provider.dart';
+import '../../model/transactions/transactions_provider.dart';
+import '../dashboard/category_expenses.dart';
 
 class Categories extends ConsumerStatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -31,6 +36,8 @@ class _CategoriesState extends ConsumerState<Categories> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
+    final transactionList = ref.watch(transactionsProvider);
+    final accountList = ref.watch(accountsProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,7 +81,22 @@ class _CategoriesState extends ConsumerState<Categories> {
                     name: category.name.toString(),
                     icon: category.icon.toString(),
                     onTap: () {
-                      print('Category $category.name tapped');
+                      context.go(
+                        '/home/dashboard/category_expenses/${category.id}',
+                        extra: CategoryTransactionsParams(
+                            category: category,
+                            transactions: transactionList.when(
+                              data: (transactionListdata) =>
+                                  transactionListdata,
+                              loading: () => [],
+                              error: (error, stackTrace) => [],
+                            ),
+                            accounts: accountList.when(
+                              data: (accountListdata) => accountListdata,
+                              loading: () => [],
+                              error: (error, stackTrace) => [],
+                            )),
+                      );
                     },
                   );
                 },

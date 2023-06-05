@@ -1,10 +1,14 @@
+import 'package:animations/animations.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecunia/model/categories/category.dart' as categoryModel;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../model/accounts/accounts_provider.dart';
 import '../model/categories/categories_provider.dart';
 import '../model/transactions/transactions_provider.dart';
+import '../screens/dashboard/category_expenses.dart';
 
 class CategoryTile extends ConsumerStatefulWidget {
   const CategoryTile(
@@ -51,6 +55,9 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
 
   @override
   Widget build(BuildContext context) {
+    final transactionList = ref.watch(transactionsProvider);
+    final accountList = ref.watch(accountsProvider);
+
     return GestureDetector(
       onLongPressStart: (LongPressStartDetails details) {
         final RenderBox overlay =
@@ -175,12 +182,6 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
                                         errorMessage = 'Please enter a name';
                                       });
                                     }
-
-                                    // Navigator.pop(context);
-                                    // editCategory(widget.id, nameController.text,
-                                    //     iconController.text);
-                                    // ref.invalidate(categoriesProvider);
-                                    // ref.invalidate(transactionsProvider);
                                   },
                                   child: const Text("Save"),
                                 ),
@@ -267,50 +268,79 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
           ],
         );
       },
-      child: Card(
-        elevation: 0,
-        color: const Color.fromARGB(100, 139, 195, 74),
-        shape: RoundedRectangleBorder(
+      onTap: widget.onTap,
+      child: OpenContainer(
+        closedElevation: 0,
+        closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.icon != '') ...[
-              Text(
-                widget.icon,
-                style: const TextStyle(
-                    color: Color(0xFF072E08),
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(
-                    widget.name,
+        transitionDuration: const Duration(milliseconds: 500),
+        openBuilder: (context, _) => CategoryTransactions(
+          params: CategoryTransactionsParams(
+            category: categoryModel.Category(
+              id: widget.id,
+              name: widget.name,
+              icon: widget.icon,
+            ),
+            transactions: transactionList.when(
+              data: (data) => data,
+              loading: () => [],
+              error: (err, stack) => [],
+            ),
+            accounts: accountList.when(
+              data: (data) => data,
+              loading: () => [],
+              error: (err, stack) => [],
+            ),
+          ),
+        ),
+        closedBuilder: (context, _) {
+          return Card(
+            elevation: 0,
+            color: const Color.fromARGB(100, 139, 195, 74),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (widget.icon != '') ...[
+                  Text(
+                    widget.icon,
                     style: const TextStyle(
-                      color: Color(0xFF072E08),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                        color: Color(0xFF072E08),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text(
+                        widget.name,
+                        style: const TextStyle(
+                          color: Color(0xFF072E08),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ] else ...[
-              SizedBox(
-                child: Text(
-                  widget.name,
-                  style: const TextStyle(
-                    color: Color(0xFF072E08),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                ] else ...[
+                  SizedBox(
+                    child: Text(
+                      widget.name,
+                      style: const TextStyle(
+                        color: Color(0xFF072E08),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ],
-        ),
+                ],
+              ],
+            ),
+          );
+        },
       ),
     );
   }
