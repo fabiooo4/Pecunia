@@ -1,7 +1,16 @@
-# pecunia
+# Pecunia
 
-A new Flutter project.
+Pecunia is a personal finance mobile app developed with Flutter.
 
+## Features
+- Multiple account management
+- Transactions assignable to different accounts separated by income or expense
+- Pie chart and Graph with statistics for every account
+- Authentication to enable data sync between devices
+- Beautiful material design
+
+
+<!--
 ## Getting Started
 
 This project is a starting point for a Flutter application that follows the
@@ -31,3 +40,4 @@ apps](https://flutter.dev/docs/development/accessibility-and-localization/intern
 
 ## Figma
 https://www.figma.com/team_invite/redeem/3o4DmSpuhrK3IaJhi900WW
+-->
